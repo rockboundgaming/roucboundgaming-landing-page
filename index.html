@@ -1,14 +1,14 @@
-html<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rockbound Gaming — Built on the Rock.</title>
     
-    <!-- FIX 1: Official Icon Link (Required for Discord/FB/Twitch logos) -->
+    <!-- FIX 1: Official Font Awesome (This makes the icons show up) -->
     <link rel="stylesheet" href="https://cloudflare.com">
     
-    <!-- FIX 2: Official Font Link (Required for Bebas & Barlow) -->
+    <!-- FIX 2: Official Google Fonts (This loads Bebas and Barlow) -->
     <link href="https://googleapis.com" rel="stylesheet">
     
     <!-- FIX 3: Correct Path to your CSS folder -->
@@ -32,14 +32,19 @@ html<!DOCTYPE html>
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
+    
+    <!-- BRANDING CONTAINER: Centers Logo & Tagline -->
     <div class="hero-branding">
       <img src="assets/logos/tplogo.png" alt="Rockbound Gaming" class="logo-big">
       <img src="assets/logos/tptagline1.png" alt="Built on the Rock. Gaming Everywhere." class="tagline-img">
     </div>
+
+    <!-- ACTION BUTTONS: One single set -->
     <div class="hero-btns">
       <a href="https://discord.gg" target="_blank" class="btn-primary">Join Discord</a>
       <a href="#streamers" class="btn-secondary">Streamer Program</a>
     </div>
+
   </div>
 </div>
 
@@ -61,8 +66,45 @@ html<!DOCTYPE html>
       <a href="https://discord.gg" target="_blank" class="btn-primary">Join The Community</a>
     </div>
     <div class="about-cards">
-      <div class="about-card"><div class="about-card-icon"><i class="fa-solid fa-gamepad"></i></div><h4>All Platforms</h4><p>PC, Xbox, PlayStation.</p></div>
-      <div class="about-card"><div class="about-card-icon"><i class="fa-solid fa-water"></i></div><h4>Rock Proud</h4><p>Built on the Rock.</p></div>
+      <div class="about-card">
+        <div class="about-card-icon"><i class="fa-solid fa-gamepad"></i></div>
+        <h4>All Platforms</h4>
+        <p>PC, Xbox, PlayStation — no gatekeeping.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon"><i class="fa-solid fa-water"></i></div>
+        <h4>Rock Proud</h4>
+        <p>Built on the Rock. Bound to our roots.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STREAMER PROGRAM -->
+<section id="streamers" class="streamer-section">
+  <div class="streamer-grid reveal">
+    <div>
+      <div class="section-tag">For Creators</div>
+      <h2 class="section-title">STREAMER <span>PROGRAM</span></h2>
+      <p>Stop streaming to zero viewers. We provide the platform, branding, and local audience you need to grow.</p>
+      <br>
+      <a href="https://discord.gg" target="_blank" class="btn-primary">Apply Now</a>
+    </div>
+    <div class="phases">
+      <div class="phase">
+          <div class="phase-num">01</div>
+          <div class="phase-content">
+              <h4>Go Live</h4>
+              <p>Get your Stream Key. Go live directly on the Rockbound Twitch channel.</p>
+          </div>
+      </div>
+      <div class="phase">
+          <div class="phase-num">02</div>
+          <div class="phase-content">
+              <h4>Professional Branding</h4>
+              <p>Custom overlays with your gamertag and socials. Look like a pro.</p>
+          </div>
+      </div>
     </div>
   </div>
 </section>
@@ -81,6 +123,10 @@ html<!DOCTYPE html>
         <span class="platform-icon"><i class="fa-brands fa-facebook"></i></span>
         <div class="platform-name">Facebook</div>
       </a>
+      <a href="https://tiktok.com" target="_blank" class="platform-card">
+        <span class="platform-icon"><i class="fa-brands fa-tiktok"></i></span>
+        <div class="platform-name">TikTok</div>
+      </a>
       <a href="https://twitch.tv" target="_blank" class="platform-card">
         <span class="platform-icon"><i class="fa-brands fa-twitch"></i></span>
         <div class="platform-name">Twitch</div>
@@ -88,6 +134,16 @@ html<!DOCTYPE html>
     </div>
   </div>
 </section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="https://discord.gg" target="_blank">Discord</a>
+    <a href="https://facebook.com" target="_blank">Facebook</a>
+    <a href="mailto:rockboundgaming@gmail.com">Email</a>
+  </div>
+  <div class="footer-copy">© 2026 Rockbound Gaming — Built on the Rock.</div>
+</footer>
 
 <script src="js/script.js"></script>
 </body>
