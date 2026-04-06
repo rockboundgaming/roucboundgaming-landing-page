@@ -1,29 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rockbound Gaming — Built on the Rock. Gaming Everywhere.</title>
-
-<!-- THE ICON FIX: Loads actual logos (Discord, FB, etc) -->
-<link rel="stylesheet" href="https://cloudflare.com">
-
-<!-- THE FONT FIX: Loads Bebas and Barlow -->
-<link href="https://googleapis.com" rel="stylesheet">
-
-<!-- Your Style (Inside the css folder) -->
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Rockbound Gaming — Built on the Rock. Gaming Everywhere. A gaming community for streamers, creators, and gamers from all backgrounds.">
+  <title>Rockbound Gaming — Built on the Rock. Gaming Everywhere.</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/logos/tplogo.png">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Bebas+Neue:400,700|Barlow:400,700&display=swap" rel="stylesheet">
+  <!-- Font Awesome (Icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-<!-- NAV -->
-<nav>
+<nav aria-label="Main Navigation">
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#streamers">Streamers</a></li>
     <li><a href="#community">Community</a></li>
     <li><a href="#platforms">Find Us</a></li>
-    <li><a href="https://discord.gg/SsrHttHX8n" target="_blank">Join Discord</a></li>
+    <li><a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer">Join Discord</a></li>
   </ul>
 </nav>
 
@@ -32,24 +30,18 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    
-    <!-- BRANDING CONTAINER: This centers the logo and tagline image -->
-    <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 2.5rem;">
-      
+    <div class="branding-container">
       <!-- Main Logo -->
       <img src="assets/logos/tplogo.png" 
-           alt="Rockbound Gaming" 
-           style="max-width: 500px; width: 90%; height: auto; filter: drop-shadow(0 0 20px rgba(230, 57, 70, 0.3));">
-      
-      <!-- Tagline Image (Tucked underneath) -->
+           alt="Rockbound Gaming Logo" 
+           class="logo-main">
+      <!-- Tagline Image -->
       <img src="assets/logos/tptagline1.png" 
            alt="Built on the Rock. Gaming Everywhere." 
-           style="max-width: 500px; width: 90%; height: auto; margin-top: -15px;">
+           class="tagline-image">
     </div>
-
-    <!-- ACTION BUTTONS: One single set -->
     <div class="hero-btns">
-      <a href="https://discord.gg/SsrHttHX8n" target="_blank" class="btn-primary">Join Discord</a>
+      <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">Join Discord</a>
       <a href="#streamers" class="btn-secondary">Streamer Program</a>
     </div>
   </div>
@@ -76,7 +68,7 @@
       <p>Whether you stream, watch, play casually, or grind competitively — you belong here. We're connecting players, shining a spotlight on local creators, and putting our community on the map.</p>
       <p>Nobody was doing this. <strong>So we built it.</strong></p>
       <br>
-      <a href="https://discord.gg/SsrHttHX8n" target="_blank" class="btn-primary">Join The Community</a>
+      <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">Join The Community</a>
     </div>
     <div class="about-cards">
       <div class="about-card"><div class="about-card-icon"><i class="fa-solid fa-gamepad"></i></div><h4>All Platforms</h4><p>PC, Xbox, PlayStation — no gatekeeping.</p></div>
@@ -95,14 +87,23 @@
     <div>
       <div class="section-tag">For Creators</div>
       <h2 class="section-title">STREAMER <span>PROGRAM</span></h2>
-      <p style="color: rgba(241,250,238,0.7); margin-bottom: 2rem; line-height: 1.8;">Whether you've never streamed before or you're already building your audience — Rockbound Gaming has your back. We provide the platform, the promotion, and the community.</p>
+      <p class="streamer-desc">Whether you've never streamed before or you're already building your audience — Rockbound Gaming has your back.</p>
       <ul class="perks-list">
-        <li><span class="perk-icon"><i class="fa-solid fa-key"></i></span><div class="perk-text"><h4>Stream Key Access</h4><p>Stream directly on the Rockbound Twitch channel.</p></div></li>
-        <li><span class="perk-icon"><i class="fa-solid fa-palette"></i></span><div class="perk-text"><h4>Custom Overlays</h4><p>Pro branded overlays with your gamertag.</p></div></li>
-        <li><span class="perk-icon"><i class="fa-solid fa-bullhorn"></i></span><div class="perk-text"><h4>Full Promotion</h4><p>Promoted across all Rockbound platforms.</p></div></li>
+        <li>
+          <span class="perk-icon"><i class="fa-solid fa-key"></i></span>
+          <div class="perk-text"><h4>Stream Key Access</h4><p>Stream directly on the Rockbound Twitch channel.</p></div>
+        </li>
+        <li>
+          <span class="perk-icon"><i class="fa-solid fa-palette"></i></span>
+          <div class="perk-text"><h4>Custom Overlays</h4><p>Pro branded overlays with your gamertag.</p></div>
+        </li>
+        <li>
+          <span class="perk-icon"><i class="fa-solid fa-bullhorn"></i></span>
+          <div class="perk-text"><h4>Full Promotion</h4><p>Promoted across all Rockbound platforms.</p></div>
+        </li>
       </ul>
       <br>
-      <a href="https://discord.gg/SsrHttHX8n" target="_blank" class="btn-primary">Apply Now</a>
+      <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">Apply Now</a>
     </div>
     <div>
       <div class="section-tag">The Roadmap</div>
@@ -140,10 +141,22 @@
     <div class="section-tag">Find Us</div>
     <h2 class="section-title">WE'RE <span>EVERYWHERE</span></h2>
     <div class="platforms-grid">
-      <a href="https://discord.gg/SsrHttHX8n" target="_blank" class="platform-card"><span class="platform-icon"><i class="fa-brands fa-discord"></i></span><div class="platform-name">Discord</div><div class="platform-handle">Rockbound Gaming</div></a>
-      <a href="https://www.facebook.com/profile.php?id=61578495384408" target="_blank" class="platform-card"><span class="platform-icon"><i class="fa-brands fa-facebook"></i></span><div class="platform-name">Facebook</div><div class="platform-handle">Rockbound Gaming</div></a>
-      <a href="https://www.tiktok.com/@rockboundgaming" target="_blank" class="platform-card"><span class="platform-icon"><i class="fa-brands fa-tiktok"></i></span><div class="platform-name">TikTok</div><div class="platform-handle">@rockboundgaming</div></a>
-      <a href="https://www.twitch.tv/rockboundgaming" target="_blank" class="platform-card"><span class="platform-icon"><i class="fa-brands fa-twitch"></i></span><div class="platform-name">Twitch</div><div class="platform-handle">rockboundgaming</div></a>
+      <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="platform-card">
+        <span class="platform-icon"><i class="fa-brands fa-discord"></i></span>
+        <div class="platform-name">Discord</div>
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61578495384408" target="_blank" rel="noopener noreferrer" class="platform-card">
+        <span class="platform-icon"><i class="fa-brands fa-facebook"></i></span>
+        <div class="platform-name">Facebook</div>
+      </a>
+      <a href="https://www.tiktok.com/@rockboundgaming" target="_blank" rel="noopener noreferrer" class="platform-card">
+        <span class="platform-icon"><i class="fa-brands fa-tiktok"></i></span>
+        <div class="platform-name">TikTok</div>
+      </a>
+      <a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="platform-card">
+        <span class="platform-icon"><i class="fa-brands fa-twitch"></i></span>
+        <div class="platform-name">Twitch</div>
+      </a>
     </div>
   </div>
 </section>
@@ -153,7 +166,7 @@
   <h2>BUILT ON THE ROCK.<br>GAMING EVERYWHERE.</h2>
   <p>Join 100+ gamers already in the community. It's free. It's local. It's yours.</p>
   <div class="cta-btns">
-    <a href="https://discord.gg/SsrHttHX8n" target="_blank" class="btn-white">Join Discord Now</a>
+    <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-white">Join Discord Now</a>
     <a href="mailto:rockboundgaming@gmail.com" class="btn-dark">Contact Us</a>
   </div>
 </div>
@@ -164,14 +177,13 @@
     <img src="assets/logos/tplogo.png" alt="Rockbound Gaming" class="footer-logo-img" style="height: 60px;">
   </div>
   <div class="footer-links">
-    <a href="https://discord.gg/SsrHttHX8n" target="_blank">Discord</a>
-    <a href="https://www.facebook.com/profile.php?id=61578495384408" target="_blank">Facebook</a>
+    <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer">Discord</a>
+    <a href="https://www.facebook.com/profile.php?id=61578495384408" target="_blank" rel="noopener noreferrer">Facebook</a>
     <a href="mailto:rockboundgaming@gmail.com">Email</a>
   </div>
   <div class="footer-copy">© 2026 Rockbound Gaming — Built on the Rock.</div>
 </footer>
-
+<!-- JS (if needed) -->
 <script src="js/script.js"></script>
-
 </body>
 </html>
