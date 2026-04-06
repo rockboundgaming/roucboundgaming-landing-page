@@ -165,6 +165,36 @@ nav {
 }
 
 /* ============================================
+   HERO STATS
+   ============================================ */
+.hero-stats {
+  background: var(--red);
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  margin-top: 3rem;
+  width: 100%;
+}
+
+.hero-stats .stat-item { text-align: center; }
+
+.hero-stats .stat-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+.hero-stats .stat-label {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* ============================================
    BUTTONS
    ============================================ */
 .btn-primary {
@@ -251,34 +281,6 @@ nav {
 .btn-dark:hover {
   background: rgba(0, 0, 0, 0.5);
   transform: translateY(-2px);
-}
-
-/* ============================================
-   STATS BAR
-   ============================================ */
-.stats-bar {
-  background: var(--red);
-  padding: 1.2rem 2rem;
-  display: flex;
-  justify-content: center;
-  gap: 4rem;
-  flex-wrap: wrap;
-}
-
-.stat-item { text-align: center; }
-
-.stat-number {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 2rem;
-  letter-spacing: 2px;
-  line-height: 1;
-}
-
-.stat-label {
-  font-size: 0.7rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  opacity: 0.85;
 }
 
 /* ============================================
@@ -756,6 +758,6 @@ footer {
   .nav-links { display: none; }
   .streamer-section { padding: 4rem 1.5rem; }
   section { padding: 4rem 1.5rem; }
-  .stats-bar { gap: 2rem; }
+  .hero-stats { gap: 1.5rem; padding: 1.5rem; }
   .hero-logo { max-width: 400px; }
 }
