@@ -21,16 +21,32 @@
 </nav>
 
 <!-- HERO -->
+<!-- HERO -->
 <div class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <h1>
-      <div class="hero-tagline-img">
-  <div class="hero-logo-big">
-  <img src="assets/logos/tplogo.png" alt="Rockbound Gaming" class="logo-big" style="max-width: 500px; width: 90%; height: auto; margin: 2rem 0; filter: drop-shadow(0 0 20px rgba(230, 57, 70, 0.3));">
-  <img src="assets/logos/tptagline1.png" alt="Built on the Rock. Gaming Everywhere." style="max-width: 350px; width: 90%; height: auto; margin-bottom: 1.5rem;">
-</div>
+    
+    <!-- BRANDING CONTAINER: This centers the logo and tagline -->
+    <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem;">
+      
+      <!-- Main Logo (Centered & Large) -->
+      <img src="assets/logos/tplogo.png" 
+           alt="Rockbound Gaming" 
+           style="max-width: 500px; width: 90%; height: auto; filter: drop-shadow(0 0 20px rgba(230, 57, 70, 0.3));">
+      
+      <!-- Tagline Image (Tucked neatly underneath) -->
+      <img src="assets/logos/tptagline1.png" 
+           alt="Built on the Rock. Gaming Everywhere." 
+           style="max-width: 500px; width: 90%; height: auto; margin-top: -15px;">
+
+    </div>
+
+    <!-- Redundant text removed, leaving only the action buttons -->
+    <div class="hero-btns">
+      <a href="https://discord.gg" target="_blank" class="btn-primary">Join Discord</a>
+      <a href="#streamers" class="btn-secondary">Streamer Program</a>
+    </div>
 
 <p class="hero-sub">
   NL's first dedicated gaming community hub — connecting players, showcasing streamers, and putting the province on the map.
