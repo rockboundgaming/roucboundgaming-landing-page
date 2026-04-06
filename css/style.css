@@ -61,16 +61,16 @@ nav {
 
 @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
-.hero-branding { display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem; }
+.hero-branding { display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem; width: 100%; }
 .logo-big { max-width: 500px; width: 90%; height: auto; filter: drop-shadow(0 0 20px rgba(230, 57, 70, 0.3)); }
 
-/* ENLARGED TAGLINE FIX */
+/* ENLARGED TAGLINE FIX - BOOSTED SIZE */
 .tagline-img { 
-  max-width: 550px; 
+  max-width: 750px; /* Much larger than the logo for impact */
   width: 95%; 
   height: auto; 
-  margin-top: -12px; 
-  filter: drop-shadow(0 0 15px rgba(230, 57, 70, 0.2)); 
+  margin-top: -15px; 
+  filter: drop-shadow(0 0 15px rgba(230, 57, 70, 0.3)); 
 }
 
 /* 4. BUTTONS */
