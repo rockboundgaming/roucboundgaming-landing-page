@@ -1,3 +1,9 @@
+/* ============================================
+   ROCKBOUND GAMING — style.css
+   Built on the Rock. Gaming Everywhere.
+   ============================================ */
+
+/* CSS VARIABLES */
 :root {
   --red: #e63946;
   --gold: #f4c430;
@@ -9,10 +15,11 @@
   --card: #111827;
 }
 
+/* RESET */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 html { scroll-behavior: smooth; }
 
+/* BASE */
 body {
   background: var(--darker);
   color: var(--white);
@@ -20,7 +27,7 @@ body {
   overflow-x: hidden;
 }
 
-/* NOISE OVERLAY */
+/* NOISE TEXTURE */
 body::before {
   content: '';
   position: fixed;
@@ -31,7 +38,9 @@ body::before {
   opacity: 0.4;
 }
 
-/* NAV */
+/* ============================================
+   NAVIGATION
+   ============================================ */
 nav {
   position: fixed;
   top: 0;
@@ -73,7 +82,9 @@ nav {
 
 .nav-links a:hover { color: var(--red); }
 
-/* HERO */
+/* ============================================
+   HERO
+   ============================================ */
 .hero {
   min-height: 100vh;
   display: flex;
@@ -82,13 +93,12 @@ nav {
   position: relative;
   overflow: hidden;
   padding: 6rem 2rem 4rem;
-  margin-top: 65px;
 }
 
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: 
+  background:
     radial-gradient(ellipse at 20% 50%, rgba(230, 57, 70, 0.15) 0%, transparent 60%),
     radial-gradient(ellipse at 80% 20%, rgba(69, 123, 157, 0.2) 0%, transparent 50%),
     radial-gradient(ellipse at 50% 80%, rgba(29, 53, 87, 0.3) 0%, transparent 60%),
@@ -98,7 +108,7 @@ nav {
 .hero-grid {
   position: absolute;
   inset: 0;
-  background-image: 
+  background-image:
     linear-gradient(rgba(230, 57, 70, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(230, 57, 70, 0.05) 1px, transparent 1px);
   background-size: 60px 60px;
@@ -145,16 +155,13 @@ nav {
 
 .hero h1 .line1 { color: var(--white); }
 .hero h1 .line2 { color: var(--red); }
-.hero h1 .line3 { 
-  color: transparent;
-  -webkit-text-stroke: 2px var(--gold);
-}
 
 .hero-sub {
   font-size: 1.2rem;
   color: rgba(241, 250, 238, 0.7);
   margin: 1.5rem 0 2.5rem;
   letter-spacing: 1px;
+  line-height: 1.7;
 }
 
 .hero-sub strong { color: var(--gold); }
@@ -166,6 +173,9 @@ nav {
   flex-wrap: wrap;
 }
 
+/* ============================================
+   BUTTONS
+   ============================================ */
 .btn-primary {
   background: var(--red);
   color: white;
@@ -211,7 +221,50 @@ nav {
   transform: translateY(-2px);
 }
 
-/* STATS BAR */
+.btn-white {
+  background: white;
+  color: var(--red);
+  padding: 1rem 2.5rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.btn-white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.btn-dark {
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  padding: 1rem 2.5rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.btn-dark:hover {
+  background: rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   STATS BAR
+   ============================================ */
 .stats-bar {
   background: var(--red);
   padding: 1.2rem 2rem;
@@ -221,9 +274,7 @@ nav {
   flex-wrap: wrap;
 }
 
-.stat-item {
-  text-align: center;
-}
+.stat-item { text-align: center; }
 
 .stat-number {
   font-family: 'Bebas Neue', sans-serif;
@@ -239,7 +290,18 @@ nav {
   opacity: 0.85;
 }
 
-/* SECTIONS */
+/* ============================================
+   DIVIDER
+   ============================================ */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(230, 57, 70, 0.3), transparent);
+}
+
+/* ============================================
+   SECTIONS
+   ============================================ */
 section {
   padding: 6rem 2rem;
   max-width: 1200px;
@@ -268,7 +330,9 @@ section {
 
 .section-title span { color: var(--red); }
 
-/* ABOUT */
+/* ============================================
+   ABOUT
+   ============================================ */
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -335,14 +399,16 @@ section {
   line-height: 1.5;
 }
 
-/* STREAMER PROGRAM */
+/* ============================================
+   STREAMER PROGRAM
+   ============================================ */
 .streamer-section {
   background: linear-gradient(135deg, rgba(230, 57, 70, 0.08) 0%, rgba(29, 53, 87, 0.2) 100%);
-  border: 1px solid rgba(230, 57, 70, 0.2);
-  padding: 4rem;
+  border-top: 1px solid rgba(230, 57, 70, 0.2);
+  border-bottom: 1px solid rgba(230, 57, 70, 0.2);
+  padding: 6rem 2rem;
   position: relative;
   overflow: hidden;
-  margin: 0 -2rem;
 }
 
 .streamer-section::before {
@@ -362,9 +428,23 @@ section {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
-  align-items: center;
+  align-items: start;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.streamer-intro {
+  color: rgba(241, 250, 238, 0.7);
+  margin-bottom: 2rem;
+  line-height: 1.8;
+}
+
+.roadmap-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+  color: var(--gold);
 }
 
 .perks-list {
@@ -379,7 +459,7 @@ section {
   align-items: flex-start;
   gap: 1rem;
   padding: 1rem;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
   border-left: 3px solid var(--red);
 }
 
@@ -394,6 +474,7 @@ section {
   letter-spacing: 1px;
   text-transform: uppercase;
   margin-bottom: 0.2rem;
+  color: var(--white);
 }
 
 .perk-text p {
@@ -401,7 +482,6 @@ section {
   color: rgba(241, 250, 238, 0.6);
 }
 
-/* PHASES */
 .phases {
   display: flex;
   flex-direction: column;
@@ -439,74 +519,10 @@ section {
   line-height: 1.6;
 }
 
-/* PLATFORMS */
-.platforms-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-top: 3rem;
-}
-
-.platform-card {
-  background: var(--card);
-  border: 1px solid rgba(255,255,255,0.05);
-  padding: 2rem 1.5rem;
-  text-align: center;
-  text-decoration: none;
-  color: var(--white);
-  transition: all 0.3s;
-  position: relative;
-  overflow: hidden;
-  display: block;
-}
-
-.platform-card::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: var(--red);
-  transform: scaleX(0);
-  transition: transform 0.3s;
-}
-
-.platform-card:hover::after { transform: scaleX(1); }
-
-.platform-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(230, 57, 70, 0.3);
-  background: rgba(17, 24, 39, 0.9);
-}
-
-.platform-icon {
-  font-size: 2.5rem;
-  margin-bottom: 0.8rem;
-  display: block;
-}
-
-.platform-name {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 1rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: 0.3rem;
-}
-
-.platform-handle {
-  font-size: 0.8rem;
-  color: rgba(241, 250, 238, 0.5);
-}
-
-/* COMMUNITY */
-.community-section {
-  text-align: center;
-}
-
-.community-section .section-title {
-  margin-bottom: 1rem;
-}
+/* ============================================
+   COMMUNITY
+   ============================================ */
+.community-section { text-align: center; }
 
 .community-desc {
   max-width: 600px;
@@ -525,7 +541,7 @@ section {
 
 .feature-card {
   background: var(--card);
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   padding: 2rem;
   transition: all 0.3s;
 }
@@ -556,7 +572,78 @@ section {
   line-height: 1.6;
 }
 
-/* CTA */
+/* ============================================
+   PLATFORMS
+   ============================================ */
+.platforms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+.platform-card {
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--white);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.platform-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--red);
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+
+.platform-card:hover::after { transform: scaleX(1); }
+
+.platform-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(230, 57, 70, 0.3);
+}
+
+.platform-icon {
+  font-size: 2.8rem;
+  margin-bottom: 0.8rem;
+  display: block;
+}
+
+.platform-icon .fa-discord { color: #5865F2; }
+.platform-icon .fa-facebook { color: #1877F2; }
+.platform-icon .fa-tiktok { color: #ffffff; }
+.platform-icon .fa-twitch { color: #9146FF; }
+.platform-icon .fa-youtube { color: #FF0000; }
+.platform-icon .fa-globe { color: #e63946; }
+
+.platform-card:hover .platform-icon i { filter: brightness(1.3); }
+
+.platform-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+.platform-handle {
+  font-size: 0.8rem;
+  color: rgba(241, 250, 238, 0.5);
+}
+
+/* ============================================
+   CTA SECTION
+   ============================================ */
 .cta-section {
   background: var(--red);
   padding: 5rem 2rem;
@@ -573,7 +660,7 @@ section {
   transform: translate(-50%, -50%);
   font-family: 'Bebas Neue', sans-serif;
   font-size: 20rem;
-  color: rgba(0,0,0,0.1);
+  color: rgba(0, 0, 0, 0.1);
   pointer-events: none;
   white-space: nowrap;
   letter-spacing: 20px;
@@ -603,48 +690,9 @@ section {
   position: relative;
 }
 
-.btn-white {
-  background: white;
-  color: var(--red);
-  padding: 1rem 2.5rem;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  text-decoration: none;
-  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
-  transition: all 0.2s;
-  display: inline-block;
-}
-
-.btn-white:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-}
-
-.btn-dark {
-  background: rgba(0,0,0,0.3);
-  color: white;
-  padding: 1rem 2.5rem;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  text-decoration: none;
-  border: 2px solid rgba(255,255,255,0.5);
-  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
-  transition: all 0.2s;
-  display: inline-block;
-}
-
-.btn-dark:hover {
-  background: rgba(0,0,0,0.5);
-  transform: translateY(-2px);
-}
-
-/* FOOTER */
+/* ============================================
+   FOOTER
+   ============================================ */
 footer {
   background: var(--darker);
   border-top: 1px solid rgba(230, 57, 70, 0.2);
@@ -693,15 +741,9 @@ footer {
   letter-spacing: 1px;
 }
 
-/* DIVIDER */
-.divider {
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(230, 57, 70, 0.3), transparent);
-  margin: 0;
-}
-
-/* SCROLL ANIMATIONS */
+/* ============================================
+   SCROLL REVEAL ANIMATION
+   ============================================ */
 .reveal {
   opacity: 0;
   transform: translateY(30px);
@@ -713,30 +755,15 @@ footer {
   transform: translateY(0);
 }
 
-/* RESPONSIVE */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 @media (max-width: 768px) {
-  nav { padding: 1rem; }
-  .nav-links { display: none; }
-  
-  .hero { padding: 6rem 1rem 4rem; margin-top: 65px; }
-  .hero h1 { font-size: clamp(2.5rem, 10vw, 5rem); }
-  
   .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .about-cards { grid-template-columns: 1fr; }
-  
   .streamer-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .streamer-section { padding: 3rem 1.5rem; margin: 0 -1rem; }
-  .streamer-section::before { font-size: 8rem; }
-  
+  .about-cards { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .streamer-section { padding: 4rem 1.5rem; }
   section { padding: 4rem 1.5rem; }
-  
-  .stats-bar { gap: 1rem; padding: 1rem; }
-  .stat-number { font-size: 1.5rem; }
-  .stat-label { font-size: 0.6rem; }
-  
-  .platforms-grid { grid-template-columns: repeat(2, 1fr); }
-  .community-features { grid-template-columns: 1fr; }
-  
-  .cta-section::before { font-size: 8rem; }
-  .cta-section h2 { font-size: clamp(2rem, 6vw, 4rem); }
+  .stats-bar { gap: 2rem; }
 }
