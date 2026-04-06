@@ -18,4 +18,21 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   }
+
+  // Reveal animations via IntersectionObserver
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && revealEls.length) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(function(el) { observer.observe(el); });
+  } else {
+    // Fallback: show all immediately
+    revealEls.forEach(function(el) { el.classList.add('visible'); });
+  }
 });
