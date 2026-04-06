@@ -176,19 +176,20 @@ nav {
   text-transform: uppercase;
   text-decoration: none;
   clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
-  transition: all 0.2s;
+  transition: all 0.3s ease; /* Smoother transition */
   border: none;
   cursor: pointer;
+  display: inline-block;
 }
 
 .btn-primary:hover {
   background: #ff4757;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(230, 57, 70, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 0 30px rgba(230, 57, 70, 0.4); /* Added a glow */
 }
 
 .btn-secondary {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.05); /* Subtle dark glass fill */
   color: var(--white);
   padding: 1rem 2.5rem;
   font-family: 'Barlow Condensed', sans-serif;
@@ -197,11 +198,20 @@ nav {
   letter-spacing: 3px;
   text-transform: uppercase;
   text-decoration: none;
-  border: 2px solid rgba(241, 250, 238, 0.3);
+  border: 2px solid rgba(241, 250, 238, 0.2); /* Softer border */
   clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px); /* Modern frost effect */
+  display: inline-block;
 }
 
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--gold); /* Swaps to gold on hover for premium feel */
+  color: var(--gold);
+  transform: translateY(-3px);
+  box-shadow: 0 0 25px rgba(244, 196, 48, 0.15);
+}
 .btn-secondary:hover {
   border-color: var(--gold);
   color: var(--gold);
