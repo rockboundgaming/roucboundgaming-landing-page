@@ -130,6 +130,7 @@ nav {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
 @keyframes fadeUp {
@@ -165,33 +166,48 @@ nav {
 }
 
 /* ============================================
-   HERO STATS
+   HERO STATS - FULL WIDTH
    ============================================ */
 .hero-stats {
   background: var(--red);
   padding: 2rem;
   display: flex;
   justify-content: center;
-  gap: 3rem;
+  align-items: center;
+  gap: 4rem;
   flex-wrap: wrap;
-  margin-top: 3rem;
-  width: 100%;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
 }
 
-.hero-stats .stat-item { text-align: center; }
+.hero-stats .stat-item { 
+  text-align: center;
+  color: white;
+  flex: 0 0 auto;
+  min-width: 100px;
+}
 
 .hero-stats .stat-number {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 2rem;
   letter-spacing: 2px;
   line-height: 1;
+  color: white;
+  font-weight: 700;
 }
 
 .hero-stats .stat-label {
-  font-size: 0.7rem;
-  letter-spacing: 3px;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  opacity: 0.85;
+  opacity: 0.9;
+  color: white;
+  font-weight: 600;
+  margin-top: 0.5rem;
 }
 
 /* ============================================
@@ -752,12 +768,46 @@ footer {
    RESPONSIVE
    ============================================ */
 @media (max-width: 768px) {
-  .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .streamer-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .about-cards { grid-template-columns: 1fr; }
-  .nav-links { display: none; }
-  .streamer-section { padding: 4rem 1.5rem; }
-  section { padding: 4rem 1.5rem; }
-  .hero-stats { gap: 1.5rem; padding: 1.5rem; }
-  .hero-logo { max-width: 400px; }
+  .about-grid { 
+    grid-template-columns: 1fr; 
+    gap: 2rem; 
+  }
+  
+  .streamer-grid { 
+    grid-template-columns: 1fr; 
+    gap: 2rem; 
+  }
+  
+  .about-cards { 
+    grid-template-columns: 1fr; 
+  }
+  
+  .nav-links { 
+    display: none; 
+  }
+  
+  .streamer-section { 
+    padding: 4rem 1.5rem; 
+  }
+  
+  section { 
+    padding: 4rem 1.5rem; 
+  }
+  
+  .hero-stats { 
+    gap: 2rem; 
+    padding: 1.5rem;
+  }
+  
+  .hero-stats .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .hero-stats .stat-label {
+    font-size: 0.6rem;
+  }
+  
+  .hero-logo { 
+    max-width: 400px; 
+  }
 }
