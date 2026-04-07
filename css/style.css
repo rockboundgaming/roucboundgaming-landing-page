@@ -338,3 +338,148 @@ footer {
 
   section { padding: 4rem 1.5rem; }
 }
+/* ============================================
+   MISSING STYLES FIX (CRITICAL)
+   ============================================ */
+
+/* DIVIDER */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(230,57,70,0.4), transparent);
+}
+
+/* SECTION TAG */
+.section-tag {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+/* COMMUNITY GRID */
+.community-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* FEATURE CARDS */
+.feature-card {
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 2rem;
+  transition: 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(230,57,70,0.4);
+}
+
+.feature-emoji {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* ============================================
+   PLATFORMS (YOUR ISSUE AREA)
+   ============================================ */
+
+.platforms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.platform-card {
+  background: var(--card);
+  padding: 2rem;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: 0.3s;
+  position: relative;
+}
+
+.platform-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(230,57,70,0.3);
+}
+
+/* bottom red line animation */
+.platform-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--red);
+  transform: scaleX(0);
+  transition: 0.3s;
+}
+
+.platform-card:hover::after {
+  transform: scaleX(1);
+}
+
+.platform-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* brand colors */
+.fa-discord { color: #5865F2; }
+.fa-facebook { color: #1877F2; }
+.fa-tiktok { color: white; }
+.fa-twitch { color: #9146FF; }
+.fa-youtube { color: #FF0000; }
+
+/* TEXT */
+.platform-name {
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  margin-top: 0.5rem;
+}
+
+.platform-handle {
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+/* ============================================
+   FOOTER FIX
+   ============================================ */
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin: 1.5rem 0;
+}
+
+.footer-links a {
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.footer-links a:hover {
+  color: var(--red);
+}
+
+.footer-tagline {
+  opacity: 0.5;
+  margin-bottom: 1rem;
+}
+
+.footer-copy {
+  font-size: 0.7rem;
+  opacity: 0.4;
+}
