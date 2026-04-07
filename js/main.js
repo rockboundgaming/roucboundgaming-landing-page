@@ -103,10 +103,16 @@ async function loadFeaturedCreators() {
     });
     const data = await response.text();
 
+    console.log("RAW DATA:", data);
+    console.log("FIRST 200 CHARS:", data.substring(0, 200));
+
     const rows = data.split("\n").slice(1);
+    console.log("TOTAL ROWS:", rows.length);
+    console.log("FIRST ROW:", rows[0]);
 
     const creators = rows.map(row => {
       const cols = row.split("\t");
+      console.log("PARSED ROW:", cols);
 
       return {
         twitch: cols[0]?.trim(),
@@ -119,6 +125,8 @@ async function loadFeaturedCreators() {
       };
     }).filter(c => c.twitch && c.name);
 
+    console.log("CREATORS ARRAY:", creators);
+
     const seen = new Set();
 
     const featuredCreators = creators.filter(c => {
@@ -126,6 +134,8 @@ async function loadFeaturedCreators() {
 
       if (seen.has(key)) return false;
       seen.add(key);
+
+      console.log(`Checking: ${c.name} - Level: ${c.level}, Featured: ${c.featured}, Status: ${c.status}`);
 
       return (
         c.level >= 5 &&
