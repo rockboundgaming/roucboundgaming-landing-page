@@ -244,13 +244,8 @@
   <div class="section-tag">Live Discovery</div>
   <h2 class="section-title">ON THE <span>ROCK</span> RIGHT NOW</h2>
   
-  <div class="live-container">
-    <iframe
-        src="https://twitch.tv/rockboundgaming"
-        frameborder="0"
-        allowfullscreen="true"
-        scrolling="no">
-    </iframe>
+  <div class="live-wrapper">
+    <div id="twitch-embed"></div>
   </div>
   
   <div class="live-cta">
@@ -385,7 +380,17 @@
   <div class="footer-copy">© 2026 Rockbound Gaming</div>
 </footer>
 
+<script src="https://embed.twitch.tv/embed.js"></script>
 <script src="js/main.js"></script>
+<script>
+  new Twitch.Embed("twitch-embed", {
+    width: "100%",
+    height: "500px",
+    channel: "rockboundgaming",
+    layout: "video",
+    theme: "dark"
+  });
+</script>
 
 </body>
 </html>
