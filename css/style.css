@@ -394,13 +394,6 @@ section {
   font-weight: 700;
 }
 
-.streamer-intro {
-  font-size: 1.3rem;
-  color: rgba(241,250,238,0.7);
-  margin-bottom: 2rem;
-  line-height: 1.8;
-}
-
 .community-desc {
   font-size: 1.3rem;
   color: rgba(241,250,238,0.7);
@@ -421,8 +414,7 @@ section {
 /* ============================================
    GRID LAYOUTS
    ============================================ */
-.about-grid,
-.streamer-grid {
+.about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
@@ -465,7 +457,7 @@ section {
 }
 
 /* ============================================
-   CARDS
+   ABOUT CARDS
    ============================================ */
 .about-card {
   background: var(--card);
@@ -507,117 +499,164 @@ section {
 }
 
 /* ============================================
-   STREAMER SECTION
+   CREATOR SECTION
    ============================================ */
-.streamer-section {
-  background: linear-gradient(135deg, rgba(230,57,70,0.08) 0%, rgba(29,53,87,0.2) 100%);
-  border-top: 1px solid rgba(230,57,70,0.2);
-  border-bottom: 1px solid rgba(230,57,70,0.2);
+.creator-section {
   padding: 6rem 2rem;
-  position: relative;
-  overflow: hidden;
   max-width: 1500px;
   margin: 0 auto;
   width: 100%;
 }
 
-.streamer-section::before {
-  content: 'STREAM';
-  position: absolute;
-  right: -2rem;
-  top: 50%;
-  transform: translateY(-50%) rotate(90deg);
-  font-family: 'Bebas Neue';
-  font-size: 12rem;
-  color: rgba(230,57,70,0.04);
-  pointer-events: none;
-  letter-spacing: 10px;
+.creator-intro {
+  font-size: 1.3rem;
+  color: rgba(241,250,238,0.7);
+  margin-bottom: 3rem;
+  line-height: 1.8;
+  max-width: 800px;
 }
 
-.perks-list {
-  list-style: none;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
+.creator-perks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
 }
 
-.perks-list li {
+.perk-card {
+  background: var(--card);
+  border: 1px solid rgba(230,57,70,0.2);
+  padding: 2rem;
   display: flex;
+  gap: 1.5rem;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  padding: 1rem;
-  background: rgba(0,0,0,0.3);
-  border-left: 3px solid var(--red);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.perk-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--red);
+}
+
+.perk-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--red);
 }
 
 .perk-icon {
-  font-size: 1.5rem;
-  flex-shrink: 0;
+  font-size: 2.5rem;
   color: var(--red);
+  flex-shrink: 0;
   transition: all 0.3s;
+  line-height: 1;
 }
 
-.perks-list li:hover .perk-icon {
+.perk-card:hover .perk-icon {
   color: var(--gold);
   transform: scale(1.1);
 }
 
-.perks-list li strong {
-  font-family: 'Barlow Condensed';
-  font-size: 1.1rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: 0.2rem;
-}
-
-.perks-list li p {
-  font-size: 1rem;
-  color: rgba(241,250,238,0.6);
-}
-
-.phases {
-  margin-top: 1rem;
-}
-
-.phase {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-  align-items: flex-start;
-}
-
-.phase-num {
-  font-family: 'Bebas Neue';
-  font-size: 3rem;
-  color: var(--red);
-  line-height: 1;
-  flex-shrink: 0;
-  opacity: 0.5;
-}
-
-.phase-content strong {
+.perk-content h4 {
   font-family: 'Barlow Condensed';
   font-size: 1.1rem;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--gold);
-  display: block;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
+  color: white;
 }
 
-.phase-content p {
-  font-size: 0.9rem;
+.perk-content p {
+  font-size: 0.95rem;
   color: rgba(241,250,238,0.6);
   line-height: 1.6;
 }
 
+.creator-cta {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.roadmap-section {
+  margin-top: 4rem;
+}
+
 .roadmap-title {
   font-family: 'Bebas Neue';
-  font-size: 2rem;
+  font-size: 1.8rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+}
+
+.roadmap-subtitle {
+  font-size: 0.9rem;
   letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(241,250,238,0.6);
   margin-bottom: 2rem;
+  font-weight: 700;
+  font-family: 'Barlow Condensed';
+}
+
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.roadmap-item {
+  background: var(--card);
+  border: 1px solid rgba(230,57,70,0.2);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.roadmap-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--red);
+}
+
+.roadmap-item:hover {
+  transform: translateY(-4px);
+  border-color: var(--red);
+}
+
+.roadmap-num {
+  font-family: 'Bebas Neue';
+  font-size: 2.5rem;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+
+.roadmap-content h4 {
+  font-family: 'Barlow Condensed';
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
   color: var(--gold);
+}
+
+.roadmap-content p {
+  font-size: 0.9rem;
+  color: rgba(241,250,238,0.6);
+  line-height: 1.6;
 }
 
 /* ============================================
@@ -951,8 +990,7 @@ footer {
     padding: 0.8rem;
   }
 
-  .about-grid,
-  .streamer-grid {
+  .about-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
@@ -962,10 +1000,6 @@ footer {
   }
 
   .about-text p {
-    font-size: 1.1rem;
-  }
-
-  .streamer-intro {
     font-size: 1.1rem;
   }
 
@@ -993,12 +1027,54 @@ footer {
     font-size: 0.9rem;
   }
 
-  .perks-list li strong {
+  .creator-section {
+    padding: 4rem 1.5rem;
+  }
+
+  .creator-intro {
+    font-size: 1.1rem;
+  }
+
+  .creator-perks {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .perk-card {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .perk-icon {
+    font-size: 2rem;
+  }
+
+  .perk-content h4 {
     font-size: 1rem;
   }
 
-  .perks-list li p {
+  .perk-content p {
     font-size: 0.9rem;
+  }
+
+  .roadmap-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .roadmap-num {
+    font-size: 2rem;
+  }
+
+  .roadmap-content h4 {
+    font-size: 1rem;
+  }
+
+  .roadmap-content p {
+    font-size: 0.85rem;
+  }
+
+  .roadmap-title {
+    font-size: 1.5rem;
   }
 
   .hero-logo { 
@@ -1011,10 +1087,6 @@ footer {
 
   section { 
     padding: 4rem 1.5rem; 
-  }
-
-  .streamer-section {
-    padding: 4rem 1.5rem;
   }
 
   .hero-stats {
