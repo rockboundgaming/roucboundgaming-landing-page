@@ -148,15 +148,15 @@ nav {
   filter: drop-shadow(0 20px 40px rgba(230, 57, 70, 0.3));
 }
 
-.hero-sub {
-  font-size: 1.2rem;
-  color: rgba(241, 250, 238, 0.7);
-  margin: 1.5rem 0 2.5rem;
-  letter-spacing: 1px;
-  line-height: 1.7;
+.hero-tagline {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  margin: 0 auto 2.5rem auto;
+  display: block;
+  animation: fadeUp 1s ease forwards;
+  filter: drop-shadow(0 10px 20px rgba(230, 57, 70, 0.2));
 }
-
-.hero-sub strong { color: var(--gold); }
 
 .hero-btns {
   display: flex;
@@ -806,6 +806,10 @@ footer {
   }
   
   .hero-logo { 
+    max-width: 400px; 
+  }
+  
+  .hero-tagline { 
     max-width: 400px; 
   }
 }
