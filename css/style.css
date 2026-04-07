@@ -95,7 +95,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6rem 2rem 0;
+  padding: 6rem 2rem 2rem;
   position: relative;
   text-align: center;
 }
@@ -166,7 +166,7 @@ nav {
   animation: fadeUp 1s ease forwards 0.2s both;
 }
 
-/* STATS - FULL WIDTH AT BOTTOM */
+/* STATS - FULL WIDTH */
 .hero-stats {
   background: var(--red);
   width: 100vw;
@@ -178,10 +178,6 @@ nav {
   align-items: center;
   gap: 3rem;
   flex-wrap: wrap;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   animation: fadeUp 1s ease forwards 0.3s both;
 }
 
