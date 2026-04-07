@@ -518,7 +518,7 @@ section {
 
 .creator-perks {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
   margin-bottom: 3rem;
 }
@@ -528,11 +528,19 @@ section {
   border: 1px solid rgba(230,57,70,0.2);
   padding: 2rem;
   display: flex;
+  flex-direction: column;
   gap: 1.5rem;
   align-items: flex-start;
   transition: all 0.3s;
   position: relative;
   overflow: hidden;
+}
+
+.perk-card:nth-child(5),
+.perk-card:nth-child(6) {
+  grid-column: 1 / -1;
+  max-width: 50%;
+  margin: 0 auto;
 }
 
 .perk-card::before {
@@ -561,6 +569,10 @@ section {
 .perk-card:hover .perk-icon {
   color: var(--gold);
   transform: scale(1.1);
+}
+
+.perk-content {
+  width: 100%;
 }
 
 .perk-content h4 {
@@ -679,6 +691,12 @@ section {
   border: 1px solid rgba(255,255,255,0.05);
   padding: 2rem;
   transition: all 0.3s;
+}
+
+.feature-card:last-child {
+  grid-column: 1 / -1;
+  max-width: 33.333%;
+  margin: 0 auto;
 }
 
 .feature-card:hover {
@@ -1027,6 +1045,11 @@ footer {
     font-size: 0.9rem;
   }
 
+  .feature-card:last-child {
+    grid-column: 1 / -1;
+    max-width: 100%;
+  }
+
   .creator-section {
     padding: 4rem 1.5rem;
   }
@@ -1043,6 +1066,12 @@ footer {
   .perk-card {
     padding: 1.5rem;
     gap: 1rem;
+  }
+
+  .perk-card:nth-child(5),
+  .perk-card:nth-child(6) {
+    grid-column: 1 / -1;
+    max-width: 100%;
   }
 
   .perk-icon {
