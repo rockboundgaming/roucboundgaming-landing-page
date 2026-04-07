@@ -1017,7 +1017,7 @@ footer {
 }
 
 /* ============================================
-   RESPONSIVE MOBILE
+   RESPONSIVE TABLET
    ============================================ */
 @media (max-width: 1024px) {
   :root {
@@ -1044,11 +1044,50 @@ footer {
   }
 }
 
+/* ============================================
+   RESPONSIVE MOBILE 768px
+   ============================================ */
 @media (max-width: 768px) {
+  /* Hamburger Menu Mobile */
+  .menu-toggle {
+    display: block !important;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background: rgba(6,8,16,0.98);
+    backdrop-filter: blur(12px);
+    flex-direction: column;
+    gap: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    border-bottom: 2px solid rgba(230,57,70,0.3);
+    padding: 0;
+  }
+
+  .nav-links.active {
+    max-height: 500px;
+    padding: 1rem 0;
+  }
+
+  .nav-links li {
+    border-bottom: 1px solid rgba(230,57,70,0.1);
+  }
+
+  .nav-links a {
+    font-size: 1rem;
+    padding: 1rem 2rem;
+    display: block;
+  }
+
   /* Hero Section Mobile */
   .hero {
-    padding: 6rem 2rem 2rem;
-    padding-bottom: 2rem;
+    padding: 6rem 2rem 0;
+    padding-bottom: 4.5rem;
   }
 
   .hero-logo {
@@ -1087,19 +1126,6 @@ footer {
   .stat-label {
     font-size: 0.5rem;
     margin-top: 0.3rem;
-  }
-
-  /* Navigation Mobile */
-  .nav-links {
-    gap: 1.5rem;
-  }
-
-  .nav-links a {
-    font-size: 1rem;
-  }
-
-  .nav-logo {
-    font-size: 1.5rem;
   }
 
   /* Buttons Mobile */
@@ -1249,8 +1275,10 @@ footer {
   }
 }
 
+/* ============================================
+   RESPONSIVE EXTRA SMALL 480px
+   ============================================ */
 @media (max-width: 480px) {
-  /* Extra small mobile adjustments */
   .hero {
     padding: 5rem 1rem 2rem;
     min-height: auto;
