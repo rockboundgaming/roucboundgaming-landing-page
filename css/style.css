@@ -170,7 +170,7 @@ nav {
 }
 
 /* ============================================
-   HERO STATS - INSIDE HERO
+   HERO STATS - FULL WIDTH
    ============================================ */
 .hero-stats {
   background: var(--red);
@@ -180,11 +180,14 @@ nav {
   align-items: center;
   gap: 4rem;
   flex-wrap: wrap;
-  width: 100vw;
+  width: 100%;
   position: relative;
-  left: calc(-50vw + 50%);
-  margin: 0;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
   margin-top: 2rem;
+  margin-bottom: 0;
 }
 
 .hero-stats .stat-item { 
