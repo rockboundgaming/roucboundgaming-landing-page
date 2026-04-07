@@ -1137,10 +1137,10 @@ footer {
   }
 
   .hero-stats {
-    gap: 0.8rem;
-    padding: 1rem 0.5rem;
-    bottom: 0;
-  }
+  gap: 0.8rem;
+  padding: 1rem 0.5rem;
+  bottom: -2rem;
+}
 
   .stat-item {
     flex: 0 0 calc(33.333% - 0.5rem);
