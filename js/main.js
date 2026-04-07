@@ -176,7 +176,7 @@ function displayFeaturedCreators(creators) {
         </div>
         <div class="creator-embed-wrapper">
           <iframe
-            src="https://twitch.tv/embed/${creator.twitch}/chat?parent=localhost&parent=rockgamingnl.ca&parent=www.rockgamingnl.ca"
+            src="https://twitch.tv/embed/${creator.twitch}?parent=localhost&parent=rockgamingnl.ca&parent=www.rockgamingnl.ca"
             height="500"
             width="100%"
             frameborder="0"
