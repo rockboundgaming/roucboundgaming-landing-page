@@ -695,6 +695,7 @@ section:nth-child(odd) {
   border: 3px solid var(--red);
   overflow: hidden;
   transition: all 0.3s ease;
+  margin-bottom: 2rem;
 }
 
 .creator-featured:hover {
@@ -799,6 +800,30 @@ section:nth-child(odd) {
   width: 100%;
   height: 100%;
   border: none;
+}
+
+/* ============================================
+   LIVE WRAPPER
+   ============================================ */
+.live-wrapper {
+  width: 100%;
+  margin-bottom: 2rem;
+  background: var(--darker);
+}
+
+.live-cta {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(230,57,70,0.05);
+  border: 1px solid rgba(230,57,70,0.2);
+  border-radius: 8px;
+}
+
+.live-cta p {
+  font-size: 1.1rem;
+  color: rgba(241,250,238,0.7);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
 }
 
 /* ============================================
@@ -1254,6 +1279,11 @@ footer {
   .footer-links a {
     font-size: 0.75rem;
   }
+
+  /* Twitch Embed Mobile */
+  .twitch-embed-container {
+    min-height: 300px;
+  }
 }
 
 /* ============================================
@@ -1351,5 +1381,10 @@ footer {
 
   footer {
     padding: 2rem 1rem;
+  }
+
+  /* Twitch Embed Mobile */
+  .twitch-embed-container {
+    min-height: 250px;
   }
 }
