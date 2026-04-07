@@ -10,8 +10,8 @@
   --white: #f1faee;
   --darker: #060810;
   --card: #111827;
-  --silver: #c0c0c0;
-  --light-silver: #e8e8e8;
+  --silver-light: #D3D3D3;
+  --silver-dark: #A9A9A9;
 }
 
 /* RESET */
@@ -217,11 +217,10 @@ nav.scrolled {
   text-transform: uppercase;
   margin-bottom: 2rem;
   animation: fadeUp 1s ease forwards 0.1s both;
-  background: linear-gradient(135deg, var(--light-silver) 0%, var(--silver) 50%, var(--white) 100%);
+  background: linear-gradient(180deg, var(--silver-light) 0%, var(--silver-dark) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 4px 15px rgba(192,192,192,0.3));
 }
 
 .hero-btns {
