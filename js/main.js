@@ -180,7 +180,7 @@ function displayFeaturedCreators(creators) {
         </div>
         <div class="twitch-embed-container">
           <iframe
-            src="https://twitch.tv/embed/${c.twitch}/chat?parent=${window.location.hostname}&darkpixel=on"
+            src="https://twitch.tv/embed/${c.twitch}?parent=${window.location.hostname}"
             allowfullscreen=""
             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;">
           </iframe>
