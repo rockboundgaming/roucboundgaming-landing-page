@@ -109,12 +109,12 @@ async function fetchFeaturedCreators() {
       // Only process rows with enough columns
       if (cols.length >= 6) {
         allCreators.push({
-          twitch: cols[0],           // Col 0: TwitchName
-          name: cols[1],             // Col 1: DisplayName
-          level: parseInt(cols[2]),  // Col 2: Level
-          hours: cols[3],            // Col 3: TotalHours
-          featured: cols[4],         // Col 4: Featured (Yes/No)
-          status: cols[5]            // Col 5: Status (Active/Inactive)
+          twitch: cols[0],
+          name: cols[1],
+          level: parseInt(cols[2]),
+          hours: cols[3],
+          featured: cols[4],
+          status: cols[5]
         });
       }
     }
