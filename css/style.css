@@ -12,6 +12,8 @@
   --card: #111827;
   --silver-light: #D3D3D3;
   --silver-dark: #A9A9A9;
+  --container-max: 1500px;
+  --container-pad: 6rem 2rem;
 }
 
 /* RESET */
@@ -59,6 +61,32 @@ body::before {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes parallax {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(20px); }
+}
+
+/* ============================================
+   CONTAINER SYSTEM
+   ============================================ */
+.container {
+  padding: var(--container-pad);
+  max-width: var(--container-max);
+  margin: 0 auto;
+  width: 100%;
 }
 
 /* ============================================
@@ -121,7 +149,6 @@ nav.scrolled {
 .nav-links a:hover {
   color: var(--red);
   transform: translateY(-2px);
-  text-shadow: 0 0 10px rgba(230,57,70,0.5);
 }
 
 .nav-links a::after {
@@ -158,6 +185,7 @@ nav.scrolled {
   position: relative;
   text-align: center;
   padding-bottom: 8rem;
+  overflow: hidden;
 }
 
 .hero-bg {
@@ -167,6 +195,7 @@ nav.scrolled {
     radial-gradient(circle at 20% 50%, rgba(230,57,70,0.15), transparent 60%),
     radial-gradient(circle at 80% 20%, rgba(69,123,157,0.2), transparent 50%),
     var(--darker);
+  animation: parallax 6s ease-in-out infinite;
 }
 
 .hero-grid {
@@ -224,6 +253,17 @@ nav.scrolled {
   animation: fadeUp 1s ease forwards 0.2s both;
 }
 
+.authority-line {
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--silver-light);
+  font-weight: 700;
+  font-family: 'Barlow Condensed';
+  margin-bottom: 2rem;
+  animation: fadeUp 1s ease forwards 0.3s both;
+}
+
 .hero-stats {
   background: var(--red);
   width: 100vw;
@@ -239,7 +279,7 @@ nav.scrolled {
   bottom: 0;
   left: 0;
   right: 0;
-  animation: fadeUp 1s ease forwards 0.3s both;
+  animation: fadeUp 1s ease forwards 0.4s both;
   box-shadow: inset 0 10px 30px rgba(0,0,0,0.3);
 }
 
@@ -253,7 +293,6 @@ nav.scrolled {
 
 .stat-item:hover {
   transform: scale(1.1);
-  text-shadow: 0 0 20px rgba(255,255,255,0.5);
 }
 
 .stat-number {
@@ -379,15 +418,14 @@ nav.scrolled {
   border-color: var(--gold);
   color: var(--gold);
   transform: translateY(-2px);
-  box-shadow: 0 0 20px rgba(244,196,48,0.3);
 }
 
 /* ============================================
    SECTIONS
    ============================================ */
 section {
-  padding: 6rem 2rem;
-  max-width: 1500px;
+  padding: var(--container-pad);
+  max-width: var(--container-max);
   margin: 0 auto;
   width: 100%;
   position: relative;
@@ -430,7 +468,6 @@ section:nth-child(odd) {
   color: rgba(241,250,238,0.8);
   line-height: 1.8;
   margin-bottom: 1.2rem;
-  background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(230,57,70,0.02) 100%);
   padding: 1rem;
   border-left: 3px solid rgba(230,57,70,0.3);
 }
@@ -446,7 +483,6 @@ section:nth-child(odd) {
   line-height: 1.8;
   margin: 0 auto 3rem;
   max-width: 600px;
-  background: linear-gradient(135deg, rgba(230,57,70,0.05) 0%, rgba(29,53,87,0.05) 100%);
   padding: 2rem;
   border-radius: 8px;
   border: 1px solid rgba(230,57,70,0.2);
@@ -514,6 +550,65 @@ section:nth-child(odd) {
 }
 
 /* ============================================
+   UNIFIED CARD SYSTEM
+   ============================================ */
+.card {
+  background: var(--card);
+  border: 1px solid rgba(230,57,70,0.2);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--red);
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(230,57,70,0) 0%, rgba(230,57,70,0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  border-color: var(--red);
+  box-shadow: 0 15px 40px rgba(230,57,70,0.2), 0 0 20px rgba(230,57,70,0.1);
+  background: linear-gradient(135deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0.95) 100%);
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+.card h4 {
+  font-family: 'Barlow Condensed';
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+  margin-top: 0.5rem;
+  color: white;
+}
+
+.card p {
+  font-size: 1rem;
+  color: rgba(241,250,238,0.6);
+  line-height: 1.5;
+}
+
+/* ============================================
    CARD ICONS
    ============================================ */
 .card-icon,
@@ -523,155 +618,35 @@ section:nth-child(odd) {
   display: block;
   flex-shrink: 0;
   line-height: 1;
+  font-size: 2.5rem;
+  color: var(--red);
+  margin-bottom: 1rem;
 }
 
 .card-icon {
   font-size: 3rem;
-  color: var(--red);
-  margin-bottom: 1rem;
-}
-
-.feature-icon {
-  font-size: 2.5rem;
-  color: var(--red);
-  margin-bottom: 1rem;
 }
 
 .perk-icon {
-  font-size: 2.5rem;
-  color: var(--red);
   margin-bottom: 0;
 }
 
-.about-card:hover .card-icon,
-.feature-card:hover .feature-icon,
-.perk-card:hover .perk-icon {
+.card:hover .card-icon,
+.card:hover .feature-icon,
+.card:hover .perk-icon {
   color: var(--gold);
-  transform: scale(1.1) drop-shadow(0 0 10px rgba(244,196,48,0.5));
+  transform: scale(1.1);
 }
 
 /* ============================================
-   ABOUT CARDS
+   PERK CARD OVERRIDE
    ============================================ */
-.about-card {
-  background: var(--card);
-  border: 1px solid rgba(230,57,70,0.2);
-  padding: 1.5rem;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.about-card::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 3px;
-  height: 100%;
-  background: var(--red);
-}
-
-.about-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(230,57,70,0) 0%, rgba(230,57,70,0.05) 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.about-card:hover {
-  transform: translateY(-8px);
-  border-color: var(--red);
-  box-shadow: 0 15px 40px rgba(230,57,70,0.2), 0 0 30px rgba(230,57,70,0.1);
-  background: linear-gradient(135deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0.95) 100%);
-}
-
-.about-card:hover::after {
-  opacity: 1;
-}
-
-.about-card h4 {
-  font-family: 'Barlow Condensed';
-  font-size: 1.2rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 0.3rem;
-  margin-top: 0.5rem;
-}
-
-.about-card p {
-  font-size: 1.1rem;
-  color: rgba(241,250,238,0.6);
-  line-height: 1.5;
-}
-
-/* ============================================
-   CREATOR SECTION
-   ============================================ */
-.creator-section {
-  padding: 6rem 2rem;
-  max-width: 1500px;
-  margin: 0 auto;
-  width: 100%;
-  background: linear-gradient(135deg, rgba(230,57,70,0.03) 0%, rgba(29,53,87,0.05) 100%);
-}
-
-.creator-intro {
-  font-size: 1.3rem;
-  color: rgba(241,250,238,0.7);
-  margin-bottom: 3rem;
-  line-height: 1.8;
-  max-width: 800px;
-  background: linear-gradient(135deg, rgba(230,57,70,0.05) 0%, rgba(29,53,87,0.03) 100%);
-  padding: 1.5rem;
-  border-left: 3px solid rgba(230,57,70,0.3);
-}
-
 .perk-card {
-  background: var(--card);
-  border: 1px solid rgba(230,57,70,0.2);
   padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   align-items: flex-start;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.perk-card::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 3px;
-  height: 100%;
-  background: var(--red);
-}
-
-.perk-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(230,57,70,0) 0%, rgba(230,57,70,0.05) 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.perk-card:hover {
-  transform: translateY(-8px);
-  border-color: var(--red);
-  box-shadow: 0 15px 40px rgba(230,57,70,0.2), 0 0 30px rgba(230,57,70,0.1);
-  background: linear-gradient(135deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0.95) 100%);
-}
-
-.perk-card:hover::after {
-  opacity: 1;
 }
 
 .perk-card:nth-child(5),
@@ -696,6 +671,75 @@ section:nth-child(odd) {
   font-size: 1.05rem;
   color: rgba(241,250,238,0.6);
   line-height: 1.6;
+}
+
+/* ============================================
+   ROADMAP CARD OVERRIDE
+   ============================================ */
+.roadmap-item {
+  padding: 1.5rem;
+}
+
+.roadmap-num {
+  font-family: 'Bebas Neue';
+  font-size: 2.5rem;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+
+.roadmap-content h4 {
+  font-family: 'Barlow Condensed';
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: var(--gold);
+}
+
+.roadmap-content p {
+  font-size: 1.1rem;
+  color: rgba(241,250,238,0.6);
+  line-height: 1.7;
+}
+
+/* ============================================
+   FEATURE CARD OVERRIDE
+   ============================================ */
+.feature-card {
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.feature-card:last-child {
+  grid-column: 1 / -1;
+  max-width: 33.333%;
+  margin: 0 auto;
+}
+
+.feature-card p {
+  font-size: 1.1rem;
+}
+
+/* ============================================
+   CREATOR SECTION
+   ============================================ */
+.creator-section {
+  background: linear-gradient(135deg, rgba(230,57,70,0.03) 0%, rgba(29,53,87,0.05) 100%);
+}
+
+.creator-intro {
+  font-size: 1.3rem;
+  color: rgba(241,250,238,0.7);
+  margin-bottom: 3rem;
+  line-height: 1.8;
+  max-width: 800px;
+  padding: 1.5rem;
+  border-left: 3px solid rgba(230,57,70,0.3);
+}
+
+.creator-intro strong {
+  color: var(--white);
+  font-weight: 700;
 }
 
 .creator-cta {
@@ -726,124 +770,11 @@ section:nth-child(odd) {
   font-family: 'Barlow Condensed';
 }
 
-.roadmap-item {
-  background: var(--card);
-  border: 1px solid rgba(230,57,70,0.2);
-  padding: 1.5rem;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.roadmap-item::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 3px;
-  height: 100%;
-  background: var(--red);
-}
-
-.roadmap-item::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(230,57,70,0) 0%, rgba(230,57,70,0.05) 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.roadmap-item:hover {
-  transform: translateY(-8px);
-  border-color: var(--red);
-  box-shadow: 0 15px 40px rgba(230,57,70,0.2), 0 0 30px rgba(230,57,70,0.1);
-  background: linear-gradient(135deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0.95) 100%);
-}
-
-.roadmap-item:hover::after {
-  opacity: 1;
-}
-
-.roadmap-num {
-  font-family: 'Bebas Neue';
-  font-size: 2.5rem;
-  color: var(--red);
-  margin-bottom: 0.5rem;
-  opacity: 0.7;
-}
-
-.roadmap-content h4 {
-  font-family: 'Barlow Condensed';
-  font-size: 1.1rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-  color: var(--gold);
-}
-
-.roadmap-content p {
-  font-size: 1.1rem;
-  color: rgba(241,250,238,0.6);
-  line-height: 1.7;
-}
-
 /* ============================================
-   COMMUNITY
+   COMMUNITY SECTION
    ============================================ */
 .community-section { 
   text-align: center; 
-}
-
-.feature-card {
-  background: var(--card);
-  border: 1px solid rgba(255,255,255,0.05);
-  padding: 2rem;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.feature-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(230,57,70,0) 0%, rgba(230,57,70,0.05) 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.feature-card:last-child {
-  grid-column: 1 / -1;
-  max-width: 33.333%;
-  margin: 0 auto;
-}
-
-.feature-card:hover {
-  transform: translateY(-8px);
-  border-color: rgba(230,57,70,0.4);
-  box-shadow: 0 15px 40px rgba(230,57,70,0.15), 0 0 30px rgba(230,57,70,0.08);
-  background: linear-gradient(135deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0.95) 100%);
-}
-
-.feature-card:hover::after {
-  opacity: 1;
-}
-
-.feature-card h4 {
-  font-family: 'Barlow Condensed';
-  font-size: 1.2rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-}
-
-.feature-card p {
-  font-size: 1.1rem;
-  color: rgba(241,250,238,0.6);
-  line-height: 1.6;
 }
 
 /* ============================================
@@ -874,7 +805,7 @@ section:nth-child(odd) {
 .platform-card:hover {
   transform: translateY(-8px);
   border-color: rgba(230,57,70,0.3);
-  box-shadow: 0 15px 40px rgba(230,57,70,0.15), 0 0 30px rgba(230,57,70,0.08);
+  box-shadow: 0 15px 40px rgba(230,57,70,0.15), 0 0 20px rgba(230,57,70,0.08);
   background: linear-gradient(135deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0.95) 100%);
 }
 
@@ -911,7 +842,7 @@ section:nth-child(odd) {
 .platform-icon .fa-facebook { color: #1877F2; }
 
 .platform-card:hover .platform-icon {
-  transform: scale(1.2) drop-shadow(0 0 10px rgba(255,255,255,0.5));
+  transform: scale(1.2);
   filter: brightness(1.3);
 }
 
@@ -1044,7 +975,6 @@ footer {
 .footer-links a:hover {
   color: var(--white);
   transform: translateY(-8px);
-  filter: drop-shadow(0 0 10px currentColor);
 }
 
 .footer-links a:hover i {
@@ -1075,7 +1005,7 @@ footer {
 }
 
 /* ============================================
-   MOBILE
+   MOBILE NAV
    ============================================ */
 @media (max-width: 768px) {
   nav {
@@ -1101,6 +1031,7 @@ footer {
     z-index: 99;
     gap: 1rem;
     border: 1px solid rgba(230,57,70,0.3);
+    animation: slideInDown 0.3s ease forwards;
   }
 
   .nav-links.active { 
@@ -1110,6 +1041,10 @@ footer {
   .nav-links a {
     font-size: 0.9rem;
     padding: 0.8rem;
+  }
+
+  :root {
+    --container-pad: 4rem 1.5rem;
   }
 
   .about-grid {
@@ -1125,10 +1060,6 @@ footer {
     font-size: 1.1rem;
   }
 
-  .about-card p {
-    font-size: 1rem;
-  }
-
   .community-desc {
     font-size: 1.1rem;
   }
@@ -1137,25 +1068,17 @@ footer {
     font-size: 0.95rem;
   }
 
-  .about-card h4 {
+  .card h4 {
     font-size: 1rem;
   }
 
-  .feature-card h4 {
-    font-size: 1rem;
-  }
-
-  .feature-card p {
-    font-size: 1rem;
+  .card p {
+    font-size: 0.95rem;
   }
 
   .feature-card:last-child {
     grid-column: 1 / -1;
     max-width: 100%;
-  }
-
-  .creator-section {
-    padding: 4rem 1.5rem;
   }
 
   .creator-intro {
@@ -1181,14 +1104,6 @@ footer {
     font-size: 2rem;
   }
 
-  .perk-content h4 {
-    font-size: 1rem;
-  }
-
-  .perk-content p {
-    font-size: 1rem;
-  }
-
   .roadmap-grid {
     grid-template-columns: 1fr;
   }
@@ -1197,16 +1112,8 @@ footer {
     font-size: 2rem;
   }
 
-  .roadmap-content h4 {
-    font-size: 1rem;
-  }
-
   .roadmap-content p {
     font-size: 1rem;
-  }
-
-  .roadmap-title {
-    font-size: 1.5rem;
   }
 
   .hero-logo { 
@@ -1215,10 +1122,6 @@ footer {
 
   .hero {
     padding-bottom: 10rem;
-  }
-
-  section { 
-    padding: 4rem 1.5rem; 
   }
 
   .hero-stats {
