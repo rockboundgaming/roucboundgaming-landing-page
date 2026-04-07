@@ -438,6 +438,7 @@ section {
 .perks-list {
   list-style: none;
   margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 .perks-list li {
