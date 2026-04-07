@@ -149,13 +149,17 @@ nav {
 }
 
 .hero-tagline {
-  max-width: 800px;
+  max-width: 1600px;
   width: 100%;
   height: auto;
-  margin: 0 auto 2rem auto;
+  margin: 0 auto 2.5rem auto;
   display: block;
   animation: fadeUp 1s ease forwards;
   filter: drop-shadow(0 10px 20px rgba(230, 57, 70, 0.2));
+  transform: scale(4);
+  transform-origin: center top;
+  margin-top: 3rem;
+  margin-bottom: 6rem;
 }
 
 .hero-btns {
@@ -216,11 +220,11 @@ nav {
 .btn-primary {
   background: var(--red);
   color: white;
-  padding: 1rem 2.5rem;
+  padding: 1.5rem 3.5rem;
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   text-transform: uppercase;
   text-decoration: none;
   clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
@@ -818,11 +822,14 @@ footer {
   }
   
   .hero-tagline { 
-    max-width: 500px; 
+    max-width: 500px;
+    transform: scale(2.5);
+    margin-bottom: 4rem;
   }
   
-  .btn-large {
+  .btn-primary {
     padding: 1.2rem 2.5rem;
     font-size: 1rem;
+    letter-spacing: 2px;
   }
 }
