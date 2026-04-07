@@ -42,18 +42,21 @@ nav {
   top: 0;
   width: 100%;
   z-index: 100;
-  padding: 1rem 2rem;
+  padding: 1.5rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: rgba(6,8,16,0.85);
   backdrop-filter: blur(12px);
+  border-bottom: 2px solid rgba(230,57,70,0.3);
 }
 
 .nav-logo {
   font-family: 'Bebas Neue';
-  font-size: 1.8rem;
+  font-size: 2rem;
   letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 900;
 }
 
 .nav-logo span { 
@@ -62,21 +65,45 @@ nav {
 
 .nav-links {
   display: flex;
-  gap: 2rem;
+  gap: 3rem;
   list-style: none;
+}
+
+.nav-links li {
+  position: relative;
 }
 
 .nav-links a {
   color: white;
   text-decoration: none;
-  font-size: 0.8rem;
+  font-size: 1rem;
   letter-spacing: 2px;
   text-transform: uppercase;
-  transition: color 0.2s;
+  font-weight: 700;
+  font-family: 'Barlow Condensed';
+  transition: all 0.3s;
+  display: block;
+  padding: 0.5rem 0;
 }
 
-.nav-links a:hover { 
-  color: var(--red); 
+.nav-links a:hover {
+  color: var(--red);
+  transform: translateY(-2px);
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--red);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
 }
 
 /* MOBILE */
@@ -838,6 +865,14 @@ footer {
    MOBILE
    ============================================ */
 @media (max-width: 768px) {
+  nav {
+    padding: 1rem 1.5rem;
+  }
+
+  .nav-logo {
+    font-size: 1.5rem;
+  }
+
   .menu-toggle { 
     display: block; 
   }
@@ -846,15 +881,22 @@ footer {
     position: absolute;
     top: 70px;
     right: 20px;
-    background: var(--darker);
+    background: rgba(6,8,16,0.95);
     flex-direction: column;
-    padding: 1rem;
+    padding: 1.5rem;
     display: none;
     z-index: 99;
+    gap: 1rem;
+    border: 1px solid rgba(230,57,70,0.3);
   }
 
   .nav-links.active { 
     display: flex; 
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+    padding: 0.8rem;
   }
 
   .about-grid,
