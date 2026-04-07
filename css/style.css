@@ -142,7 +142,7 @@ nav {
   max-width: 700px;
   width: 100%;
   height: auto;
-  margin: 0 auto 1rem auto;
+  margin: 0 auto 0.5rem auto;
   display: block;
   animation: fadeUp 1s ease forwards;
   filter: drop-shadow(0 20px 40px rgba(230, 57, 70, 0.3));
@@ -152,14 +152,12 @@ nav {
   max-width: 3200px;
   width: 100%;
   height: auto;
-  margin: 0 auto 2.5rem auto;
+  margin: 0 auto 3rem auto;
   display: block;
   animation: fadeUp 1s ease forwards;
   filter: drop-shadow(0 10px 20px rgba(230, 57, 70, 0.2));
   transform: scale(8);
   transform-origin: center top;
-  margin-top: 4rem;
-  margin-bottom: 8rem;
 }
 
 .hero-btns {
@@ -824,8 +822,8 @@ footer {
   .hero-tagline { 
     max-width: 800px;
     transform: scale(4);
-    margin-bottom: 5rem;
-    margin-top: 2rem;
+    margin-bottom: 2rem;
+    margin-top: 0.5rem;
   }
   
   .btn-primary {
