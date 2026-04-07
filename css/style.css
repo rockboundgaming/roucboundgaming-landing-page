@@ -348,8 +348,12 @@ nav {
    SECTIONS
    ============================================ */
 section {
-  padding: 6rem 2rem;
-  max-width: 1200px;
+  padding: 6rem 4rem;
+  width: 100%;
+}
+
+.section-inner {
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -512,7 +516,7 @@ section {
   background: linear-gradient(135deg, rgba(230,57,70,0.08) 0%, rgba(29,53,87,0.2) 100%);
   border-top: 1px solid rgba(230,57,70,0.2);
   border-bottom: 1px solid rgba(230,57,70,0.2);
-  padding: 6rem 2rem;
+  padding: 6rem 4rem;
   position: relative;
   overflow: hidden;
 }
@@ -625,7 +629,7 @@ section {
 
 .community-features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
   text-align: left;
@@ -662,8 +666,8 @@ section {
    ============================================ */
 .platforms-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
   margin-top: 2rem;
 }
 
@@ -735,9 +739,10 @@ section {
 .cta-section {
   background: var(--red);
   text-align: center;
-  padding: 5rem 2rem;
+  padding: 5rem 4rem;
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 
 .cta-section::before {
@@ -822,8 +827,9 @@ section {
 footer {
   background: var(--darker);
   border-top: 1px solid rgba(230,57,70,0.2);
-  padding: 4rem 2rem 3rem;
+  padding: 4rem 4rem 3rem;
   text-align: center;
+  width: 100%;
 }
 
 .footer-logo {
@@ -910,6 +916,38 @@ footer {
 /* ============================================
    MOBILE
    ============================================ */
+@media (max-width: 1024px) {
+  section {
+    padding: 5rem 2.5rem;
+  }
+
+  .streamer-section {
+    padding: 5rem 2.5rem;
+  }
+
+  .cta-section {
+    padding: 4rem 2.5rem;
+  }
+
+  footer {
+    padding: 3.5rem 2.5rem 2.5rem;
+  }
+
+  .about-grid,
+  .streamer-grid {
+    gap: 3rem;
+  }
+
+  .community-features {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .platforms-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+}
+
 @media (max-width: 768px) {
   nav {
     padding: 1rem 1.5rem;
@@ -943,6 +981,22 @@ footer {
   .nav-links a {
     font-size: 0.9rem;
     padding: 0.8rem;
+  }
+
+  section {
+    padding: 4rem 1.5rem;
+  }
+
+  .streamer-section {
+    padding: 4rem 1.5rem;
+  }
+
+  .cta-section {
+    padding: 3rem 1.5rem;
+  }
+
+  footer {
+    padding: 3rem 1.5rem 2rem;
   }
 
   .about-grid,
@@ -987,6 +1041,14 @@ footer {
     font-size: 0.9rem;
   }
 
+  .community-features {
+    grid-template-columns: 1fr;
+  }
+
+  .platforms-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
   .perks-list li strong {
     font-size: 1rem;
   }
@@ -1003,10 +1065,6 @@ footer {
     padding-bottom: 10rem;
   }
 
-  section { 
-    padding: 4rem 1.5rem; 
-  }
-
   .hero-stats {
     gap: 2rem;
     padding: 1.5rem;
@@ -1020,21 +1078,9 @@ footer {
     font-size: 0.6rem;
   }
 
-  .community-features {
-    grid-template-columns: 1fr;
-  }
-
-  .platforms-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  }
-
   .btn-primary {
     padding: 0.9rem 1.8rem;
     font-size: 0.9rem;
-  }
-
-  .cta-section {
-    padding: 3rem 1.5rem;
   }
 
   .cta-section::before {
@@ -1050,10 +1096,6 @@ footer {
     padding: 0.8rem 1.5rem;
     font-size: 0.85rem;
     letter-spacing: 1px;
-  }
-
-  footer {
-    padding: 3rem 1.5rem 2rem;
   }
 
   .footer-links {
