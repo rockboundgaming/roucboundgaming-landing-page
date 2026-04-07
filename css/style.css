@@ -538,9 +538,15 @@ section {
 
 .perk-card:nth-child(5),
 .perk-card:nth-child(6) {
-  grid-column: 1 / -1;
-  max-width: 50%;
-  margin: 0 auto;
+  grid-column: auto;
+}
+
+.creator-perks-bottom {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  max-width: 70%;
+  margin: 0 auto 3rem;
 }
 
 .perk-card::before {
@@ -1063,14 +1069,8 @@ footer {
     gap: 1rem;
   }
 
-  .perk-card {
-    padding: 1.5rem;
-    gap: 1rem;
-  }
-
-  .perk-card:nth-child(5),
-  .perk-card:nth-child(6) {
-    grid-column: 1 / -1;
+  .creator-perks-bottom {
+    grid-template-columns: 1fr;
     max-width: 100%;
   }
 
