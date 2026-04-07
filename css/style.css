@@ -71,62 +71,6 @@ body::before {
 }
 
 /* ============================================
-   SHARED CARD STYLES
-   ============================================ */
-.card-base {
-  background: var(--card);
-  border: 1px solid rgba(230,57,70,0.2);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.card-base::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 3px;
-  height: 100%;
-  background: var(--red);
-}
-
-.card-base::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(230,57,70,0) 0%, rgba(230,57,70,0.05) 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.card-base:hover {
-  transform: translateY(-8px);
-  border-color: var(--red);
-  box-shadow: 0 15px 40px rgba(230,57,70,0.2), 0 0 30px rgba(230,57,70,0.1);
-  background: linear-gradient(135deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0.95) 100%);
-}
-
-.card-base:hover::after {
-  opacity: 1;
-}
-
-/* ============================================
-   SHARED BUTTON STYLES
-   ============================================ */
-.btn-base {
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: all 0.3s;
-  border: none;
-  cursor: pointer;
-  clip-path: polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
-}
-
-/* ============================================
    NAV
    ============================================ */
 nav {
@@ -348,8 +292,15 @@ nav.scrolled {
   background: var(--red);
   color: white;
   padding: 1.2rem 2.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  clip-path: polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
   font-size: 1rem;
-  extends: .btn-base;
 }
 
 .btn-primary:hover {
@@ -377,12 +328,19 @@ nav.scrolled {
 }
 
 .btn-white {
-  display: inline-block;
   background: white;
   color: var(--red);
+  border: none;
   padding: 1rem 2rem;
   font-size: 1rem;
-  extends: .btn-base;
+  letter-spacing: 2px;
+  clip-path: polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
+  display: inline-block;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: all 0.3s;
+  cursor: pointer;
 }
 
 .btn-white:hover {
@@ -391,13 +349,19 @@ nav.scrolled {
 }
 
 .btn-dark {
-  display: inline-block;
   background: rgba(0,0,0,0.3);
   color: white;
   border: 2px solid rgba(255,255,255,0.5);
   padding: 1rem 2rem;
   font-size: 1rem;
-  extends: .btn-base;
+  letter-spacing: 2px;
+  clip-path: polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
+  display: inline-block;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: all 0.3s;
+  cursor: pointer;
 }
 
 .btn-dark:hover {
@@ -407,12 +371,17 @@ nav.scrolled {
 }
 
 .btn-secondary {
-  display: inline-block;
   background: transparent;
   color: var(--white);
   padding: 1rem 2.5rem;
   border: 2px solid rgba(241,250,238,0.3);
-  extends: .btn-base;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  clip-path: polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
+  transition: all 0.3s;
+  display: inline-block;
 }
 
 .btn-secondary:hover {
@@ -463,17 +432,16 @@ section:nth-child(odd) {
 }
 
 /* ============================================
-   TEXT STYLES
+   ABOUT TEXT
    ============================================ */
-.about-text p,
-.creator-intro {
+.about-text p {
+  font-size: 1.3rem;
+  color: rgba(241,250,238,0.8);
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
   background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(230,57,70,0.02) 100%);
   padding: 1rem;
   border-left: 3px solid rgba(230,57,70,0.3);
-  font-size: 1.3rem;
-  color: rgba(241,250,238,0.7);
-  line-height: 1.8;
-  margin-bottom: 1.2rem;
 }
 
 .about-text p strong {
@@ -559,8 +527,7 @@ section:nth-child(odd) {
    ============================================ */
 .card-icon,
 .feature-icon,
-.perk-icon,
-.platform-icon {
+.perk-icon {
   transition: all 0.3s;
   display: block;
   flex-shrink: 0;
@@ -585,30 +552,54 @@ section:nth-child(odd) {
   margin-bottom: 0;
 }
 
-.platform-icon {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-}
-
 .about-card:hover .card-icon,
 .feature-card:hover .feature-icon,
-.perk-card:hover .perk-icon,
-.platform-card:hover .platform-icon {
+.perk-card:hover .perk-icon {
   color: var(--gold);
   transform: scale(1.1) drop-shadow(0 0 10px rgba(244,196,48,0.5));
 }
 
-.platform-icon .fa-discord { color: #5865F2; }
-.platform-icon .fa-twitch { color: #9146FF; }
-.platform-icon .fa-tiktok { color: white; }
-.platform-icon .fa-facebook { color: #1877F2; }
-
 /* ============================================
-   CARDS
+   ABOUT CARDS
    ============================================ */
 .about-card {
-  extends: .card-base;
+  background: var(--card);
+  border: 1px solid rgba(230,57,70,0.2);
   padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.about-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--red);
+}
+
+.about-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(230,57,70,0) 0%, rgba(230,57,70,0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.about-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--red);
+  box-shadow: 0 15px 40px rgba(230,57,70,0.2), 0 0 30px rgba(230,57,70,0.1);
+  background: linear-gradient(135deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0.95) 100%);
+}
+
+.about-card:hover::after {
+  opacity: 1;
 }
 
 .about-card h4 {
@@ -624,19 +615,72 @@ section:nth-child(odd) {
   font-size: 1.1rem;
   color: rgba(241,250,238,0.6);
   line-height: 1.5;
-  background: none;
-  padding: 0;
-  border: none;
-  margin: 0;
+}
+
+/* ============================================
+   CREATOR SECTION
+   ============================================ */
+.creator-section {
+  padding: 6rem 2rem;
+  max-width: 1500px;
+  margin: 0 auto;
+  width: 100%;
+  background: linear-gradient(135deg, rgba(230,57,70,0.03) 0%, rgba(29,53,87,0.05) 100%);
+}
+
+.creator-intro {
+  font-size: 1.3rem;
+  color: rgba(241,250,238,0.7);
+  margin-bottom: 3rem;
+  line-height: 1.8;
+  max-width: 800px;
+  background: linear-gradient(135deg, rgba(230,57,70,0.05) 0%, rgba(29,53,87,0.03) 100%);
+  padding: 1.5rem;
+  border-left: 3px solid rgba(230,57,70,0.3);
 }
 
 .perk-card {
-  extends: .card-base;
+  background: var(--card);
+  border: 1px solid rgba(230,57,70,0.2);
   padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   align-items: flex-start;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.perk-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--red);
+}
+
+.perk-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(230,57,70,0) 0%, rgba(230,57,70,0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.perk-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--red);
+  box-shadow: 0 15px 40px rgba(230,57,70,0.2), 0 0 30px rgba(230,57,70,0.1);
+  background: linear-gradient(135deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0.95) 100%);
+}
+
+.perk-card:hover::after {
+  opacity: 1;
 }
 
 .perk-card:nth-child(5),
@@ -661,6 +705,104 @@ section:nth-child(odd) {
   font-size: 1.05rem;
   color: rgba(241,250,238,0.6);
   line-height: 1.6;
+}
+
+.creator-cta {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.roadmap-section {
+  margin-top: 4rem;
+}
+
+.roadmap-title {
+  font-family: 'Bebas Neue';
+  font-size: 1.8rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+}
+
+.roadmap-subtitle {
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(241,250,238,0.6);
+  margin-bottom: 2rem;
+  font-weight: 700;
+  font-family: 'Barlow Condensed';
+}
+
+.roadmap-item {
+  background: var(--card);
+  border: 1px solid rgba(230,57,70,0.2);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.roadmap-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--red);
+}
+
+.roadmap-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(230,57,70,0) 0%, rgba(230,57,70,0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.roadmap-item:hover {
+  transform: translateY(-8px);
+  border-color: var(--red);
+  box-shadow: 0 15px 40px rgba(230,57,70,0.2), 0 0 30px rgba(230,57,70,0.1);
+  background: linear-gradient(135deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0.95) 100%);
+}
+
+.roadmap-item:hover::after {
+  opacity: 1;
+}
+
+.roadmap-num {
+  font-family: 'Bebas Neue';
+  font-size: 2.5rem;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+
+.roadmap-content h4 {
+  font-family: 'Barlow Condensed';
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: var(--gold);
+}
+
+.roadmap-content p {
+  font-size: 1.1rem;
+  color: rgba(241,250,238,0.6);
+  line-height: 1.7;
+}
+
+/* ============================================
+   COMMUNITY
+   ============================================ */
+.community-section { 
+  text-align: center; 
 }
 
 .feature-card {
@@ -713,34 +855,9 @@ section:nth-child(odd) {
   line-height: 1.6;
 }
 
-.roadmap-item {
-  extends: .card-base;
-  padding: 1.5rem;
-}
-
-.roadmap-num {
-  font-family: 'Bebas Neue';
-  font-size: 2.5rem;
-  color: var(--red);
-  margin-bottom: 0.5rem;
-  opacity: 0.7;
-}
-
-.roadmap-content h4 {
-  font-family: 'Barlow Condensed';
-  font-size: 1.1rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-  color: var(--gold);
-}
-
-.roadmap-content p {
-  font-size: 1.1rem;
-  color: rgba(241,250,238,0.6);
-  line-height: 1.7;
-}
-
+/* ============================================
+   PLATFORMS
+   ============================================ */
 .platform-card {
   background: var(--card);
   padding: 2rem;
@@ -790,6 +907,23 @@ section:nth-child(odd) {
   transform: scaleX(1);
 }
 
+.platform-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  display: block;
+  transition: all 0.3s;
+}
+
+.platform-icon .fa-discord { color: #5865F2; }
+.platform-icon .fa-twitch { color: #9146FF; }
+.platform-icon .fa-tiktok { color: white; }
+.platform-icon .fa-facebook { color: #1877F2; }
+
+.platform-card:hover .platform-icon {
+  transform: scale(1.2) drop-shadow(0 0 10px rgba(255,255,255,0.5));
+  filter: brightness(1.3);
+}
+
 .platform-name {
   font-family: 'Barlow Condensed';
   font-size: 0.9rem;
@@ -801,57 +935,6 @@ section:nth-child(odd) {
 .platform-handle {
   font-size: 0.75rem;
   opacity: 0.6;
-}
-
-/* ============================================
-   CREATOR SECTION
-   ============================================ */
-.creator-section {
-  padding: 6rem 2rem;
-  max-width: 1500px;
-  margin: 0 auto;
-  width: 100%;
-  background: linear-gradient(135deg, rgba(230,57,70,0.03) 0%, rgba(29,53,87,0.05) 100%);
-}
-
-.creator-intro {
-  margin-bottom: 3rem;
-  max-width: 800px;
-}
-
-.creator-cta {
-  text-align: center;
-  margin-bottom: 4rem;
-}
-
-.roadmap-section {
-  margin-top: 4rem;
-}
-
-.roadmap-title {
-  font-family: 'Bebas Neue';
-  font-size: 1.8rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 0.5rem;
-}
-
-.roadmap-subtitle {
-  font-size: 0.9rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(241,250,238,0.6);
-  margin-bottom: 2rem;
-  font-weight: 700;
-  font-family: 'Barlow Condensed';
-}
-
-/* ============================================
-   COMMUNITY
-   ============================================ */
-.community-section { 
-  text-align: center; 
 }
 
 /* ============================================
@@ -1038,8 +1121,7 @@ footer {
     padding: 0.8rem;
   }
 
-  .about-grid,
-  .creator-perks {
+  .about-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
@@ -1048,23 +1130,12 @@ footer {
     grid-template-columns: 1fr;
   }
 
-  .creator-perks {
-    gap: 1rem;
-  }
-
-  .creator-perks-bottom {
-    grid-template-columns: 1fr;
-    max-width: 100%;
-  }
-
-  .feature-card:last-child {
-    grid-column: 1 / -1;
-    max-width: 100%;
-  }
-
-  .about-text p,
-  .creator-intro {
+  .about-text p {
     font-size: 1.1rem;
+  }
+
+  .about-card p {
+    font-size: 1rem;
   }
 
   .community-desc {
@@ -1079,13 +1150,35 @@ footer {
     font-size: 1rem;
   }
 
-  .about-card p {
+  .feature-card h4 {
     font-size: 1rem;
   }
 
-  .feature-card h4,
   .feature-card p {
     font-size: 1rem;
+  }
+
+  .feature-card:last-child {
+    grid-column: 1 / -1;
+    max-width: 100%;
+  }
+
+  .creator-section {
+    padding: 4rem 1.5rem;
+  }
+
+  .creator-intro {
+    font-size: 1.1rem;
+  }
+
+  .creator-perks {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .creator-perks-bottom {
+    grid-template-columns: 1fr;
+    max-width: 100%;
   }
 
   .perk-card {
@@ -1113,7 +1206,10 @@ footer {
     font-size: 2rem;
   }
 
-  .roadmap-content h4,
+  .roadmap-content h4 {
+    font-size: 1rem;
+  }
+
   .roadmap-content p {
     font-size: 1rem;
   }
@@ -1132,10 +1228,6 @@ footer {
 
   section { 
     padding: 4rem 1.5rem; 
-  }
-
-  .creator-section {
-    padding: 4rem 1.5rem;
   }
 
   .hero-stats {
