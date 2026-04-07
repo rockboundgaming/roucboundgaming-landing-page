@@ -91,8 +91,8 @@ nav {
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
-  padding: 6rem 2rem 4rem;
+  overflow: visible;
+  padding: 6rem 2rem 2rem;
 }
 
 .hero-bg {
@@ -142,17 +142,17 @@ nav {
   max-width: 700px;
   width: 100%;
   height: auto;
-  margin: 0 auto 2rem auto;
+  margin: 0 auto 1rem auto;
   display: block;
   animation: fadeUp 1s ease forwards;
   filter: drop-shadow(0 20px 40px rgba(230, 57, 70, 0.3));
 }
 
 .hero-tagline {
-  max-width: 600px;
+  max-width: 800px;
   width: 100%;
   height: auto;
-  margin: 0 auto 2.5rem auto;
+  margin: 0 auto 2rem auto;
   display: block;
   animation: fadeUp 1s ease forwards;
   filter: drop-shadow(0 10px 20px rgba(230, 57, 70, 0.2));
@@ -160,13 +160,14 @@ nav {
 
 .hero-btns {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   justify-content: center;
   flex-wrap: wrap;
+  margin-bottom: 1rem;
 }
 
 /* ============================================
-   HERO STATS - FULL WIDTH
+   HERO STATS - INSIDE HERO
    ============================================ */
 .hero-stats {
   background: var(--red);
@@ -180,6 +181,7 @@ nav {
   position: relative;
   left: calc(-50vw + 50%);
   margin: 0;
+  margin-top: 2rem;
 }
 
 .hero-stats .stat-item { 
@@ -232,6 +234,12 @@ nav {
   background: #ff4757;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(230, 57, 70, 0.5);
+}
+
+.btn-large {
+  padding: 1.5rem 3.5rem;
+  font-size: 1.3rem;
+  letter-spacing: 4px;
 }
 
 .btn-secondary {
@@ -810,6 +818,11 @@ footer {
   }
   
   .hero-tagline { 
-    max-width: 400px; 
+    max-width: 500px; 
+  }
+  
+  .btn-large {
+    padding: 1.2rem 2.5rem;
+    font-size: 1rem;
   }
 }
