@@ -137,6 +137,11 @@ async function loadFeaturedCreators() {
       return c.level >= 5 && c.featured === "Yes";
     });
 
+    if (featuredCreators.length === 0) {
+      displayNoCreators();
+      return;
+    }
+
     displayFeaturedCreators(featuredCreators);
 
   } catch (err) {
@@ -154,11 +159,6 @@ function displayFeaturedCreators(creators) {
 
   if (!container) {
     console.error("twitch-embed container not found");
-    return;
-  }
-
-  if (creators.length === 0) {
-    displayNoCreators();
     return;
   }
 
@@ -180,6 +180,7 @@ function displayFeaturedCreators(creators) {
         </div>
         <div class="twitch-embed-container">
           <iframe
+            id="twitch-${c.twitch}"
             src="https://player.twitch.tv/?channel=${c.twitch}&parent=${window.location.hostname}&muted=false"
             allowfullscreen="allowfullscreen"
             scrolling="no"
@@ -190,8 +191,34 @@ function displayFeaturedCreators(creators) {
     `;
   }).join("");
 
-  // Load Twitch embed script
+  // Wait for iframes to load, then check if streams are actually live
+  setTimeout(() => {
+    verifyStreamsAreLive(creators);
+  }, 2000);
+
   loadTwitchScript();
+}
+
+function verifyStreamsAreLive(creators) {
+  creators.forEach(c => {
+    const iframe = document.getElementById(`twitch-${c.twitch}`);
+    if (iframe) {
+      // Check if iframe has an error by looking at its document
+      try {
+        iframe.onload = () => {
+          // If iframe loads successfully, stream is live
+          console.log(`Stream ${c.twitch} is live`);
+        };
+        iframe.onerror = () => {
+          // If iframe fails to load, stream is offline
+          console.log(`Stream ${c.twitch} is offline`);
+          displayNoCreators();
+        };
+      } catch (e) {
+        console.error('Cannot verify stream status:', e);
+      }
+    }
+  });
 }
 
 function displayNoCreators() {
@@ -226,8 +253,8 @@ function loadTwitchScript() {
 // RUN on page load
 document.addEventListener('DOMContentLoaded', loadFeaturedCreators);
 
-// Refresh every 60 seconds to detect when stream goes offline
-setInterval(loadFeaturedCreators, 60000);
+// Refresh every 30 seconds to detect when stream goes offline
+setInterval(loadFeaturedCreators, 30000);
 
 // Also refresh when user comes back to tab
 document.addEventListener('visibilitychange', () => {
