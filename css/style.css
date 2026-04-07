@@ -366,7 +366,7 @@ section {
 }
 
 .section-tag {
-  font-size: 0.7rem;
+  font-size: 1.1rem;
   letter-spacing: 3px;
   color: var(--red);
   margin-bottom: 0.5rem;
@@ -374,13 +374,15 @@ section {
   border-left: 3px solid var(--red);
   padding-left: 0.8rem;
   display: inline-block;
+  font-weight: 700;
+  font-family: 'Barlow Condensed';
 }
 
 /* ============================================
    ABOUT TEXT
    ============================================ */
 .about-text p {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   color: rgba(241,250,238,0.8);
   line-height: 1.8;
   margin-bottom: 1.2rem;
@@ -389,6 +391,21 @@ section {
 .about-text p strong {
   color: var(--white);
   font-weight: 700;
+}
+
+.streamer-intro {
+  font-size: 1.3rem;
+  color: rgba(241,250,238,0.7);
+  margin-bottom: 2rem;
+  line-height: 1.8;
+}
+
+.community-desc {
+  font-size: 1.3rem;
+  color: rgba(241,250,238,0.7);
+  line-height: 1.8;
+  margin: 0 auto 3rem;
+  max-width: 600px;
 }
 
 /* ============================================
@@ -488,12 +505,6 @@ section {
   letter-spacing: 10px;
 }
 
-.streamer-intro {
-  color: rgba(241,250,238,0.7);
-  margin-bottom: 2rem;
-  line-height: 1.8;
-}
-
 .perks-list {
   list-style: none;
   margin-top: 1rem;
@@ -578,14 +589,6 @@ section {
    ============================================ */
 .community-section { 
   text-align: center; 
-}
-
-.community-desc {
-  max-width: 600px;
-  margin: 0 auto 3rem;
-  color: rgba(241,250,238,0.7);
-  line-height: 1.8;
-  font-size: 1.05rem;
 }
 
 .community-features {
@@ -925,7 +928,19 @@ footer {
   }
 
   .about-text p {
-    font-size: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .streamer-intro {
+    font-size: 1.1rem;
+  }
+
+  .community-desc {
+    font-size: 1.1rem;
+  }
+
+  .section-tag {
+    font-size: 0.95rem;
   }
 
   .hero-logo { 
