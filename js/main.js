@@ -96,17 +96,23 @@ let activePlayers = new Map();
 const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
 
 // ============================================
-//   LOAD DATA FROM GOOGLE SHEET
+//   LOAD DATA FROM GOOGLE SHEET (WITH DEBUGGING)
 // ============================================
 async function loadFeaturedCreators() {
   const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=tsv&cb=${Date.now()}`;
 
+  console.log("Fetching from:", url);
+
   try {
     const response = await fetch(url);
+    console.log("Response status:", response.status);
+    
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     
     const data = await response.text();
+    console.log("Raw data:", data);
     const rows = data.split("\n");
+    console.log("Rows:", rows);
 
     const creators = rows.slice(1).map(row => {
       if (!row.trim()) return null;
@@ -120,11 +126,15 @@ async function loadFeaturedCreators() {
       };
     }).filter(c => c && c.twitch && c.name);
 
+    console.log("Creators:", creators);
+
     const liveNow = creators.filter(c => 
       c.level >= 5 && 
       c.featured === "Yes" && 
       c.status === "Live"
     );
+
+    console.log("Live Now:", liveNow);
 
     updateDisplay(liveNow);
 
