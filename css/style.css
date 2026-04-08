@@ -1,319 +1,1404 @@
-// ============================================
-//   SCROLL ANIMATIONS WITH DEBOUNCE
-// ============================================
-const reveals = document.querySelectorAll('.reveal');
+/* ============================================
+   ROCKBOUND GAMING — COMPLETE STYLE
+   ============================================ */
 
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
+/* VARIABLES */
+:root {
+  --red: #e63946;
+  --gold: #f4c430;
+  --blue: #1d3557;
+  --white: #f1faee;
+  --darker: #060810;
+  --card: #111827;
+  --silver-light: #D3D3D3;
+  --silver-dark: #A9A9A9;
+  --container-max: 1500px;
+  --container-pad: 6rem 2rem;
 }
 
-function reveal() {
-  reveals.forEach(element => {
-    const windowHeight = window.innerHeight;
-    const revealTop = element.getBoundingClientRect().top;
-    const revealPoint = 150;
+/* RESET */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
-    if (revealTop < windowHeight - revealPoint) {
-      element.classList.add('visible');
-    }
-  });
+/* BASE */
+body {
+  background: var(--darker);
+  color: var(--white);
+  font-family: 'Barlow', sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
-window.addEventListener('scroll', debounce(reveal, 100));
-reveal();
+/* NOISE */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' fill='%23000' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.08;
+  z-index: -1;
+}
 
-// ============================================
-//   NAV SCROLL EFFECT WITH THROTTLE
-// ============================================
-const nav = document.querySelector('nav');
-let ticking = false;
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-function updateNav() {
-  if (window.scrollY > 100) {
-    nav.classList.add('scrolled');
-  } else {
-    nav.classList.remove('scrolled');
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes parallax {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(20px); }
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(230,57,70,0.5); }
+  50% { box-shadow: 0 0 20px rgba(230,57,70,0.8); }
+}
+
+/* ============================================
+   NAV
+   ============================================ */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(6,8,16,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 2px solid rgba(230,57,70,0.3);
+  transition: all 0.3s ease;
+}
+
+nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
+
+.nav-logo {
+  font-family: 'Bebas Neue';
+  font-size: 2rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 900;
+}
+
+.nav-logo span { color: var(--red); }
+
+.nav-links {
+  display: flex;
+  gap: 3rem;
+  list-style: none;
+}
+
+.nav-links li { position: relative; }
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-family: 'Barlow Condensed';
+  transition: all 0.3s;
+  display: block;
+  padding: 0.5rem 0;
+}
+
+.nav-links a:hover {
+  color: var(--red);
+  transform: translateY(-2px);
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--red);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover::after { width: 100%; }
+
+.menu-toggle {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--white);
+}
+
+/* ============================================
+   HERO
+   ============================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem 0;
+  position: relative;
+  text-align: center;
+  padding-bottom: 8rem;
+  overflow: hidden;
+  background: var(--darker);
+  flex-direction: column;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(230,57,70,0.15), transparent 60%),
+    radial-gradient(circle at 80% 20%, rgba(69,123,157,0.2), transparent 50%),
+    var(--darker);
+  animation: parallax 6s ease-in-out infinite;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(230,57,70,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(230,57,70,0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.hero-logo {
+  max-width: 600px;
+  width: 100%;
+  margin-bottom: 1rem;
+  animation: fadeUp 1s ease forwards;
+  filter: drop-shadow(0 0 15px rgba(230,57,70,0.4)) drop-shadow(0 0 25px rgba(244,196,48,0.2));
+}
+
+.hero-logo:hover {
+  filter: drop-shadow(0 0 25px rgba(230,57,70,0.6)) drop-shadow(0 0 35px rgba(244,196,48,0.3));
+}
+
+.hero-tagline-text {
+  font-family: 'Bebas Neue';
+  font-size: clamp(2.5rem,6vw,6rem);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  animation: fadeUp 1s ease forwards 0.1s both;
+  background: linear-gradient(180deg, var(--silver-light) 0%, var(--silver-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  animation: fadeUp 1s ease forwards 0.2s both;
+}
+
+.authority-line {
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--silver-light);
+  font-weight: 700;
+  font-family: 'Barlow Condensed';
+  margin-bottom: 2rem;
+  animation: fadeUp 1s ease forwards 0.3s both;
+}
+
+.hero-stats {
+  background: var(--red);
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  animation: fadeUp 1s ease forwards 0.4s both;
+  box-shadow: inset 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.stat-item {
+  text-align: center;
+  color: white;
+  flex: 0 0 auto;
+  min-width: 100px;
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover { transform: scale(1.1); }
+
+.stat-number {
+  font-family: 'Bebas Neue';
+  font-size: 2rem;
+  letter-spacing: 2px;
+  line-height: 1;
+  color: white;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.9;
+  color: white;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.btn-primary {
+  display: inline-block;
+  background: var(--red);
+  color: white;
+  padding: 1.2rem 2.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  clip-path: polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(230,57,70,0.5), 0 0 20px rgba(230,57,70,0.6);
+  background: #ff4757;
+}
+
+.hero-btns .btn-primary:nth-child(2) {
+  background: rgba(0,0,0,0.3);
+  color: white;
+  border: 2px solid rgba(255,255,255,0.5);
+}
+
+.hero-btns .btn-primary:nth-child(2):hover {
+  background: rgba(0,0,0,0.5);
+  box-shadow: 0 0 20px rgba(255,255,255,0.3);
+}
+
+.btn-white {
+  background: white;
+  color: var(--red);
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  clip-path: polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
+  display: inline-block;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.btn-white:hover {
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+}
+
+.btn-dark {
+  background: rgba(0,0,0,0.3);
+  color: white;
+  border: 2px solid rgba(255,255,255,0.5);
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  clip-path: polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
+  display: inline-block;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.btn-dark:hover {
+  background: rgba(0,0,0,0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--white);
+  padding: 1rem 2.5rem;
+  border: 2px solid rgba(241,250,238,0.3);
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  clip-path: polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
+  transition: all 0.3s;
+  display: inline-block;
+}
+
+.btn-secondary:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(244,196,48,0.3);
+}
+
+/* ============================================
+   SECTIONS
+   ============================================ */
+section {
+  padding: var(--container-pad);
+  max-width: var(--container-max);
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  background: var(--darker);
+}
+
+section:nth-child(odd) {
+  background: linear-gradient(135deg, rgba(230,57,70,0.03) 0%, rgba(29,53,87,0.05) 100%);
+}
+
+.section-title {
+  font-family: 'Bebas Neue';
+  font-size: clamp(2.5rem,6vw,5rem);
+  letter-spacing: 3px;
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+
+.section-title span { color: var(--red); }
+
+.section-tag {
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  border-left: 3px solid var(--red);
+  padding-left: 0.8rem;
+  display: inline-block;
+  font-weight: 700;
+  font-family: 'Barlow Condensed';
+}
+
+/* ============================================
+   TEXT STYLES
+   ============================================ */
+.about-text p {
+  font-size: 1.3rem;
+  color: rgba(241,250,238,0.8);
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
+  padding: 1rem;
+  border-left: 3px solid rgba(230,57,70,0.3);
+}
+
+.about-text p strong { color: var(--white); font-weight: 700; }
+
+.community-desc {
+  font-size: 1.3rem;
+  color: rgba(241,250,238,0.7);
+  line-height: 1.8;
+  margin: 0 auto 3rem;
+  max-width: 600px;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(230,57,70,0.2);
+}
+
+/* ============================================
+   DIVIDER
+   ============================================ */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(230,57,70,0.4), transparent);
+}
+
+/* ============================================
+   GRID LAYOUTS
+   ============================================ */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.about-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.creator-perks {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.creator-perks-bottom {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  max-width: 70%;
+  margin: 0 auto 3rem;
+}
+
+.community-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.platforms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* ============================================
+   CARD SYSTEM
+   ============================================ */
+.card {
+  background: var(--card);
+  border: 1px solid rgba(230,57,70,0.2);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--red);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  border-color: var(--red);
+  box-shadow: 0 15px 40px rgba(230,57,70,0.2), 0 0 20px rgba(230,57,70,0.1);
+  background: linear-gradient(135deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0.95) 100%);
+}
+
+.card h4 {
+  font-family: 'Barlow Condensed';
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+  margin-top: 0.5rem;
+  color: white;
+}
+
+.card p {
+  font-size: 1rem;
+  color: rgba(241,250,238,0.6);
+  line-height: 1.5;
+}
+
+/* ============================================
+   CARD ICONS
+   ============================================ */
+.card-icon, .feature-icon, .perk-icon {
+  transition: all 0.3s;
+  display: block;
+  flex-shrink: 0;
+  line-height: 1;
+  font-size: 2.5rem;
+  color: var(--red);
+  margin-bottom: 1rem;
+}
+
+.card-icon { font-size: 3rem; }
+.perk-icon { margin-bottom: 0; }
+
+.card:hover .card-icon,
+.card:hover .feature-icon,
+.card:hover .perk-icon {
+  color: var(--gold);
+  transform: scale(1.1);
+}
+
+/* ============================================
+   PERK CARDS
+   ============================================ */
+.perk-card {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.perk-content h4 {
+  font-family: 'Barlow Condensed';
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.perk-content p {
+  font-size: 1.05rem;
+  color: rgba(241,250,238,0.6);
+  line-height: 1.6;
+}
+
+/* ============================================
+   ROADMAP CARDS
+   ============================================ */
+.roadmap-item { padding: 1.5rem; }
+
+.roadmap-num {
+  font-family: 'Bebas Neue';
+  font-size: 2.5rem;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+
+.roadmap-content h4 {
+  font-family: 'Barlow Condensed';
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: var(--gold);
+}
+
+.roadmap-content p {
+  font-size: 1.1rem;
+  color: rgba(241,250,238,0.6);
+  line-height: 1.7;
+}
+
+/* ============================================
+   FEATURE CARDS
+   ============================================ */
+.feature-card { border: 1px solid rgba(255,255,255,0.05); }
+
+.feature-card:last-child {
+  grid-column: 1 / -1;
+  max-width: 33.333%;
+  margin: 0 auto;
+}
+
+.feature-card p { font-size: 1.1rem; }
+
+/* ============================================
+   CREATOR SECTION
+   ============================================ */
+.creator-section {
+  background: linear-gradient(135deg, rgba(230,57,70,0.03) 0%, rgba(29,53,87,0.05) 100%);
+}
+
+.creator-intro {
+  font-size: 1.3rem;
+  color: rgba(241,250,238,0.7);
+  margin-bottom: 3rem;
+  line-height: 1.8;
+  max-width: 800px;
+  padding: 1.5rem;
+  border-left: 3px solid rgba(230,57,70,0.3);
+}
+
+.creator-intro strong { color: var(--white); font-weight: 700; }
+
+.creator-cta { text-align: center; margin-bottom: 4rem; }
+
+.roadmap-section { margin-top: 4rem; }
+
+.roadmap-title {
+  font-family: 'Bebas Neue';
+  font-size: 1.8rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+}
+
+.roadmap-subtitle {
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(241,250,238,0.6);
+  margin-bottom: 2rem;
+  font-weight: 700;
+  font-family: 'Barlow Condensed';
+}
+
+/* ============================================
+   CREATOR FEATURED
+   ============================================ */
+.creator-featured {
+  position: relative;
+  width: 100%;
+  background: #000;
+  border: 3px solid var(--red);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
+}
+
+.creator-featured:hover {
+  box-shadow: 0 0 30px rgba(230,57,70,0.3), inset 0 0 20px rgba(230,57,70,0.1);
+}
+
+.creator-featured-header {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(230,57,70,0.1) 0%, rgba(29,53,87,0.1) 100%);
+  border-bottom: 2px solid rgba(230,57,70,0.3);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.creator-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.creator-info { flex: 1; }
+
+.creator-name {
+  font-family: 'Barlow Condensed';
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: white;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+}
+
+.creator-level {
+  font-size: 0.9rem;
+  color: var(--gold);
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+.creator-status-badge {
+  background: var(--red);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  animation: pulse 2s ease-in-out infinite;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.no-featured-creators {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(230,57,70,0.05);
+  border: 2px dashed rgba(230,57,70,0.2);
+  border-radius: 8px;
+  color: rgba(241,250,238,0.6);
+}
+
+.no-featured-creators i {
+  font-size: 3rem;
+  color: var(--red);
+  margin-bottom: 1rem;
+  display: block;
+  opacity: 0.5;
+}
+
+.no-featured-creators p {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+/* ============================================
+   TWITCH EMBED - FIXED HEIGHT
+   ============================================ */
+.twitch-embed-container {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  margin-top: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.twitch-embed-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.stream-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--white);
+  z-index: 10;
+}
+
+.stream-loading i {
+  font-size: 2rem;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+}
+
+.stream-loading p {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+/* ============================================
+   LIVE WRAPPER
+   ============================================ */
+.live-wrapper {
+  width: 100%;
+  margin-bottom: 2rem;
+  background: var(--darker);
+}
+
+.live-cta {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(230,57,70,0.05);
+  border: 1px solid rgba(230,57,70,0.2);
+  border-radius: 8px;
+}
+
+.live-cta p {
+  font-size: 1.1rem;
+  color: rgba(241,250,238,0.7);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+/* ============================================
+   PLATFORMS
+   ============================================ */
+.platform-card {
+  background: var(--card);
+  padding: 2rem;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.platform-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(230,57,70,0.3);
+  box-shadow: 0 15px 40px rgba(230,57,70,0.15), 0 0 20px rgba(230,57,70,0.08);
+  background: linear-gradient(135deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0.95) 100%);
+}
+
+.platform-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--red);
+  transform: scaleX(0);
+  transition: 0.3s;
+}
+
+.platform-card:hover::after { transform: scaleX(1); }
+
+.platform-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  display: block;
+  transition: all 0.3s;
+}
+
+.platform-icon .fa-discord { color: #5865F2; }
+.platform-icon .fa-twitch { color: #9146FF; }
+.platform-icon .fa-tiktok { color: white; }
+.platform-icon .fa-facebook { color: #1877F2; }
+
+.platform-card:hover .platform-icon {
+  transform: scale(1.2);
+  filter: brightness(1.3);
+}
+
+.platform-name {
+  font-family: 'Barlow Condensed';
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+
+.platform-handle {
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+/* ============================================
+   CTA SECTION
+   ============================================ */
+.cta-section {
+  background: linear-gradient(135deg, var(--red) 0%, #ff4757 100%);
+  text-align: center;
+  padding: 5rem 2rem;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  box-shadow: inset 0 -20px 40px rgba(0,0,0,0.2), 0 20px 60px rgba(230,57,70,0.3);
+}
+
+.cta-section::before {
+  content: 'JOIN';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Bebas Neue';
+  font-size: 20rem;
+  color: rgba(0,0,0,0.1);
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: 20px;
+  z-index: 1;
+}
+
+.cta-section h2 {
+  font-family: 'Bebas Neue';
+  font-size: clamp(3rem,8vw,7rem);
+  letter-spacing: 4px;
+  line-height: 1;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.cta-section p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.cta-btns {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+  background: linear-gradient(135deg, rgba(6,8,16,1) 0%, rgba(17,24,39,0.8) 100%);
+  border-top: 1px solid rgba(230,57,70,0.2);
+  padding: 4rem 2rem 3rem;
+  text-align: center;
+  width: 100%;
+}
+
+.footer-logo {
+  font-family: 'Bebas Neue';
+  font-size: 2rem;
+  letter-spacing: 4px;
+  margin-bottom: 1rem;
+}
+
+.footer-logo span { color: var(--red); }
+
+.footer-tagline {
+  opacity: 0.6;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.footer-links a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.3s;
+}
+
+.footer-links a:hover {
+  color: var(--red);
+  transform: translateY(-3px);
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(230,57,70,0.2);
+  padding-top: 2rem;
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.footer-copy {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* ============================================
+   RESPONSIVE TABLET
+   ============================================ */
+@media (max-width: 1024px) {
+  :root {
+    --container-pad: 4rem 2rem;
   }
-  ticking = false;
-}
 
-window.addEventListener('scroll', () => {
-  if (!ticking) {
-    window.requestAnimationFrame(updateNav);
-    ticking = true;
+  .nav-links {
+    gap: 2rem;
   }
-});
 
-// ============================================
-//   MOBILE MENU TOGGLE
-// ============================================
-const menuToggle = document.querySelector('.menu-toggle');
-const navLinks = document.querySelector('.nav-links');
+  .nav-links a {
+    font-size: 1.2rem;
+  }
 
-if (menuToggle && navLinks) {
-  menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-  });
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
 
-  navLinks.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('active');
-    });
-  });
-}
+  .creator-perks,
+  .creator-perks-bottom {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
 
-// ============================================
-//   SMOOTH SCROLL FOR ANCHOR LINKS
-// ============================================
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    const href = this.getAttribute('href');
-    if (href === '#') return;
-    
-    e.preventDefault();
-    const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-  });
-});
-
-// ============================================
-//   TWITCH LIVE STREAMS
-// ============================================
-let activePlayers = new Map();
-let lastLiveUsernames = new Set();
-let recentlyRemoved = new Map(); // username -> removal timestamp
-const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
-
-// Load Twitch script once at startup
-function initTwitchScript() {
-  return new Promise((resolve) => {
-    if (window.Twitch && window.Twitch.Player) {
-      console.log("Twitch script already loaded");
-      resolve();
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = 'https://player.twitch.tv/js/embed/v1.js';
-    script.async = true;
-    script.onload = () => {
-      console.log("Twitch script loaded successfully");
-      resolve();
-    };
-    script.onerror = () => {
-      console.error('Failed to load Twitch script');
-      resolve();
-    };
-    document.body.appendChild(script);
-  });
-}
-
-async function loadFeaturedCreators() {
-  const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=tsv&cb=${Date.now()}`;
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    
-    const data = await response.text();
-    const rows = data.split("\n");
-
-    const creators = rows.slice(1).map(row => {
-      if (!row.trim()) return null;
-      const cols = row.split("\t");
-      return {
-        twitch: cols[0]?.trim()?.toLowerCase(), 
-        name: cols[1]?.trim(),
-        level: parseInt(cols[2]),
-        featured: cols[4]?.trim(),
-        status: cols[5]?.trim()?.toLowerCase()
-      };
-    }).filter(c => c && c.twitch && c.name);
-
-    const liveNow = creators.filter(c => 
-      c.level >= 5 && 
-      c.featured?.toLowerCase() === "yes" &&
-      (c.status === "live" || c.status === "active")
-    );
-
-    updateDisplay(liveNow);
-  } catch (err) {
-    console.error("Error loading creators:", err);
-    displayNoCreators();
+  .twitch-embed-container {
+    height: 300px;
   }
 }
 
-function updateDisplay(liveNow) {
-  const container = document.getElementById("twitch-embed");
-  if (!container) return;
+/* ============================================
+   RESPONSIVE MOBILE 768px
+   ============================================ */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block !important;
+  }
 
-  const incomingUsernames = new Set(liveNow.map(c => c.twitch));
+  .nav-links {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background: rgba(6,8,16,0.98);
+    backdrop-filter: blur(12px);
+    flex-direction: column;
+    gap: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    border-bottom: 2px solid rgba(230,57,70,0.3);
+    padding: 0;
+  }
 
-  const usernamesChanged = 
-    incomingUsernames.size !== lastLiveUsernames.size ||
-    ![...incomingUsernames].every(u => lastLiveUsernames.has(u));
+  .nav-links.active {
+    max-height: 500px;
+    padding: 1rem 0;
+  }
 
-  if (!usernamesChanged) return;
+  .nav-links li {
+    border-bottom: 1px solid rgba(230,57,70,0.1);
+  }
 
-  lastLiveUsernames = incomingUsernames;
+  .nav-links a {
+    font-size: 1rem;
+    padding: 1rem 2rem;
+    display: block;
+  }
 
-  activePlayers.forEach((_, username) => {
-    if (!incomingUsernames.has(username)) {
-      removeStreamer(username);
-    }
-  });
+  .hero {
+    padding: 6rem 2rem 0;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100svh;
+  }
 
-  // Filter out recently removed channels (within last 60 seconds)
-  const now = Date.now();
-  const filteredLiveNow = liveNow.filter(c => {
-    const removedTime = recentlyRemoved.get(c.twitch);
-    return !removedTime || (now - removedTime) >= 60000;
-  });
+  .hero-logo {
+    max-width: 400px;
+  }
 
-  filteredLiveNow.forEach(c => {
-    if (!activePlayers.has(c.twitch)) {
-      addStreamer(c);
-    }
-  });
+  .hero-tagline-text {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    margin-bottom: 1rem;
+  }
 
-  const noCard = container.querySelector('.no-featured-creators');
-  if (incomingUsernames.size === 0 && activePlayers.size === 0) {
-    if (!noCard) displayNoCreators();
-  } else if (noCard) {
-    noCard.remove();
+  .hero-btns {
+    margin-bottom: 1rem;
+  }
+
+  .authority-line {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-stats {
+    position: relative;
+    width: 100%;
+    margin-top: auto;
+    left: unset;
+    right: unset;
+    bottom: unset;
+    padding: 1.5rem 1rem;
+    gap: 1.5rem;
+  }
+
+  .stat-item {
+    min-width: 70px;
+    flex: 0 0 auto;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.5rem;
+    margin-top: 0.3rem;
+  }
+
+  .btn-primary,
+  .btn-white,
+  .btn-dark,
+  .btn-secondary {
+    padding: 0.9rem 1.8rem;
+    font-size: 0.9rem;
+  }
+
+  section {
+    padding: 3rem 1.5rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+  }
+
+  .about-text p {
+    font-size: 1.1rem;
+    padding: 0.8rem;
+  }
+
+  .community-desc {
+    font-size: 1.1rem;
+    padding: 1.5rem;
+  }
+
+  .about-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .creator-perks,
+  .creator-perks-bottom {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    max-width: 100%;
+  }
+
+  .platforms-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.8rem;
+  }
+
+  .card {
+    padding: 1.2rem;
+  }
+
+  .card h4 {
+    font-size: 1rem;
+  }
+
+  .card p {
+    font-size: 0.95rem;
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+  }
+
+  .perk-card {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .perk-content h4 {
+    font-size: 1rem;
+  }
+
+  .perk-content p {
+    font-size: 0.95rem;
+  }
+
+  .roadmap-item {
+    padding: 1.2rem;
+  }
+
+  .roadmap-num {
+    font-size: 2rem;
+  }
+
+  .roadmap-content h4 {
+    font-size: 1rem;
+  }
+
+  .roadmap-content p {
+    font-size: 1rem;
+  }
+
+  .platform-card {
+    padding: 1.5rem;
+  }
+
+  .platform-icon {
+    font-size: 2rem;
+  }
+
+  .platform-name {
+    font-size: 0.85rem;
+  }
+
+  .cta-section {
+    padding: 3rem 1.5rem;
+  }
+
+  .cta-section::before {
+    font-size: 10rem;
+    letter-spacing: 10px;
+  }
+
+  .cta-section h2 {
+    font-size: clamp(1.5rem, 6vw, 3rem);
+  }
+
+  .cta-section p {
+    font-size: 1rem;
+  }
+
+  .cta-btns {
+    gap: 1rem;
+  }
+
+  footer {
+    padding: 2.5rem 1.5rem 2rem;
+  }
+
+  .footer-logo {
+    font-size: 1.5rem;
+  }
+
+  .footer-links {
+    gap: 1.5rem;
+  }
+
+  .footer-links a {
+    font-size: 0.75rem;
+  }
+
+  .twitch-embed-container {
+    height: 250px;
   }
 }
 
-function addStreamer(c) {
-  const container = document.getElementById("twitch-embed");
-  
-  const wrapper = document.createElement('div');
-  wrapper.className = 'creator-featured'; 
-  wrapper.id = `wrapper-${c.twitch}`;
-  wrapper.style.display = 'none'; // Hide initially
-  wrapper.innerHTML = `
-    <div class="creator-featured-header">
-      <div class="creator-avatar"><i class="fas fa-user"></i></div>
-      <div class="creator-info">
-        <h3 class="creator-name">${c.name}</h3>
-        <p class="creator-level">Level ${c.level}</p>
-      </div>
-      <div class="creator-status-badge">LIVE</div>
-    </div>
-    <div id="player-${c.twitch}" class="twitch-embed-container">
-      <div class="stream-loading">
-        <i class="fas fa-spinner fa-spin"></i>
-        <p>Loading stream...</p>
-      </div>
-    </div>
-  `;
-  container.appendChild(wrapper); // Append hidden
+/* ============================================
+   RESPONSIVE EXTRA SMALL 480px
+   ============================================ */
+@media (max-width: 480px) {
+  .hero {
+    padding: 5rem 1rem 0;
+    min-height: 100svh;
+  }
 
-  // Create player immediately
-  try {
-    if (!window.Twitch || !window.Twitch.Player) {
-      console.error("Twitch Player not available");
-      removeStreamer(c.twitch);
-      return;
-    }
+  .hero-logo {
+    max-width: 250px;
+    margin-bottom: 0.5rem;
+  }
 
-    const hostname = window.location.hostname === "" ? "localhost" : window.location.hostname;
-    
-    const player = new Twitch.Player(`player-${c.twitch}`, {
-      channel: c.twitch,
-      width: "100%",
-      height: 350,
-      parent: [hostname],
-      autoplay: true,
-      muted: true
-    });
+  .hero-tagline-text {
+    font-size: clamp(1.3rem, 4vw, 2.2rem);
+    margin-bottom: 0.8rem;
+  }
 
-    let hasStartedPlayback = false;
-    let offlineTimeout;
-    
-    if (player.addEventListener) {
-      player.addEventListener(Twitch.Player.READY, () => {
-        console.log(`${c.twitch} player ready`);
-      });
+  .hero-btns {
+    margin-bottom: 0.8rem;
+    gap: 0.8rem;
+  }
 
-      player.addEventListener(Twitch.Player.ONLINE, () => {
-        console.log(`${c.twitch} came ONLINE`);
-        hasStartedPlayback = true;
-        clearTimeout(offlineTimeout);
-        wrapper.style.display = 'block'; // Show the card
-        // Hide loading after a short delay to ensure stream starts
-        setTimeout(() => {
-          const loading = wrapper.querySelector('.stream-loading');
-          if (loading) loading.style.display = 'none';
-        }, 2000);
-      });
+  .authority-line {
+    font-size: 0.85rem;
+    margin-bottom: 0.8rem;
+  }
 
-      player.addEventListener(Twitch.Player.OFFLINE, () => {
-        console.log(`${c.twitch} went OFFLINE`);
-        removeStreamer(c.twitch);
-      });
-    }
+  .hero-stats {
+    position: relative;
+    margin-top: auto;
+    left: unset;
+    right: unset;
+    bottom: unset;
+    padding: 1rem 0.8rem;
+    gap: 1rem;
+  }
 
-    // Auto-remove if stream doesn't go online within 10 seconds
-    offlineTimeout = setTimeout(() => {
-      if (!hasStartedPlayback) {
-        console.log(`${c.twitch} timeout - removing player`);
-        removeStreamer(c.twitch);
-      }
-    }, 10000);
+  .stat-item {
+    min-width: 60px;
+  }
 
-    activePlayers.set(c.twitch, player);
-    console.log(`Player initialized for ${c.twitch}`);
-  } catch (e) {
-    console.error("Player Init Error:", e);
-    removeStreamer(c.twitch);
+  .stat-number {
+    font-size: 1.2rem;
+  }
+
+  .stat-label {
+    font-size: 0.45rem;
+  }
+
+  .btn-primary,
+  .btn-white,
+  .btn-dark,
+  .btn-secondary {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.8rem;
+  }
+
+  section {
+    padding: 2rem 1rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    margin-bottom: 1rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .perk-card {
+    padding: 1.2rem;
+  }
+
+  .platform-card {
+    padding: 1.2rem;
+  }
+
+  .cta-section {
+    padding: 2rem 1rem;
+  }
+
+  .cta-section::before {
+    font-size: 6rem;
+  }
+
+  .cta-section h2 {
+    font-size: clamp(1.2rem, 5vw, 2.2rem);
+  }
+
+  footer {
+    padding: 2rem 1rem;
+  }
+
+  .twitch-embed-container {
+    height: 200px;
   }
 }
-
-function removeStreamer(username) {
-  const el = document.getElementById(`wrapper-${username}`);
-  if (el) el.remove();
-  activePlayers.delete(username);
-  lastLiveUsernames.delete(username);
-  
-  // Record removal to prevent re-adding for 60 seconds
-  recentlyRemoved.set(username, Date.now());
-  
-  const container = document.getElementById("twitch-embed");
-  if (container && container.children.length === 0) displayNoCreators();
-}
-
-function displayNoCreators() {
-  const container = document.getElementById("twitch-embed");
-  if (!container) return;
-  container.innerHTML = `
-    <div class="no-featured-creators">
-      <i class="fas fa-video"></i>
-      <p>No one is live right now</p>
-      <p style="font-size: 0.9rem; margin-top: 0.5rem;">Check back soon for featured creators!</p>
-    </div>
-  `;
-}
-
-// ============================================
-//   INITIALIZE
-// ============================================
-document.addEventListener('DOMContentLoaded', async () => {
-  await initTwitchScript();
-  await loadFeaturedCreators();
-});
-
-setInterval(loadFeaturedCreators, 60000);
