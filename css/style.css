@@ -220,7 +220,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
 }
 
 .authority-line {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--silver-light);
@@ -1130,13 +1130,12 @@ footer {
   .hero-btns {
     order: 3;
     flex-wrap: nowrap;
-    margin-top: auto;
-    margin-bottom: 0;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
   }
 
   .authority-line {
-    font-size: 0.95rem;
-    margin-bottom: auto;
+    font-size: 1.1rem;
     order: 4;
   }
 
@@ -1338,13 +1337,12 @@ footer {
     order: 3;
     gap: 0.8rem;
     flex-wrap: nowrap;
-    margin-top: auto;
-    margin-bottom: 0;
+    margin-top: 1.2rem;
+    margin-bottom: 1.2rem;
   }
 
   .authority-line {
-    font-size: 0.85rem;
-    margin-bottom: auto;
+    font-size: 0.95rem;
     order: 4;
   }
 
