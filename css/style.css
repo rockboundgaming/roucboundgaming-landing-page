@@ -1120,14 +1120,22 @@ footer {
   .hero-tagline-text {
     font-size: clamp(1.8rem, 5vw, 3rem);
     margin-bottom: 1rem;
+    order: 2;
   }
 
-  .hero-btns {
-    margin-bottom: 1rem;
+  .hero-logo {
+    order: 1;
   }
 
   .authority-line {
     font-size: 0.95rem;
+    margin-bottom: 0;
+    order: 3;
+  }
+
+  .hero-btns {
+    order: 4;
+    margin-top: auto;
     margin-bottom: auto;
   }
 
@@ -1318,16 +1326,24 @@ footer {
   .hero-tagline-text {
     font-size: clamp(1.3rem, 4vw, 2.2rem);
     margin-bottom: 0.8rem;
+    order: 2;
+  }
+
+  .hero-logo {
+    order: 1;
   }
 
   .hero-btns {
-    margin-bottom: 0.8rem;
+    order: 4;
     gap: 0.8rem;
+    margin-top: auto;
+    margin-bottom: auto;
   }
 
   .authority-line {
     font-size: 0.85rem;
-    margin-bottom: auto;
+    margin-bottom: 0;
+    order: 3;
   }
 
   .hero-stats {
