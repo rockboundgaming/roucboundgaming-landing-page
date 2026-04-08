@@ -99,50 +99,36 @@ async function loadFeaturedCreators() {
 
   try {
     const response = await fetch(url);
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     
     const data = await response.text();
     const rows = data.split("\n");
 
-    const creators = rows
-      .slice(1)
-      .map(row => {
-        if (!row.trim()) return null;
-        
-        const cols = row.split("\t");
+    const creators = rows.slice(1).map(row => {
+      if (!row.trim()) return null;
+      const cols = row.split("\t");
+      return {
+        twitch: cols[0]?.trim(),
+        name: cols[1]?.trim(),
+        level: parseInt(cols[2]),
+        featured: cols[4]?.trim(),
+        status: cols[5]?.trim()
+      };
+    }).filter(c => c && c.twitch && c.name);
 
-        return {
-          twitch: cols[0]?.trim(),
-          name: cols[1]?.trim(),
-          level: parseInt(cols[2]),
-          hours: cols[3]?.trim(),
-          featured: cols[4]?.trim(),
-          status: cols[5]?.trim(),
-          eligible: cols[7]?.trim()
-        };
-      })
-      .filter(c => c && c.twitch && c.name);
+    // Filter for people who are ACTUALLY live based on your sheet's status
+    const liveNow = creators.filter(c => 
+      c.level >= 5 && 
+      c.featured === "Yes" && 
+      c.status === "Live"
+    );
 
-    const seen = new Set();
-
-    const featuredCreators = creators.filter(c => {
-      const key = c.twitch.toLowerCase();
-
-      if (seen.has(key)) return false;
-      seen.add(key);
-
-      return c.level >= 5 && c.featured === "Yes";
-    });
-
-    if (featuredCreators.length === 0) {
+    // If no one is live, show the "No one is live" card
+    if (liveNow.length === 0) {
       displayNoCreators();
-      return;
+    } else {
+      displayFeaturedCreators(liveNow);
     }
-
-    displayFeaturedCreators(featuredCreators);
 
   } catch (err) {
     console.error("Error loading creators:", err);
@@ -214,8 +200,8 @@ function displayNoCreators() {
 
 document.addEventListener('DOMContentLoaded', loadFeaturedCreators);
 
-// Refresh every 60 seconds
-setInterval(loadFeaturedCreators, 60000);
+// Refresh every 30 seconds to detect status changes
+setInterval(loadFeaturedCreators, 30000);
 
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') {
