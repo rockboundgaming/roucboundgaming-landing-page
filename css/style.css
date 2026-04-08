@@ -1127,16 +1127,16 @@ footer {
     order: 1;
   }
 
-  .authority-line {
-    font-size: 0.95rem;
-    margin-bottom: 0;
+  .hero-btns {
     order: 3;
+    margin-top: auto;
+    margin-bottom: 0;
   }
 
-  .hero-btns {
-    order: 4;
-    margin-top: auto;
+  .authority-line {
+    font-size: 0.95rem;
     margin-bottom: auto;
+    order: 4;
   }
 
   .hero-stats {
@@ -1334,16 +1334,16 @@ footer {
   }
 
   .hero-btns {
-    order: 4;
+    order: 3;
     gap: 0.8rem;
     margin-top: auto;
-    margin-bottom: auto;
+    margin-bottom: 0;
   }
 
   .authority-line {
     font-size: 0.85rem;
-    margin-bottom: 0;
-    order: 3;
+    margin-bottom: auto;
+    order: 4;
   }
 
   .hero-stats {
