@@ -97,6 +97,28 @@ let lastLiveUsernames = new Set();
 const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
 
 // ============================================
+//   TWITCH SCRIPT LOADING
+// ============================================
+let twitchScriptLoading = false;
+let twitchScriptReady = false;
+
+function loadTwitchScript() {
+  if (twitchScriptReady) return;
+  if (twitchScriptLoading) return;
+  
+  twitchScriptLoading = true;
+  const script = document.createElement('script');
+  script.src = 'https://player.twitch.tv/js/embed/v1.js';
+  script.async = true;
+  script.onload = () => {
+    twitchScriptReady = true;
+    console.log("Twitch script loaded successfully");
+  };
+  script.onerror = () => console.error('Failed to load Twitch script');
+  document.body.appendChild(script);
+}
+
+// ============================================
 //   LOAD DATA FROM GOOGLE SHEET (OPTIMIZED)
 // ============================================
 async function loadFeaturedCreators() {
@@ -203,11 +225,18 @@ function addStreamer(c) {
   `;
   container.appendChild(wrapper);
 
-  // Initialize player with minimal delay
-  setTimeout(() => {
+  // Wait for Twitch to be ready
+  let retries = 0;
+  const initPlayer = () => {
     try {
       if (!window.Twitch || !window.Twitch.Player) {
-        console.error("Twitch Player not loaded yet");
+        retries++;
+        if (retries < 50) { // Retry up to 50 times (5 seconds)
+          setTimeout(initPlayer, 100);
+          return;
+        }
+        console.error("Twitch Player failed to load after retries");
+        removeStreamer(c.twitch);
         return;
       }
 
@@ -222,7 +251,6 @@ function addStreamer(c) {
         muted: true
       });
 
-      // Only remove on OFFLINE if stream was actually showing
       let hasStartedPlayback = false;
       
       if (player.addEventListener) {
@@ -231,7 +259,6 @@ function addStreamer(c) {
         });
 
         player.addEventListener(Twitch.Player.OFFLINE, () => {
-          // Only remove if it actually played, not on initial load
           if (hasStartedPlayback) {
             removeStreamer(c.twitch);
           }
@@ -239,11 +266,14 @@ function addStreamer(c) {
       }
 
       activePlayers.set(c.twitch, player);
+      console.log(`Player initialized for ${c.twitch}`);
     } catch (e) {
       console.error("Player Init Error:", e);
       removeStreamer(c.twitch);
     }
-  }, 10);
+  };
+
+  initPlayer();
 }
 
 function removeStreamer(username) {
@@ -266,20 +296,6 @@ function displayNoCreators() {
       <p style="font-size: 0.9rem; margin-top: 0.5rem;">Check back soon for featured creators!</p>
     </div>
   `;
-}
-
-let twitchScriptLoading = false;
-
-function loadTwitchScript() {
-  if (window.Twitch && window.Twitch.Player) return;
-  if (twitchScriptLoading) return;
-  
-  twitchScriptLoading = true;
-  const script = document.createElement('script');
-  script.src = 'https://player.twitch.tv/js/embed/v1.js';
-  script.async = true;
-  script.onerror = () => console.error('Failed to load Twitch script');
-  document.body.appendChild(script);
 }
 
 // ============================================
