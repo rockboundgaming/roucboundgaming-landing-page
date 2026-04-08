@@ -1124,6 +1124,7 @@ footer {
 
   .hero-tagline-text {
     font-size: clamp(1.8rem, 5vw, 3rem);
+    margin-top: auto;
     margin-bottom: 1rem;
   }
 
@@ -1133,13 +1134,12 @@ footer {
 
   .authority-line {
     font-size: 0.95rem;
-    margin-bottom: 1rem;
+    margin-bottom: auto;
   }
 
   .hero-stats {
     position: relative;
     width: 100%;
-    margin-top: auto;
     left: unset;
     right: unset;
     bottom: unset;
@@ -1323,6 +1323,7 @@ footer {
 
   .hero-tagline-text {
     font-size: clamp(1.3rem, 4vw, 2.2rem);
+    margin-top: auto;
     margin-bottom: 0.8rem;
   }
 
@@ -1333,12 +1334,11 @@ footer {
 
   .authority-line {
     font-size: 0.85rem;
-    margin-bottom: 0.8rem;
+    margin-bottom: auto;
   }
 
   .hero-stats {
     position: relative;
-    margin-top: auto;
     left: unset;
     right: unset;
     bottom: unset;
