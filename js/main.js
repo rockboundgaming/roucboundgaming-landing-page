@@ -151,7 +151,7 @@ async function loadFeaturedCreators() {
 }
 
 // ============================================
-//   DISPLAY CREATORS WITH TWITCH STREAM ONLY
+//   DISPLAY CREATORS
 // ============================================
 
 function displayFeaturedCreators(creators) {
@@ -162,7 +162,9 @@ function displayFeaturedCreators(creators) {
     return;
   }
 
-  // Build HTML for all featured creators - STREAM ONLY (NO CHAT)
+  const domain = window.location.hostname;
+
+  // Build HTML for all featured creators
   container.innerHTML = creators.map(c => {
     return `
       <div class="creator-featured">
@@ -178,47 +180,22 @@ function displayFeaturedCreators(creators) {
             LIVE
           </div>
         </div>
-        <div class="twitch-embed-container">
+        <div class="twitch-embed-container" style="min-height: 500px;">
           <iframe
-            id="twitch-${c.twitch}"
-            src="https://player.twitch.tv/?channel=${c.twitch}&parent=${window.location.hostname}&muted=false"
-            allowfullscreen="allowfullscreen"
+            src="https://twitch.tv/embed/${c.twitch}?parent=${domain}"
+            height="500"
+            width="100%"
+            frameborder="0"
             scrolling="no"
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;">
+            allowfullscreen="true"
+            style="width: 100%; height: 500px;">
           </iframe>
         </div>
       </div>
     `;
   }).join("");
 
-  // Wait for iframes to load, then check if streams are actually live
-  setTimeout(() => {
-    verifyStreamsAreLive(creators);
-  }, 2000);
-
   loadTwitchScript();
-}
-
-function verifyStreamsAreLive(creators) {
-  creators.forEach(c => {
-    const iframe = document.getElementById(`twitch-${c.twitch}`);
-    if (iframe) {
-      // Check if iframe has an error by looking at its document
-      try {
-        iframe.onload = () => {
-          // If iframe loads successfully, stream is live
-          console.log(`Stream ${c.twitch} is live`);
-        };
-        iframe.onerror = () => {
-          // If iframe fails to load, stream is offline
-          console.log(`Stream ${c.twitch} is offline`);
-          displayNoCreators();
-        };
-      } catch (e) {
-        console.error('Cannot verify stream status:', e);
-      }
-    }
-  });
 }
 
 function displayNoCreators() {
@@ -236,12 +213,16 @@ function displayNoCreators() {
 }
 
 function loadTwitchScript() {
-  // Only load the script once
   if (window.twitchEmbedLoaded) return;
   
   const script = document.createElement('script');
   script.src = 'https://embed.twitch.tv/embed/v1.js';
   script.async = true;
+  script.onload = () => {
+    if (window.Twitch && window.Twitch.Embed) {
+      window.Twitch.Embed.lib.render(document.getElementById("twitch-embed"));
+    }
+  };
   document.body.appendChild(script);
   window.twitchEmbedLoaded = true;
 }
@@ -250,20 +231,17 @@ function loadTwitchScript() {
 //   REFRESH HANDLERS
 // ============================================
 
-// RUN on page load
 document.addEventListener('DOMContentLoaded', loadFeaturedCreators);
 
-// Refresh every 30 seconds to detect when stream goes offline
-setInterval(loadFeaturedCreators, 30000);
+// Refresh every 60 seconds
+setInterval(loadFeaturedCreators, 60000);
 
-// Also refresh when user comes back to tab
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') {
     loadFeaturedCreators();
   }
 });
 
-// Refresh when window regains focus
 window.addEventListener('focus', () => {
   loadFeaturedCreators();
 });
