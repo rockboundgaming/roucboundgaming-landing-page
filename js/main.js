@@ -97,8 +97,8 @@ let lastLiveUsernames = new Set();
 let recentlyRemoved = new Map(); // username -> removal timestamp
 const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
 
-function isAndroid() {
-  return /Android/i.test(navigator.userAgent);
+function isMobile() {
+  return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 }
 
 // Load Twitch script once at startup
@@ -227,9 +227,9 @@ function addStreamer(c) {
 
   const hostname = window.location.hostname === "" ? "localhost" : window.location.hostname;
 
-  // On Android the Twitch JS SDK doesn't fire ONLINE/OFFLINE events reliably,
+  // On mobile the Twitch JS SDK doesn't fire ONLINE/OFFLINE events reliably,
   // so we use a direct iframe embed which works across all mobile browsers.
-  if (isAndroid()) {
+  if (isMobile()) {
     const playerContainer = document.getElementById(`player-${c.twitch}`);
     const iframe = document.createElement('iframe');
     iframe.src = `https://player.twitch.tv/?channel=${encodeURIComponent(c.twitch)}&parent=${encodeURIComponent(hostname)}&muted=true&autoplay=true`;
@@ -249,7 +249,7 @@ function addStreamer(c) {
 
     playerContainer.appendChild(iframe);
     activePlayers.set(c.twitch, iframe);
-    console.log(`Android iframe player initialized for ${c.twitch}`);
+    console.log(`Mobile iframe player initialized for ${c.twitch}`);
     return;
   }
 
@@ -266,7 +266,7 @@ function addStreamer(c) {
     const player = new Twitch.Player(`player-${c.twitch}`, {
       channel: c.twitch,
       width: "100%",
-      height: 350,
+      height: "100%",
       parent: [hostname],
       autoplay: true,
       muted: true
@@ -343,7 +343,7 @@ function displayNoCreators() {
 //   INITIALIZE
 // ============================================
 document.addEventListener('DOMContentLoaded', async () => {
-  if (!isAndroid()) {
+  if (!isMobile()) {
     await initTwitchScript();
   }
   await loadFeaturedCreators();

@@ -786,7 +786,7 @@ section:nth-child(odd) {
 .twitch-embed-container {
   position: relative;
   width: 100%;
-  height: 350px;
+  aspect-ratio: 16 / 9;
   margin-top: 1rem;
   border-radius: 8px;
   overflow: hidden;
@@ -1063,10 +1063,6 @@ footer {
     grid-template-columns: 1fr;
     max-width: 100%;
   }
-
-  .twitch-embed-container {
-    height: 300px;
-  }
 }
 
 /* ============================================
@@ -1316,10 +1312,6 @@ footer {
   .footer-links a {
     font-size: 0.75rem;
   }
-
-  .twitch-embed-container {
-    height: 250px;
-  }
 }
 
 /* ============================================
@@ -1423,9 +1415,5 @@ footer {
 
   footer {
     padding: 2rem 1rem;
-  }
-
-  .twitch-embed-container {
-    height: 200px;
   }
 }
