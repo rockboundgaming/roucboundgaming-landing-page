@@ -254,6 +254,8 @@ function addStreamer(c) {
         hasStartedPlayback = true;
         clearTimeout(offlineTimeout);
         wrapper.style.display = 'block'; // Show the card
+        // Explicitly start playback — required on mobile where autoplay may stall
+        try { player.play(); } catch (e) { console.warn(`play() failed for ${c.twitch}:`, e); }
         // Hide loading after a short delay to ensure stream starts
         setTimeout(() => {
           const loading = wrapper.querySelector('.stream-loading');
@@ -267,13 +269,13 @@ function addStreamer(c) {
       });
     }
 
-    // Auto-remove if stream doesn't go online within 10 seconds
+    // Auto-remove if stream doesn't go online within 20 seconds (mobile networks need more time)
     offlineTimeout = setTimeout(() => {
       if (!hasStartedPlayback) {
         console.log(`${c.twitch} timeout - removing player`);
         removeStreamer(c.twitch);
       }
-    }, 10000);
+    }, 20000);
 
     activePlayers.set(c.twitch, player);
     console.log(`Player initialized for ${c.twitch}`);
