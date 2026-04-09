@@ -22,6 +22,7 @@ jobs:
         run: |
           if [ -z "${TWITCH_CLIENT_ID}" ] || [ -z "${TWITCH_CLIENT_SECRET}" ]; then
             echo "Twitch credentials not configured — skipping update."
+            echo '{"data":[]}' > /tmp/streams.json
             exit 0
           fi
 
@@ -48,36 +49,36 @@ jobs:
           echo "Twitch API response:"
           cat /tmp/streams.json
 
-          # Generate live-status.json from the API response
-          python3 - <<'PYEOF'
-import json, datetime, sys
+      - name: Generate live-status.json
+        shell: python
+        run: |
+          import json, datetime, sys
 
-with open('/tmp/streams.json') as f:
-    data = json.load(f)
+          with open('/tmp/streams.json') as f:
+              data = json.load(f)
 
-if 'data' not in data:
-    print(f"Unexpected API response: {data}", file=sys.stderr)
-    sys.exit(1)
+          if 'data' not in data:
+              print(f"Unexpected API response: {data}", file=sys.stderr)
+              sys.exit(1)
 
-live = []
-for s in data['data']:
-    live.append({
-        'twitch': s['user_login'].lower(),
-        'title': s.get('title', ''),
-        'viewerCount': s.get('viewer_count', 0)
-    })
+          live = []
+          for s in data['data']:
+              live.append({
+                  'twitch': s['user_login'].lower(),
+                  'title': s.get('title', ''),
+                  'viewerCount': s.get('viewer_count', 0)
+              })
 
-output = {
-    'lastChecked': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
-    'live': live
-}
+          output = {
+              'lastChecked': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+              'live': live
+          }
 
-with open('live-status.json', 'w') as f:
-    json.dump(output, f, indent=2)
-    f.write('\n')
+          with open('live-status.json', 'w') as f:
+              json.dump(output, f, indent=2)
+              f.write('\n')
 
-print(f"Live streamers: {[s['twitch'] for s in live]}")
-PYEOF
+          print(f"Live streamers: {[s['twitch'] for s in live]}")
 
       - name: Commit and push if changed
         run: |
