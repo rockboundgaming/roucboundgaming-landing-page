@@ -93,9 +93,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 //   TWITCH LIVE STREAMS
 // ============================================
 let activePlayers = new Map();
+let mobileTimeouts = new Map(); // username -> mobile-fallback timeout ID
 let lastLiveUsernames = new Set();
 let recentlyRemoved = new Map(); // username -> removal timestamp
 const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
+// How long to wait on mobile before assuming the stream is live when SDK events
+// don't fire (common on Android Chrome).
+const MOBILE_SDK_FALLBACK_MS = 5000;
 
 function isMobile() {
   return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
@@ -227,35 +231,9 @@ function addStreamer(c) {
 
   const hostname = window.location.hostname === "" ? "localhost" : window.location.hostname;
 
-  // On mobile the Twitch JS SDK doesn't fire ONLINE/OFFLINE events reliably,
-  // so we use a direct iframe embed which works across all mobile browsers.
-  if (isMobile()) {
-    const playerContainer = document.getElementById(`player-${c.twitch}`);
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://player.twitch.tv/?channel=${encodeURIComponent(c.twitch)}&parent=${encodeURIComponent(hostname)}&muted=true&autoplay=true`;
-    iframe.width = '100%';
-    iframe.height = '100%';
-    iframe.setAttribute('allowfullscreen', '');
-    iframe.setAttribute('allow', 'autoplay; fullscreen');
-    iframe.style.border = 'none';
-    iframe.style.position = 'absolute';
-    iframe.style.top = '0';
-    iframe.style.left = '0';
-
-    iframe.addEventListener('load', () => {
-      const loading = playerContainer.querySelector('.stream-loading');
-      if (loading) loading.style.display = 'none';
-    });
-
-    playerContainer.appendChild(iframe);
-    activePlayers.set(c.twitch, iframe);
-    console.log(`Mobile iframe player initialized for ${c.twitch}`);
-    return;
-  }
-
-  // Desktop / non-Android: use the Twitch JS Player SDK
-  wrapper.style.display = 'none'; // Hide until ONLINE event fires
-
+  // Use the Twitch JS SDK on all platforms for a consistent look and behavior.
+  // The wrapper is visible immediately so that Android Chrome (which doesn't fire
+  // ONLINE reliably) still shows the player card without needing the event.
   try {
     if (!window.Twitch || !window.Twitch.Player) {
       console.error("Twitch Player not available");
@@ -284,7 +262,8 @@ function addStreamer(c) {
         console.log(`${c.twitch} came ONLINE`);
         hasStartedPlayback = true;
         clearTimeout(offlineTimeout);
-        wrapper.style.display = 'block'; // Show the card
+        clearTimeout(mobileTimeouts.get(c.twitch));
+        mobileTimeouts.delete(c.twitch);
         // Hide loading after a short delay to ensure stream starts
         setTimeout(() => {
           const loading = wrapper.querySelector('.stream-loading');
@@ -294,12 +273,33 @@ function addStreamer(c) {
 
       player.addEventListener(Twitch.Player.OFFLINE, () => {
         console.log(`${c.twitch} went OFFLINE`);
+        clearTimeout(mobileTimeouts.get(c.twitch));
+        mobileTimeouts.delete(c.twitch);
         removeStreamer(c.twitch);
       });
     }
 
+    // On mobile, SDK events (ONLINE/OFFLINE) may not fire reliably on some
+    // Android browsers. After a short fallback delay, hide the loading spinner
+    // and mark playback as started so the player is not torn down by the
+    // offline timeout. We trust the spreadsheet data that the stream is live.
+    if (isMobile()) {
+      const mobileFallback = setTimeout(() => {
+        mobileTimeouts.delete(c.twitch);
+        if (!hasStartedPlayback) {
+          console.log(`${c.twitch} mobile fallback — assuming live, hiding spinner`);
+          hasStartedPlayback = true;
+          clearTimeout(offlineTimeout);
+          const loading = wrapper.querySelector('.stream-loading');
+          if (loading) loading.style.display = 'none';
+        }
+      }, MOBILE_SDK_FALLBACK_MS);
+      mobileTimeouts.set(c.twitch, mobileFallback);
+    }
+
     // Auto-remove if stream doesn't go online within 10 seconds
     offlineTimeout = setTimeout(() => {
+      offlineTimeout = null;
       if (!hasStartedPlayback) {
         console.log(`${c.twitch} timeout - removing player`);
         removeStreamer(c.twitch);
@@ -315,6 +315,8 @@ function addStreamer(c) {
 }
 
 function removeStreamer(username) {
+  clearTimeout(mobileTimeouts.get(username));
+  mobileTimeouts.delete(username);
   const el = document.getElementById(`wrapper-${username}`);
   if (el) el.remove();
   activePlayers.delete(username);
@@ -343,9 +345,7 @@ function displayNoCreators() {
 //   INITIALIZE
 // ============================================
 document.addEventListener('DOMContentLoaded', async () => {
-  if (!isMobile()) {
-    await initTwitchScript();
-  }
+  await initTwitchScript();
   await loadFeaturedCreators();
 });
 

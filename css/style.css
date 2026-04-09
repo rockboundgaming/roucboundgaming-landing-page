@@ -786,10 +786,18 @@ section:nth-child(odd) {
 .twitch-embed-container {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  /* padding-top fallback for browsers that do not support aspect-ratio (e.g. iOS < 15) */
+  padding-top: 56.25%; /* 16:9 */
   margin-top: 1rem;
   border-radius: 8px;
   overflow: hidden;
+}
+
+@supports (aspect-ratio: 16 / 9) {
+  .twitch-embed-container {
+    padding-top: 0;
+    aspect-ratio: 16 / 9;
+  }
 }
 
 .twitch-embed-container iframe {
