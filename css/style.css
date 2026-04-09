@@ -1089,13 +1089,13 @@ footer {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
-    border-bottom: 2px solid rgba(230,57,70,0.3);
     padding: 0;
   }
 
   .nav-links.active {
     max-height: 500px;
     padding: 1rem 0;
+    border-bottom: 2px solid rgba(230,57,70,0.3);
   }
 
   .nav-links li {
