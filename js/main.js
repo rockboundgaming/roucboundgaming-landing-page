@@ -97,6 +97,24 @@ let lastLiveUsernames = new Set();
 let recentlyRemoved = new Map(); // username -> removal timestamp
 const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
 
+// How long (ms) the server-side status file is considered fresh.
+// The GitHub Actions workflow runs every 5 minutes, so 10 minutes gives
+// comfortable headroom before we fall back to the spreadsheet status column.
+const LIVE_STATUS_MAX_AGE_MS = 10 * 60 * 1000;
+
+// Fetch the server-generated live-status.json produced by the GitHub Actions
+// workflow that calls the Twitch Helix API server-side.
+async function fetchLiveStatus() {
+  try {
+    const response = await fetch(`/live-status.json?cb=${Date.now()}`);
+    if (!response.ok) return { live: [], lastChecked: null };
+    return await response.json();
+  } catch (e) {
+    console.warn('Could not fetch live-status.json:', e);
+    return { live: [], lastChecked: null };
+  }
+}
+
 // Load Twitch script once at startup
 function initTwitchScript() {
   return new Promise((resolve) => {
@@ -125,7 +143,12 @@ async function loadFeaturedCreators() {
   const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=tsv&cb=${Date.now()}`;
 
   try {
-    const response = await fetch(url);
+    // Fetch the spreadsheet and the server-side live-status.json in parallel.
+    const [response, liveStatus] = await Promise.all([
+      fetch(url),
+      fetchLiveStatus()
+    ]);
+
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     
     const data = await response.text();
@@ -143,20 +166,40 @@ async function loadFeaturedCreators() {
       };
     }).filter(c => c && c.twitch && c.name);
 
+    // Build the set of server-confirmed live usernames from live-status.json.
+    // Only trust the file if it was written within LIVE_STATUS_MAX_AGE_MS.
+    const serverLiveUsernames = new Set();
+    if (liveStatus.lastChecked) {
+      const ageMs = Date.now() - new Date(liveStatus.lastChecked).getTime();
+      if (ageMs < LIVE_STATUS_MAX_AGE_MS) {
+        for (const s of (liveStatus.live || [])) {
+          if (s.twitch) serverLiveUsernames.add(s.twitch.toLowerCase());
+        }
+      }
+    }
+    console.log('Server-confirmed live:', [...serverLiveUsernames]);
+
+    // A creator is shown when:
+    //   • they qualify (level ≥ 5 + featured) AND
+    //   • they are confirmed live by the Helix API (serverLiveUsernames), OR
+    //     the spreadsheet still marks them live as a fallback.
     const liveNow = creators.filter(c => 
       c.level >= 5 && 
       c.featured?.toLowerCase() === "yes" &&
-      (c.status === "live" || c.status === "active")
+      (
+        serverLiveUsernames.has(c.twitch) ||
+        c.status === "live" || c.status === "active"
+      )
     );
 
-    updateDisplay(liveNow);
+    updateDisplay(liveNow, serverLiveUsernames);
   } catch (err) {
     console.error("Error loading creators:", err);
     displayNoCreators();
   }
 }
 
-function updateDisplay(liveNow) {
+function updateDisplay(liveNow, serverLiveUsernames = new Set()) {
   const container = document.getElementById("twitch-embed");
   if (!container) return;
 
@@ -185,7 +228,7 @@ function updateDisplay(liveNow) {
 
   filteredLiveNow.forEach(c => {
     if (!activePlayers.has(c.twitch)) {
-      addStreamer(c);
+      addStreamer(c, serverLiveUsernames.has(c.twitch));
     }
   });
 
@@ -199,17 +242,27 @@ function updateDisplay(liveNow) {
   }
 }
 
-function addStreamer(c) {
+function addStreamer(c, serverConfirmedLive = false) {
   const container = document.getElementById("twitch-embed");
   
   const wrapper = document.createElement('div');
   wrapper.className = 'creator-featured'; 
   wrapper.id = `wrapper-${c.twitch}`;
-  // Keep the wrapper hidden until the Twitch ONLINE event confirms the stream is
-  // actually live.  This ensures the "no one is streaming" placeholder remains
-  // visible while the player initialises, and is only swapped out once we know
-  // for certain someone is broadcasting.
-  wrapper.style.display = 'none';
+
+  if (serverConfirmedLive) {
+    // The Twitch Helix API confirmed this stream is live server-side.
+    // Show the player wrapper immediately — no waiting for the ONLINE event —
+    // so Android users see the stream straight away with zero flicker.
+    wrapper.style.display = '';
+    const noCard = container.querySelector('.no-featured-creators');
+    if (noCard) noCard.remove();
+  } else {
+    // Client-side-only path: keep the wrapper hidden until the Twitch SDK
+    // fires ONLINE so the "no one is streaming" placeholder stays visible
+    // while the player initialises.
+    wrapper.style.display = 'none';
+  }
+
   wrapper.innerHTML = `
     <div class="creator-featured-header">
       <div class="creator-avatar"><i class="fas fa-user"></i></div>
@@ -230,10 +283,6 @@ function addStreamer(c) {
 
   const hostname = window.location.hostname === "" ? "localhost" : window.location.hostname;
 
-  // Use the Twitch JS SDK on all platforms for a consistent look and behavior.
-  // The wrapper starts hidden and is revealed only when the ONLINE event fires,
-  // so the "no one is streaming" placeholder stays visible until the stream is
-  // confirmed live — no flicker, no premature reveal on slow connections.
   try {
     if (!window.Twitch || !window.Twitch.Player) {
       console.error("Twitch Player not available");
@@ -262,11 +311,15 @@ function addStreamer(c) {
         console.log(`${c.twitch} came ONLINE`);
         hasStartedPlayback = true;
         clearTimeout(offlineTimeout);
-        // Stream confirmed live: reveal the player and remove the placeholder.
-        wrapper.style.display = '';
-        const noCard = container.querySelector('.no-featured-creators');
-        if (noCard) noCard.remove();
-        // Hide loading after a short delay to ensure stream starts
+
+        if (!serverConfirmedLive) {
+          // Client-side path: reveal the player now that we know it's live.
+          wrapper.style.display = '';
+          const noCard = container.querySelector('.no-featured-creators');
+          if (noCard) noCard.remove();
+        }
+
+        // Hide the loading spinner in both cases
         setTimeout(() => {
           const loading = wrapper.querySelector('.stream-loading');
           if (loading) loading.style.display = 'none';
@@ -279,16 +332,19 @@ function addStreamer(c) {
       });
     }
 
-    // Auto-remove if stream doesn't go online within 15 seconds.
-    // Using 15 s (up from 10 s) gives slow Android connections extra time to
-    // receive the ONLINE event before we give up and clean up the hidden player.
-    offlineTimeout = setTimeout(() => {
-      offlineTimeout = null;
-      if (!hasStartedPlayback) {
-        console.log(`${c.twitch} timeout - removing player`);
-        removeStreamer(c.twitch);
-      }
-    }, 15000);
+    if (!serverConfirmedLive) {
+      // Auto-remove if the stream doesn't go online within 15 seconds.
+      // This guard is only needed for the client-side path where we hide the
+      // player until ONLINE fires; for server-confirmed streams we trust the
+      // Helix API result and rely on the OFFLINE event to clean up instead.
+      offlineTimeout = setTimeout(() => {
+        offlineTimeout = null;
+        if (!hasStartedPlayback) {
+          console.log(`${c.twitch} timeout - removing player`);
+          removeStreamer(c.twitch);
+        }
+      }, 15000);
+    }
 
     activePlayers.set(c.twitch, player);
     console.log(`Player initialized for ${c.twitch}`);
