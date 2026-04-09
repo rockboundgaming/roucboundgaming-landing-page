@@ -195,7 +195,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   width: 100%;
   margin-bottom: 1rem;
   animation: fadeUp 1s ease forwards;
-  filter: drop-shadow(0 0 20px rgba(230, 57, 70, 0.75)) drop-shadow(0 0 50px rgba(230, 57, 70, 0.35));
+  filter: drop-shadow(0 0 2px rgba(255, 200, 210, 0.85)) drop-shadow(0 0 10px rgba(230, 57, 70, 0.88)) drop-shadow(0 0 22px rgba(230, 57, 70, 0.18));
 }
 
 .hero-tagline-text {
