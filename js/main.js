@@ -203,7 +203,6 @@ function addStreamer(c) {
   const wrapper = document.createElement('div');
   wrapper.className = 'creator-featured'; 
   wrapper.id = `wrapper-${c.twitch}`;
-  wrapper.style.display = 'none'; // Hide initially
   wrapper.innerHTML = `
     <div class="creator-featured-header">
       <div class="creator-avatar"><i class="fas fa-user"></i></div>
@@ -220,7 +219,7 @@ function addStreamer(c) {
       </div>
     </div>
   `;
-  container.appendChild(wrapper); // Append hidden
+  container.appendChild(wrapper);
 
   // Create player immediately
   try {
@@ -241,6 +240,17 @@ function addStreamer(c) {
       muted: true
     });
 
+    // Ensure the iframe carries the allow attributes required for Android
+    // Chrome autoplay and fullscreen policies (SDK may not set all of them).
+    // 500 ms gives the SDK time to inject its iframe into the DOM.
+    setTimeout(() => {
+      const iframe = document.querySelector(`#player-${c.twitch} iframe`);
+      if (iframe) {
+        iframe.setAttribute('allow', 'autoplay; encrypted-media; fullscreen; picture-in-picture');
+        iframe.setAttribute('allowfullscreen', '');
+      }
+    }, 500);
+
     let hasStartedPlayback = false;
     let offlineTimeout;
     
@@ -253,7 +263,6 @@ function addStreamer(c) {
         console.log(`${c.twitch} came ONLINE`);
         hasStartedPlayback = true;
         clearTimeout(offlineTimeout);
-        wrapper.style.display = 'block'; // Show the card
         // Hide loading after a short delay to ensure stream starts
         setTimeout(() => {
           const loading = wrapper.querySelector('.stream-loading');
@@ -267,13 +276,14 @@ function addStreamer(c) {
       });
     }
 
-    // Auto-remove if stream doesn't go online within 10 seconds
+    // Auto-remove if stream doesn't go online within 20 seconds.
+    // Increased from 10 s to allow for slower mobile connections on Android.
     offlineTimeout = setTimeout(() => {
       if (!hasStartedPlayback) {
         console.log(`${c.twitch} timeout - removing player`);
         removeStreamer(c.twitch);
       }
-    }, 10000);
+    }, 20000);
 
     activePlayers.set(c.twitch, player);
     console.log(`Player initialized for ${c.twitch}`);
