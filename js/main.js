@@ -97,6 +97,10 @@ let lastLiveUsernames = new Set();
 let recentlyRemoved = new Map(); // username -> removal timestamp
 const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
 
+function isAndroid() {
+  return /Android/i.test(navigator.userAgent);
+}
+
 // Load Twitch script once at startup
 function initTwitchScript() {
   return new Promise((resolve) => {
@@ -203,7 +207,6 @@ function addStreamer(c) {
   const wrapper = document.createElement('div');
   wrapper.className = 'creator-featured'; 
   wrapper.id = `wrapper-${c.twitch}`;
-  wrapper.style.display = 'none'; // Hide initially
   wrapper.innerHTML = `
     <div class="creator-featured-header">
       <div class="creator-avatar"><i class="fas fa-user"></i></div>
@@ -220,9 +223,39 @@ function addStreamer(c) {
       </div>
     </div>
   `;
-  container.appendChild(wrapper); // Append hidden
+  container.appendChild(wrapper);
 
-  // Create player immediately
+  const hostname = window.location.hostname === "" ? "localhost" : window.location.hostname;
+
+  // On Android the Twitch JS SDK doesn't fire ONLINE/OFFLINE events reliably,
+  // so we use a direct iframe embed which works across all mobile browsers.
+  if (isAndroid()) {
+    const playerContainer = document.getElementById(`player-${c.twitch}`);
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://player.twitch.tv/?channel=${encodeURIComponent(c.twitch)}&parent=${encodeURIComponent(hostname)}&muted=true&autoplay=true`;
+    iframe.width = '100%';
+    iframe.height = '100%';
+    iframe.setAttribute('allowfullscreen', '');
+    iframe.setAttribute('allow', 'autoplay; fullscreen');
+    iframe.style.border = 'none';
+    iframe.style.position = 'absolute';
+    iframe.style.top = '0';
+    iframe.style.left = '0';
+
+    iframe.addEventListener('load', () => {
+      const loading = playerContainer.querySelector('.stream-loading');
+      if (loading) loading.style.display = 'none';
+    });
+
+    playerContainer.appendChild(iframe);
+    activePlayers.set(c.twitch, iframe);
+    console.log(`Android iframe player initialized for ${c.twitch}`);
+    return;
+  }
+
+  // Desktop / non-Android: use the Twitch JS Player SDK
+  wrapper.style.display = 'none'; // Hide until ONLINE event fires
+
   try {
     if (!window.Twitch || !window.Twitch.Player) {
       console.error("Twitch Player not available");
@@ -230,8 +263,6 @@ function addStreamer(c) {
       return;
     }
 
-    const hostname = window.location.hostname === "" ? "localhost" : window.location.hostname;
-    
     const player = new Twitch.Player(`player-${c.twitch}`, {
       channel: c.twitch,
       width: "100%",
@@ -312,7 +343,9 @@ function displayNoCreators() {
 //   INITIALIZE
 // ============================================
 document.addEventListener('DOMContentLoaded', async () => {
-  await initTwitchScript();
+  if (!isAndroid()) {
+    await initTwitchScript();
+  }
   await loadFeaturedCreators();
 });
 
