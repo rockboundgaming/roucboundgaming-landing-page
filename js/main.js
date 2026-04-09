@@ -197,11 +197,13 @@ function updateDisplay(liveNow) {
     }
   });
 
-  const noCard = container.querySelector('.no-featured-creators');
+  // Only show "no one is streaming" when there are genuinely no live players.
+  // The "no one is streaming" placeholder is removed by the ONLINE event handler
+  // inside addStreamer() once the stream is confirmed live, so we must NOT remove
+  // it here just because a creator is theoretically live in the spreadsheet.
   if (incomingUsernames.size === 0 && activePlayers.size === 0) {
+    const noCard = container.querySelector('.no-featured-creators');
     if (!noCard) displayNoCreators();
-  } else if (noCard) {
-    noCard.remove();
   }
 }
 
@@ -211,6 +213,11 @@ function addStreamer(c) {
   const wrapper = document.createElement('div');
   wrapper.className = 'creator-featured'; 
   wrapper.id = `wrapper-${c.twitch}`;
+  // Keep the wrapper hidden until the Twitch ONLINE event confirms the stream is
+  // actually live.  This ensures the "no one is streaming" placeholder remains
+  // visible while the player initialises, and is only swapped out once we know
+  // for certain someone is broadcasting.
+  wrapper.style.display = 'none';
   wrapper.innerHTML = `
     <div class="creator-featured-header">
       <div class="creator-avatar"><i class="fas fa-user"></i></div>
@@ -232,8 +239,9 @@ function addStreamer(c) {
   const hostname = window.location.hostname === "" ? "localhost" : window.location.hostname;
 
   // Use the Twitch JS SDK on all platforms for a consistent look and behavior.
-  // The wrapper is visible immediately so that Android Chrome (which doesn't fire
-  // ONLINE reliably) still shows the player card without needing the event.
+  // The wrapper starts hidden and is revealed only when the ONLINE event fires
+  // (or the mobile fallback assumes live), so the "no one is streaming" placeholder
+  // stays visible until the stream is confirmed.
   try {
     if (!window.Twitch || !window.Twitch.Player) {
       console.error("Twitch Player not available");
@@ -264,6 +272,10 @@ function addStreamer(c) {
         clearTimeout(offlineTimeout);
         clearTimeout(mobileTimeouts.get(c.twitch));
         mobileTimeouts.delete(c.twitch);
+        // Stream confirmed live: reveal the player and remove the placeholder.
+        wrapper.style.display = '';
+        const noCard = container.querySelector('.no-featured-creators');
+        if (noCard) noCard.remove();
         // Hide loading after a short delay to ensure stream starts
         setTimeout(() => {
           const loading = wrapper.querySelector('.stream-loading');
@@ -290,6 +302,10 @@ function addStreamer(c) {
           console.log(`${c.twitch} mobile fallback — assuming live, hiding spinner`);
           hasStartedPlayback = true;
           clearTimeout(offlineTimeout);
+          // Reveal the player and remove the "no one is streaming" placeholder.
+          wrapper.style.display = '';
+          const noCard = container.querySelector('.no-featured-creators');
+          if (noCard) noCard.remove();
           const loading = wrapper.querySelector('.stream-loading');
           if (loading) loading.style.display = 'none';
         }
