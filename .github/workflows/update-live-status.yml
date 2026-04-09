@@ -1,0 +1,92 @@
+name: Update Live Status
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Every 5 minutes
+  workflow_dispatch:         # Allow manual triggers
+
+permissions:
+  contents: write
+
+jobs:
+  update-status:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Twitch Live Status
+        env:
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+        run: |
+          if [ -z "${TWITCH_CLIENT_ID}" ] || [ -z "${TWITCH_CLIENT_SECRET}" ]; then
+            echo "Twitch credentials not configured — skipping update."
+            exit 0
+          fi
+
+          # Obtain a fresh OAuth token via the client credentials flow
+          TOKEN_RESPONSE=$(curl -s -X POST 'https://id.twitch.tv/oauth2/token' \
+            -d "client_id=${TWITCH_CLIENT_ID}" \
+            -d "client_secret=${TWITCH_CLIENT_SECRET}" \
+            -d "grant_type=client_credentials")
+
+          ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | python3 -c "import sys, json; print(json.load(sys.stdin)['access_token'])")
+
+          if [ -z "$ACCESS_TOKEN" ]; then
+            echo "Failed to obtain access token: $TOKEN_RESPONSE"
+            exit 1
+          fi
+
+          # Query the Helix streams endpoint for both channels
+          curl -s \
+            -H "Client-ID: ${TWITCH_CLIENT_ID}" \
+            -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+            "https://api.twitch.tv/helix/streams?user_login=eastcoastflacko&user_login=rockboundgaming" \
+            > /tmp/streams.json
+
+          echo "Twitch API response:"
+          cat /tmp/streams.json
+
+          # Generate live-status.json from the API response
+          python3 - <<'PYEOF'
+import json, datetime, sys
+
+with open('/tmp/streams.json') as f:
+    data = json.load(f)
+
+if 'data' not in data:
+    print(f"Unexpected API response: {data}", file=sys.stderr)
+    sys.exit(1)
+
+live = []
+for s in data['data']:
+    live.append({
+        'twitch': s['user_login'].lower(),
+        'title': s.get('title', ''),
+        'viewerCount': s.get('viewer_count', 0)
+    })
+
+output = {
+    'lastChecked': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
+    'live': live
+}
+
+with open('live-status.json', 'w') as f:
+    json.dump(output, f, indent=2)
+    f.write('\n')
+
+print(f"Live streamers: {[s['twitch'] for s in live]}")
+PYEOF
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add live-status.json
+          if git diff --staged --quiet; then
+            echo "No changes to live-status.json"
+          else
+            git commit -m "chore: update live stream status [skip ci]"
+            git push
+          fi
