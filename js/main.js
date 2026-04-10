@@ -107,7 +107,7 @@ const ROCKBOUND_CHANNEL = "rockboundgaming";
 //   1. In your Discord server go to Server Settings → Widget → Enable Server Widget.
 //   2. Copy the Server ID shown on that same page (or from Server Settings → Overview).
 //   3. Paste it below.
-const DISCORD_GUILD_ID = ""; // ← paste your Discord Server ID here
+const DISCORD_GUILD_ID = "1482393227146559518"; // Rockbound Gaming Discord server
 
 // How long (ms) the server-side status file is considered fresh.
 // The GitHub Actions workflow runs every 5 minutes, so 10 minutes gives
@@ -465,7 +465,7 @@ async function fetchDiscordMembers() {
   if (!DISCORD_GUILD_ID) {
     list.innerHTML = `
       <li class="discord-empty-item">
-        <i class="fab fa-discord" style="font-size:1.4rem;color:rgba(88,101,242,0.5);"></i>
+        <i class="fab fa-discord" style="font-size:1.4rem;color:rgba(230,57,70,0.5);"></i>
         <span>Add your Discord Server ID to show online members.</span>
       </li>`;
     return;
@@ -476,7 +476,7 @@ async function fetchDiscordMembers() {
     if (!res.ok) {
       list.innerHTML = `
         <li class="discord-empty-item">
-          <i class="fab fa-discord" style="font-size:1.4rem;color:rgba(88,101,242,0.5);"></i>
+          <i class="fab fa-discord" style="font-size:1.4rem;color:rgba(230,57,70,0.5);"></i>
           <span>Enable the Server Widget in Discord settings to show members here.</span>
         </li>`;
       return;
@@ -500,7 +500,7 @@ function renderDiscordMembers(members, count) {
   if (members.length === 0) {
     list.innerHTML = `
       <li class="discord-empty-item">
-        <i class="fab fa-discord" style="font-size:1.4rem;color:rgba(88,101,242,0.5);"></i>
+        <i class="fab fa-discord" style="font-size:1.4rem;color:rgba(230,57,70,0.5);"></i>
         <span>No members visible right now</span>
       </li>`;
     return;
