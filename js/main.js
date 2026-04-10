@@ -97,6 +97,18 @@ let lastLiveUsernames = new Set();
 let recentlyRemoved = new Map(); // username -> removal timestamp
 const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
 
+// The primary channel that is permanently embedded (24/7).
+const ROCKBOUND_CHANNEL = "rockboundgaming";
+
+// ============================================
+//   DISCORD WIDGET
+// ============================================
+// To show online Discord members:
+//   1. In your Discord server go to Server Settings → Widget → Enable Server Widget.
+//   2. Copy the Server ID shown on that same page (or from Server Settings → Overview).
+//   3. Paste it below.
+const DISCORD_GUILD_ID = ""; // ← paste your Discord Server ID here
+
 // How long (ms) the server-side status file is considered fresh.
 // The GitHub Actions workflow runs every 5 minutes, so 10 minutes gives
 // comfortable headroom before we fall back to the spreadsheet status column.
@@ -192,7 +204,13 @@ async function loadFeaturedCreators() {
       )
     );
 
-    updateDisplay(liveNow, serverLiveUsernames);
+    // Update the permanent player's live badge / glow using the server status.
+    updatePermanentPlayerStatus(serverLiveUsernames);
+
+    // Exclude the main channel from the community creators section — it is
+    // permanently embedded in the Control Center above.
+    const communityLiveNow = liveNow.filter(c => c.twitch !== ROCKBOUND_CHANNEL);
+    updateDisplay(communityLiveNow, serverLiveUsernames);
   } catch (err) {
     console.error("Error loading creators:", err);
     displayNoCreators();
@@ -368,15 +386,10 @@ function removeStreamer(username) {
 }
 
 function displayNoCreators() {
+  // The permanent RockboundGaming player is always shown in the Control Center.
+  // Simply clear the community-creator section so CSS :empty hides it.
   const container = document.getElementById("twitch-embed");
-  if (!container) return;
-  container.innerHTML = `
-    <div class="no-featured-creators">
-      <i class="fas fa-video"></i>
-      <p>No one is live right now</p>
-      <p style="font-size: 0.9rem; margin-top: 0.5rem;">Check back soon for featured creators!</p>
-    </div>
-  `;
+  if (container) container.innerHTML = '';
 }
 
 // ============================================
@@ -384,7 +397,144 @@ function displayNoCreators() {
 // ============================================
 document.addEventListener('DOMContentLoaded', async () => {
   await initTwitchScript();
+  initPermanentPlayer();
   await loadFeaturedCreators();
+  fetchDiscordMembers();
 });
 
 setInterval(loadFeaturedCreators, 60000);
+// Refresh Discord member list every 3 minutes
+setInterval(fetchDiscordMembers, 3 * 60 * 1000);
+
+// ============================================
+//   PERMANENT TWITCH PLAYER (RockboundGaming)
+// ============================================
+function initPermanentPlayer() {
+  const container = document.getElementById('permanent-twitch-embed');
+  if (!container || !window.Twitch || !window.Twitch.Player) return;
+
+  const hostname = window.location.hostname || 'localhost';
+
+  try {
+    const player = new Twitch.Player('permanent-twitch-embed', {
+      channel: ROCKBOUND_CHANNEL,
+      width: '100%',
+      height: '100%',
+      parent: [hostname],
+      autoplay: false,
+      muted: true
+    });
+
+    if (player.addEventListener) {
+      player.addEventListener(Twitch.Player.READY, () => {
+        const loading = document.getElementById('permanent-loading');
+        if (loading) loading.style.display = 'none';
+      });
+    }
+  } catch (e) {
+    console.error('Permanent player init error:', e);
+  }
+}
+
+// ============================================
+//   LIVE BADGE / GLOW (driven by live-status.json)
+// ============================================
+function updatePermanentPlayerStatus(serverLiveUsernames) {
+  const panel = document.getElementById('twitch-panel');
+  const badge = document.getElementById('live-badge');
+  if (!panel || !badge) return;
+
+  const isLive = serverLiveUsernames.has(ROCKBOUND_CHANNEL);
+
+  if (isLive) {
+    panel.classList.add('is-live');
+    badge.hidden = false;
+  } else {
+    panel.classList.remove('is-live');
+    badge.hidden = true;
+  }
+}
+
+// ============================================
+//   DISCORD ONLINE MEMBERS
+// ============================================
+async function fetchDiscordMembers() {
+  const list = document.getElementById('discord-members-list');
+  if (!list) return;
+
+  if (!DISCORD_GUILD_ID) {
+    list.innerHTML = `
+      <li class="discord-empty-item">
+        <i class="fab fa-discord" style="font-size:1.4rem;color:rgba(88,101,242,0.5);"></i>
+        <span>Add your Discord Server ID to show online members.</span>
+      </li>`;
+    return;
+  }
+
+  try {
+    const res = await fetch(`https://discord.com/api/guilds/${DISCORD_GUILD_ID}/widget.json`);
+    if (!res.ok) {
+      list.innerHTML = `
+        <li class="discord-empty-item">
+          <i class="fab fa-discord" style="font-size:1.4rem;color:rgba(88,101,242,0.5);"></i>
+          <span>Enable the Server Widget in Discord settings to show members here.</span>
+        </li>`;
+      return;
+    }
+    const data = await res.json();
+    renderDiscordMembers(data.members || [], data.presence_count || 0);
+  } catch (e) {
+    console.warn('Discord widget fetch failed:', e);
+  }
+}
+
+function renderDiscordMembers(members, count) {
+  const list = document.getElementById('discord-members-list');
+  const countEl = document.getElementById('discord-online-count');
+  if (!list) return;
+
+  if (countEl) {
+    countEl.textContent = count > 0 ? `${count} online` : '';
+  }
+
+  if (members.length === 0) {
+    list.innerHTML = `
+      <li class="discord-empty-item">
+        <i class="fab fa-discord" style="font-size:1.4rem;color:rgba(88,101,242,0.5);"></i>
+        <span>No members visible right now</span>
+      </li>`;
+    return;
+  }
+
+  // Sort: online → idle → dnd
+  const order = { online: 0, idle: 1, dnd: 2 };
+  members.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3));
+
+  list.innerHTML = members.map(m => {
+    const avatarSrc = m.avatar_url || '/assets/logos/favcon.jpg';
+    const game = m.game
+      ? `<span class="member-game">${escapeHtml(m.game.name)}</span>`
+      : '';
+    return `
+      <li class="discord-member-item">
+        <div class="member-avatar-wrap">
+          <img src="${avatarSrc}" alt="${escapeHtml(m.username)}" class="member-avatar" loading="lazy"
+               onerror="this.src='/assets/logos/favcon.jpg'">
+          <span class="member-status-dot status-${m.status}" title="${m.status}"></span>
+        </div>
+        <div class="member-info">
+          <span class="member-name">${escapeHtml(m.username)}</span>
+          ${game}
+        </div>
+      </li>`;
+  }).join('');
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}

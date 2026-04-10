@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://player.twitch.tv https://embed.twitch.tv; frame-src https://twitch.tv https://player.twitch.tv https://embed.twitch.tv; connect-src 'self' https://*.google.com https://*.googleusercontent.com https://player.twitch.tv https://usher.twitch.tv https://api.twitch.tv; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https: data:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://player.twitch.tv https://embed.twitch.tv; frame-src https://twitch.tv https://player.twitch.tv https://embed.twitch.tv; connect-src 'self' https://*.google.com https://*.googleusercontent.com https://player.twitch.tv https://usher.twitch.tv https://api.twitch.tv https://discord.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https: data:;">
 <meta name="google-site-verification" content="your-code-here">
 <link rel="icon" href="./assets/logos/favcon.jpg" type="image/jpeg">
 
@@ -242,21 +242,53 @@
 
 <div class="divider"></div>
 
-<!-- LIVE HUB SECTION -->
+<!-- COMMUNITY CONTROL CENTER -->
 <section id="live" class="reveal">
-  <div class="section-tag">Live Discovery</div>
-  <h2 class="section-title">ON THE <span>ROCK</span> RIGHT NOW</h2>
-  
-  <div class="live-wrapper">
-    <div id="twitch-embed">
-      <div class="no-featured-creators">
-        <i class="fas fa-video"></i>
-        <p>No one is live right now</p>
-        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Check back soon for featured creators!</p>
+  <div class="section-tag">Community Control Center</div>
+  <h2 class="section-title">THE <span>ROCK</span> HUB</h2>
+
+  <div class="control-center">
+
+    <!-- Permanent Twitch Player -->
+    <div class="twitch-panel" id="twitch-panel">
+      <div class="panel-header">
+        <span class="panel-title">
+          <i class="fab fa-twitch"></i> RockboundGaming
+        </span>
+        <span class="live-badge" id="live-badge" hidden>🔴 LIVE NOW</span>
+      </div>
+      <div id="permanent-twitch-embed" class="twitch-embed-container">
+        <div class="stream-loading" id="permanent-loading">
+          <i class="fas fa-spinner fa-spin"></i>
+          <p>Loading stream...</p>
+        </div>
       </div>
     </div>
+
+    <!-- Discord Online Members Panel -->
+    <div class="discord-panel">
+      <div class="panel-header discord-panel-header">
+        <span class="panel-title">
+          <i class="fab fa-discord"></i> Online Now
+        </span>
+        <span class="discord-online-count" id="discord-online-count"></span>
+      </div>
+      <ul class="discord-members-list" id="discord-members-list" aria-label="Online Discord members">
+        <li class="discord-loading-item">
+          <i class="fas fa-circle-notch fa-spin"></i>
+          <span>Loading members…</span>
+        </li>
+      </ul>
+      <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="discord-join-btn">
+        <i class="fab fa-discord"></i> Join the Server
+      </a>
+    </div>
+
   </div>
-  
+
+  <!-- Featured Community Creators (when live) -->
+  <div id="twitch-embed" class="community-live-section"></div>
+
   <div class="live-cta">
     <p>Want your stream featured here? Reach Level 5 in our Discord!</p>
     <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">Join Discord</a>
