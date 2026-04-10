@@ -131,7 +131,6 @@ async function fetchLiveStatus() {
 function initTwitchScript() {
   return new Promise((resolve) => {
     if (window.Twitch && window.Twitch.Player) {
-      console.log("Twitch script already loaded");
       resolve();
       return;
     }
@@ -139,10 +138,7 @@ function initTwitchScript() {
     const script = document.createElement('script');
     script.src = 'https://player.twitch.tv/js/embed/v1.js';
     script.async = true;
-    script.onload = () => {
-      console.log("Twitch script loaded successfully");
-      resolve();
-    };
+    script.onload = () => { resolve(); };
     script.onerror = () => {
       console.error('Failed to load Twitch script');
       resolve();
@@ -189,7 +185,6 @@ async function loadFeaturedCreators() {
         }
       }
     }
-    console.log('Server-confirmed live:', [...serverLiveUsernames]);
 
     // A creator is shown when:
     //   • they qualify (level ≥ 5 + featured) AND
@@ -321,12 +316,7 @@ function addStreamer(c, serverConfirmedLive = false) {
     let offlineTimeout;
     
     if (player.addEventListener) {
-      player.addEventListener(Twitch.Player.READY, () => {
-        console.log(`${c.twitch} player ready`);
-      });
-
       player.addEventListener(Twitch.Player.ONLINE, () => {
-        console.log(`${c.twitch} came ONLINE`);
         hasStartedPlayback = true;
         clearTimeout(offlineTimeout);
 
@@ -345,7 +335,6 @@ function addStreamer(c, serverConfirmedLive = false) {
       });
 
       player.addEventListener(Twitch.Player.OFFLINE, () => {
-        console.log(`${c.twitch} went OFFLINE`);
         removeStreamer(c.twitch);
       });
     }
@@ -358,14 +347,12 @@ function addStreamer(c, serverConfirmedLive = false) {
       offlineTimeout = setTimeout(() => {
         offlineTimeout = null;
         if (!hasStartedPlayback) {
-          console.log(`${c.twitch} timeout - removing player`);
           removeStreamer(c.twitch);
         }
       }, 15000);
     }
 
     activePlayers.set(c.twitch, player);
-    console.log(`Player initialized for ${c.twitch}`);
   } catch (e) {
     console.error("Player Init Error:", e);
     removeStreamer(c.twitch);
@@ -430,8 +417,7 @@ function initPermanentPlayer() {
         const loading = document.getElementById('permanent-loading');
         if (loading) loading.style.display = 'none';
       });
-    }
-  } catch (e) {
+    }  } catch (e) {
     console.error('Permanent player init error:', e);
   }
 }
