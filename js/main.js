@@ -396,8 +396,8 @@ function displayNoCreators() {
 //   INITIALIZE
 // ============================================
 document.addEventListener('DOMContentLoaded', async () => {
-  await initTwitchScript();
   initPermanentPlayer();
+  await initTwitchScript();
   await loadFeaturedCreators();
   fetchDiscordMembers();
 });
@@ -411,29 +411,22 @@ setInterval(fetchDiscordMembers, 3 * 60 * 1000);
 // ============================================
 function initPermanentPlayer() {
   const container = document.getElementById('permanent-twitch-embed');
-  if (!container || !window.Twitch || !window.Twitch.Player) return;
+  if (!container) return;
 
   const hostname = window.location.hostname || 'localhost';
 
-  try {
-    const player = new Twitch.Player('permanent-twitch-embed', {
-      channel: ROCKBOUND_CHANNEL,
-      width: '100%',
-      height: '100%',
-      parent: [hostname],
-      autoplay: true,
-      muted: true
-    });
+  const iframe = document.createElement('iframe');
+  iframe.src = `https://player.twitch.tv/?channel=${encodeURIComponent(ROCKBOUND_CHANNEL)}&parent=${encodeURIComponent(hostname)}&autoplay=true&muted=true`;
+  iframe.setAttribute('title', 'Twitch stream player for RockboundGaming');
+  iframe.setAttribute('allowfullscreen', '');
+  iframe.setAttribute('allow', 'autoplay; fullscreen');
+  iframe.setAttribute('scrolling', 'no');
+  iframe.setAttribute('width', '100%');
+  iframe.setAttribute('height', '100%');
+  container.appendChild(iframe);
 
-    if (player.addEventListener) {
-      player.addEventListener(Twitch.Player.READY, () => {
-        const loading = document.getElementById('permanent-loading');
-        if (loading) loading.style.display = 'none';
-      });
-    }
-  } catch (e) {
-    console.error('Permanent player init error:', e);
-  }
+  const loading = document.getElementById('permanent-loading');
+  if (loading) loading.style.display = 'none';
 }
 
 // ============================================

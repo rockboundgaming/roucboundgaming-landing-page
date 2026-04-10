@@ -31,8 +31,8 @@
 
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
-    <li><a href="#creators">Creators</a></li>
     <li><a href="#live">Live</a></li>
+    <li><a href="#creators">Creators</a></li>
     <li><a href="#community">Community</a></li>
     <li><a href="#platforms">Find Us</a></li>
     <li><a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer">Join Discord</a></li>
@@ -130,6 +130,58 @@
         <p>Mature, respectful, good vibes only.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMMUNITY CONTROL CENTER -->
+<section id="live" class="reveal">
+  <div class="section-tag">Community Control Center</div>
+  <h2 class="section-title">THE <span>ROCK</span> HUB</h2>
+
+  <div class="control-center">
+
+    <!-- Permanent Twitch Player -->
+    <div class="twitch-panel" id="twitch-panel">
+      <div class="panel-header">
+        <span class="panel-title">
+          <i class="fab fa-twitch"></i> RockboundGaming
+        </span>
+        <span class="live-badge" id="live-badge" hidden>🔴 LIVE NOW</span>
+      </div>
+      <div id="permanent-twitch-embed" class="twitch-embed-container">
+        <div class="stream-loading" id="permanent-loading">
+          <i class="fas fa-spinner fa-spin"></i>
+          <p>Loading stream...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Discord Online Members Panel -->
+    <div class="discord-panel">
+      <div class="panel-header discord-panel-header">
+        <span class="panel-title">
+          <i class="fab fa-discord"></i> Online Now
+        </span>
+        <span class="discord-online-count" id="discord-online-count"></span>
+      </div>
+      <ul class="discord-members-list" id="discord-members-list" aria-label="Online Discord members">
+        <li class="discord-loading-item">
+          <i class="fas fa-circle-notch fa-spin"></i>
+          <span>Loading members…</span>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Featured Community Creators (when live) -->
+  <div id="twitch-embed" class="community-live-section"></div>
+
+  <div class="live-cta">
+    <p>Want your stream featured here? Reach Level 5 in our Discord!</p>
+    <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">Join Discord</a>
   </div>
 </section>
 
@@ -237,58 +289,6 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- COMMUNITY CONTROL CENTER -->
-<section id="live" class="reveal">
-  <div class="section-tag">Community Control Center</div>
-  <h2 class="section-title">THE <span>ROCK</span> HUB</h2>
-
-  <div class="control-center">
-
-    <!-- Permanent Twitch Player -->
-    <div class="twitch-panel" id="twitch-panel">
-      <div class="panel-header">
-        <span class="panel-title">
-          <i class="fab fa-twitch"></i> RockboundGaming
-        </span>
-        <span class="live-badge" id="live-badge" hidden>🔴 LIVE NOW</span>
-      </div>
-      <div id="permanent-twitch-embed" class="twitch-embed-container">
-        <div class="stream-loading" id="permanent-loading">
-          <i class="fas fa-spinner fa-spin"></i>
-          <p>Loading stream...</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Discord Online Members Panel -->
-    <div class="discord-panel">
-      <div class="panel-header discord-panel-header">
-        <span class="panel-title">
-          <i class="fab fa-discord"></i> Online Now
-        </span>
-        <span class="discord-online-count" id="discord-online-count"></span>
-      </div>
-      <ul class="discord-members-list" id="discord-members-list" aria-label="Online Discord members">
-        <li class="discord-loading-item">
-          <i class="fas fa-circle-notch fa-spin"></i>
-          <span>Loading members…</span>
-        </li>
-      </ul>
-    </div>
-
-  </div>
-
-  <!-- Featured Community Creators (when live) -->
-  <div id="twitch-embed" class="community-live-section"></div>
-
-  <div class="live-cta">
-    <p>Want your stream featured here? Reach Level 5 in our Discord!</p>
-    <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">Join Discord</a>
   </div>
 </section>
 
