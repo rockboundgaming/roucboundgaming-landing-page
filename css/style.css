@@ -853,6 +853,7 @@ section:nth-child(odd) {
 .twitch-panel {
   flex: 1 1 0;
   min-width: 0;
+  min-height: 420px;
   background: #000;
   border-radius: 8px;
   overflow: hidden;
@@ -898,7 +899,7 @@ section:nth-child(odd) {
 }
 
 .panel-title .fab.fa-twitch  { color: #9146FF; }
-.panel-title .fab.fa-discord { color: #5865F2; }
+.panel-title .fab.fa-discord { color: var(--red); }
 
 /* 🔴 LIVE NOW badge */
 .live-badge {
@@ -923,7 +924,7 @@ section:nth-child(odd) {
   flex-direction: column;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid rgba(88,101,242,0.25);
+  border: 1px solid rgba(230,57,70,0.25);
   /* Diamond / trellis pattern tied to the 3-D wall-panel theme */
   background-color: #0d1017;
   background-image:
@@ -936,8 +937,8 @@ section:nth-child(odd) {
 }
 
 .discord-panel-header {
-  background: rgba(88,101,242,0.1);
-  border-bottom-color: rgba(88,101,242,0.2);
+  background: rgba(230,57,70,0.1);
+  border-bottom-color: rgba(230,57,70,0.2);
 }
 
 .discord-online-count {
@@ -955,14 +956,14 @@ section:nth-child(odd) {
   margin: 0;
   /* Firefox */
   scrollbar-width: thin;
-  scrollbar-color: rgba(88,101,242,0.45) transparent;
+  scrollbar-color: rgba(230,57,70,0.45) transparent;
 }
 
 /* WebKit scrollbar */
 .discord-members-list::-webkit-scrollbar       { width: 4px; }
 .discord-members-list::-webkit-scrollbar-track { background: transparent; }
 .discord-members-list::-webkit-scrollbar-thumb {
-  background: rgba(88,101,242,0.45);
+  background: rgba(230,57,70,0.45);
   border-radius: 2px;
 }
 
@@ -1048,30 +1049,9 @@ section:nth-child(odd) {
   list-style: none;
 }
 
-.discord-loading-item i { font-size: 1.2rem; color: rgba(88,101,242,0.6); }
+.discord-loading-item i { font-size: 1.2rem; color: rgba(230,57,70,0.6); }
 
-/* "Join the Server" footer button */
-.discord-join-btn {
-  display: block;
-  text-align: center;
-  padding: 0.7rem 1rem;
-  background: rgba(88,101,242,0.12);
-  border-top: 1px solid rgba(88,101,242,0.2);
-  color: var(--white);
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  transition: background 0.2s ease;
-  flex-shrink: 0;
-}
 
-.discord-join-btn:hover { background: rgba(88,101,242,0.28); }
-
-.discord-join-btn i {
-  margin-right: 0.4rem;
-  color: #5865F2;
-}
 
 /* Community-creator section (below control center; hidden when empty) */
 .community-live-section { margin-top: 2rem; }
