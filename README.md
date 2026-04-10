@@ -1,26 +1,39 @@
-# Project Structure
+# Rockbound Gaming — Landing Page
 
 ## Overview
-This project is organized into several directories and files that each play a critical role in the functionality and maintenance of the landing page application.
+Static GitHub Pages landing page for the Rockbound Gaming community. Stream live-status is provided by a scheduled GitHub Actions workflow that polls the Twitch Helix API every 2 minutes and writes `live-status.json`.
 
 ## Directory Structure
 
 ```
-roucboundgaming-landing-page/
-├── assets/                # Contains images, fonts, and other static files
-├── css/                   # Holds all stylesheets
-│   ├── main.css          # Main styling file for the landing page
-│   └── reset.css         # CSS reset for consistent styling across browsers
-├── js/                    # JavaScript files
-│   ├── app.js            # Main JavaScript file for application logic
-│   └── vendor/           # Third-party libraries
-├── index.html            # Main landing page file
-└── README.md             # Project documentation
+rockboundgaming-landing-page/
+├── .github/
+│   └── workflows/
+│       └── update-live-status.yml   # Scheduled workflow: writes live-status.json
+├── assets/                          # Images and logos
+│   ├── images/
+│   └── logos/
+├── css/
+│   ├── style.css                    # Main stylesheet
+│   └── style.min.css                # Minified stylesheet (production)
+├── js/
+│   ├── main.js                      # Application logic (scroll, Twitch, Discord)
+│   └── main.min.js                  # Minified JS (production)
+├── index.html                       # Main landing page
+├── live-status.json                 # Auto-updated by GitHub Actions workflow
+├── sitemap.xml
+└── README.md
 ```
 
 ## File Descriptions
-- **assets/**: This folder contains all static files such as images and fonts needed for the application.
-- **css/**: Contains the stylesheets that control the appearance of the landing page.
-- **js/**: Includes JavaScript files that add interactivity and logic to the application.
-- **index.html**: The main HTML file for the landing page.
-- **README.md**: Documentation of the project structure and other relevant information.
+- **assets/**: Static files (images, logos) used by the landing page.
+- **css/style.css**: Main stylesheet controlling the appearance of the landing page.
+- **css/style.min.css**: Minified version of `style.css` for production use.
+- **js/main.js**: Application JavaScript — scroll animations, Twitch live-stream embeds, Discord online-member widget.
+- **js/main.min.js**: Minified version of `main.js` for production use.
+- **index.html**: Main HTML file for the landing page.
+- **live-status.json**: Written every 2 minutes by the GitHub Actions workflow; consumed by `main.js` to display live stream badges without requiring client-side Twitch API credentials.
+- **README.md**: This file — project structure and setup documentation.
+
+## Credentials & Secrets
+All sensitive credentials are stored as **GitHub Actions Secrets** and are never committed to the repository. See [SECURITY.md](./SECURITY.md) for the full credential inventory and update instructions.

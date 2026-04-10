@@ -198,45 +198,6 @@
     <div class="creator-cta">
       <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">Get Early Access</a>
     </div>
-
-    <div class="roadmap-section">
-      <h3 class="roadmap-title">THE ROADMAP</h3>
-      <p class="roadmap-subtitle">What's Coming</p>
-
-      <div class="roadmap-grid">
-        <div class="card roadmap-item">
-          <div class="roadmap-num">01</div>
-          <div class="roadmap-content">
-            <h4>Streamer Program Launch</h4>
-            <p>Stream keys, overlays, and Creator's Hub access. Get set up and go live under the Rockbound Gaming banner.</p>
-          </div>
-        </div>
-
-        <div class="card roadmap-item">
-          <div class="roadmap-num">02</div>
-          <div class="roadmap-content">
-            <h4>Featured Streamer Roster</h4>
-            <p>An official roster of verified Rockbound Gaming creators promoted across all our platforms.</p>
-          </div>
-        </div>
-
-        <div class="card roadmap-item">
-          <div class="roadmap-num">03</div>
-          <div class="roadmap-content">
-            <h4>Hosted Streaming Network</h4>
-            <p>Stream through our setup with no expensive hardware required. We provide the infrastructure, you provide the content.</p>
-          </div>
-        </div>
-
-        <div class="card roadmap-item">
-          <div class="roadmap-num">04</div>
-          <div class="roadmap-content">
-            <h4>Collab Events & Game Nights</h4>
-            <p>Organized community events, tournaments, and co-streams featuring our creator roster.</p>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -249,20 +210,23 @@
 
   <div class="control-center">
 
-    <!-- Permanent Twitch Player -->
+    <!-- Unified Stream Area -->
     <div class="twitch-panel" id="twitch-panel">
       <div class="panel-header">
         <span class="panel-title">
-          <i class="fab fa-twitch"></i> RockboundGaming
+          <i class="fab fa-twitch"></i> <span id="panel-stream-title">RockboundGaming</span>
         </span>
         <span class="live-badge" id="live-badge" hidden>🔴 LIVE NOW</span>
       </div>
-      <div id="permanent-twitch-embed" class="twitch-embed-container">
+      <!-- Offline fallback: single RockboundGaming player (shown when no one is live) -->
+      <div id="offline-player" class="twitch-embed-container">
         <div class="stream-loading" id="permanent-loading">
           <i class="fas fa-spinner fa-spin"></i>
           <p>Loading stream...</p>
         </div>
       </div>
+      <!-- Live stream grid: up to 4 streams (shown when anyone is live) -->
+      <div id="live-streams-grid" class="live-streams-grid" hidden></div>
     </div>
 
     <!-- Discord Online Members Panel -->
@@ -283,12 +247,53 @@
 
   </div>
 
-  <!-- Featured Community Creators (when live) -->
-  <div id="twitch-embed" class="community-live-section"></div>
-
   <div class="live-cta">
     <p>Want your stream featured here? Reach Level 5 in our Discord!</p>
     <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">Join Discord</a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ROADMAP -->
+<section id="roadmap" class="reveal">
+  <div class="roadmap-section">
+    <h3 class="roadmap-title">THE ROADMAP</h3>
+    <p class="roadmap-subtitle">What's Coming</p>
+
+    <div class="roadmap-grid">
+      <div class="card roadmap-item">
+        <div class="roadmap-num">01</div>
+        <div class="roadmap-content">
+          <h4>Streamer Program Launch</h4>
+          <p>Stream keys, overlays, and Creator's Hub access. Get set up and go live under the Rockbound Gaming banner.</p>
+        </div>
+      </div>
+
+      <div class="card roadmap-item">
+        <div class="roadmap-num">02</div>
+        <div class="roadmap-content">
+          <h4>Featured Streamer Roster</h4>
+          <p>An official roster of verified Rockbound Gaming creators promoted across all our platforms.</p>
+        </div>
+      </div>
+
+      <div class="card roadmap-item">
+        <div class="roadmap-num">03</div>
+        <div class="roadmap-content">
+          <h4>Hosted Streaming Network</h4>
+          <p>Stream through our setup with no expensive hardware required. We provide the infrastructure, you provide the content.</p>
+        </div>
+      </div>
+
+      <div class="card roadmap-item">
+        <div class="roadmap-num">04</div>
+        <div class="roadmap-content">
+          <h4>Collab Events & Game Nights</h4>
+          <p>Organized community events, tournaments, and co-streams featuring our creator roster.</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
