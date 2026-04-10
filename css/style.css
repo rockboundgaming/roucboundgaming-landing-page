@@ -849,7 +849,55 @@ section:nth-child(odd) {
   width: 100%;
 }
 
-/* ---- Twitch Panel ---- */
+/* ---- Squad 4 Grid ---- */
+.squad-4-grid {
+  flex: 1 1 0;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  align-content: start;
+}
+
+/* Auto switch to 2-column layout when 2 or more stream slots are present */
+.squad-4-grid:has(> .stream-slot:nth-child(2)) {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* ---- Stream Slot (Squad 4 individual slot) ---- */
+.stream-slot {
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.stream-slot.is-live {
+  border-color: rgba(230,57,70,0.6);
+  animation: liveGlow 2.5s ease-in-out infinite;
+}
+
+/* Remove default margin/radius on the embed container inside a slot */
+.stream-slot .twitch-embed-container {
+  flex: 1;
+  margin-top: 0;
+  border-radius: 0;
+}
+
+/* Level tag inside community stream slot headers */
+.creator-level-tag {
+  font-size: 0.75rem;
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-left: 0.4rem;
+}
+
+/* ---- Twitch Panel (legacy alias → stream-slot) ---- */
 .twitch-panel {
   flex: 1 1 0;
   min-width: 0;
@@ -868,7 +916,7 @@ section:nth-child(odd) {
   animation: liveGlow 2.5s ease-in-out infinite;
 }
 
-/* Remove the default margin/radius on the embed container inside the panel */
+/* Remove the default margin/radius on the embed container inside the Rockbound slot */
 #permanent-twitch-embed {
   flex: 1;
   margin-top: 0;
@@ -924,7 +972,8 @@ section:nth-child(odd) {
   flex-direction: column;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid rgba(230,57,70,0.25);
+  border: 2px solid #8B0000;
+  max-height: 210px;
   /* Diamond / trellis pattern tied to the 3-D wall-panel theme */
   background-color: #0d1017;
   background-image:
@@ -1545,11 +1594,21 @@ footer {
     gap: 1rem;
   }
 
+  /* Squad 4 grid: single column on mobile */
+  .squad-4-grid,
+  .squad-4-grid:has(> .stream-slot:nth-child(2)) {
+    grid-template-columns: 1fr;
+  }
+
+  .stream-slot {
+    min-height: 220px;
+  }
+
   .discord-panel {
     flex: none;
     width: 100%;
-    min-height: 160px;
-    max-height: 260px;
+    min-height: 120px;
+    max-height: 130px;
   }
 }
 

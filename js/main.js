@@ -100,6 +100,9 @@ const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4e
 // The primary channel that is permanently embedded (24/7).
 const ROCKBOUND_CHANNEL = "rockboundgaming";
 
+// Maximum total stream slots in the Rock Hub (Squad 4).
+const MAX_SQUAD_SLOTS = 4;
+
 // ============================================
 //   DISCORD WIDGET
 // ============================================
@@ -204,21 +207,29 @@ async function loadFeaturedCreators() {
       )
     );
 
-    // Update the permanent player's live badge / glow using the server status.
-    updatePermanentPlayerStatus(serverLiveUsernames);
+    const isRockboundLive = serverLiveUsernames.has(ROCKBOUND_CHANNEL);
 
-    // Exclude the main channel from the community creators section — it is
-    // permanently embedded in the Control Center above.
-    const communityLiveNow = liveNow.filter(c => c.twitch !== ROCKBOUND_CHANNEL);
+    // Squad 4: Rockbound takes 1 slot when live, leaving 3 for community.
+    // When Rockbound is offline, all 4 slots go to community members (Level 5+).
+    const communitySlots = isRockboundLive ? MAX_SQUAD_SLOTS - 1 : MAX_SQUAD_SLOTS;
+    const communityLiveNow = liveNow
+      .filter(c => c.twitch !== ROCKBOUND_CHANNEL)
+      .slice(0, communitySlots);
+
+    // Update the Rockbound slot visibility and live badge / glow.
+    updatePermanentPlayerStatus(serverLiveUsernames, communityLiveNow.length > 0);
+
     updateDisplay(communityLiveNow, serverLiveUsernames);
   } catch (err) {
     console.error("Error loading creators:", err);
-    displayNoCreators();
+    // On error, ensure Rockbound slot remains visible as the offline player.
+    const rockboundSlot = document.getElementById('slot-rockbound');
+    if (rockboundSlot) rockboundSlot.style.display = '';
   }
 }
 
 function updateDisplay(liveNow, serverLiveUsernames = new Set()) {
-  const container = document.getElementById("twitch-embed");
+  const container = document.getElementById("squad-4");
   if (!container) return;
 
   const incomingUsernames = new Set(liveNow.map(c => c.twitch));
@@ -249,22 +260,13 @@ function updateDisplay(liveNow, serverLiveUsernames = new Set()) {
       addStreamer(c, serverLiveUsernames.has(c.twitch));
     }
   });
-
-  // Only show "no one is streaming" when there are genuinely no live players.
-  // The "no one is streaming" placeholder is removed by the ONLINE event handler
-  // inside addStreamer() once the stream is confirmed live, so we must NOT remove
-  // it here just because a creator is theoretically live in the spreadsheet.
-  if (incomingUsernames.size === 0 && activePlayers.size === 0) {
-    const noCard = container.querySelector('.no-featured-creators');
-    if (!noCard) displayNoCreators();
-  }
 }
 
 function addStreamer(c, serverConfirmedLive = false) {
-  const container = document.getElementById("twitch-embed");
+  const container = document.getElementById("squad-4");
   
   const wrapper = document.createElement('div');
-  wrapper.className = 'creator-featured'; 
+  wrapper.className = 'stream-slot'; 
   wrapper.id = `wrapper-${c.twitch}`;
 
   if (serverConfirmedLive) {
@@ -272,23 +274,19 @@ function addStreamer(c, serverConfirmedLive = false) {
     // Show the player wrapper immediately — no waiting for the ONLINE event —
     // so Android users see the stream straight away with zero flicker.
     wrapper.style.display = '';
-    const noCard = container.querySelector('.no-featured-creators');
-    if (noCard) noCard.remove();
   } else {
     // Client-side-only path: keep the wrapper hidden until the Twitch SDK
-    // fires ONLINE so the "no one is streaming" placeholder stays visible
+    // fires ONLINE so the Rockbound offline player stays visible
     // while the player initialises.
     wrapper.style.display = 'none';
   }
 
   wrapper.innerHTML = `
-    <div class="creator-featured-header">
-      <div class="creator-avatar"><i class="fas fa-user"></i></div>
-      <div class="creator-info">
-        <h3 class="creator-name">${c.name}</h3>
-        <p class="creator-level">Level ${c.level}</p>
-      </div>
-      <div class="creator-status-badge">LIVE</div>
+    <div class="panel-header">
+      <span class="panel-title">
+        <i class="fas fa-user"></i> ${escapeHtml(c.name)}<span class="creator-level-tag">Lv.${c.level}</span>
+      </span>
+      <span class="live-badge" style="display:inline-block">🔴 LIVE</span>
     </div>
     <div id="player-${c.twitch}" class="twitch-embed-container">
       <div class="stream-loading">
@@ -333,8 +331,6 @@ function addStreamer(c, serverConfirmedLive = false) {
         if (!serverConfirmedLive) {
           // Client-side path: reveal the player now that we know it's live.
           wrapper.style.display = '';
-          const noCard = container.querySelector('.no-featured-creators');
-          if (noCard) noCard.remove();
         }
 
         // Hide the loading spinner in both cases
@@ -380,16 +376,11 @@ function removeStreamer(username) {
   
   // Record removal to prevent re-adding for 60 seconds
   recentlyRemoved.set(username, Date.now());
-  
-  const container = document.getElementById("twitch-embed");
-  if (container && container.children.length === 0) displayNoCreators();
 }
 
 function displayNoCreators() {
-  // The permanent RockboundGaming player is always shown in the Control Center.
-  // Simply clear the community-creator section so CSS :empty hides it.
-  const container = document.getElementById("twitch-embed");
-  if (container) container.innerHTML = '';
+  // The Rockbound Gaming slot in #squad-4 is always present as the persistent
+  // offline player when no community members are live — no placeholder card needed.
 }
 
 // ============================================
@@ -439,18 +430,28 @@ function initPermanentPlayer() {
 // ============================================
 //   LIVE BADGE / GLOW (driven by live-status.json)
 // ============================================
-function updatePermanentPlayerStatus(serverLiveUsernames) {
-  const panel = document.getElementById('twitch-panel');
+function updatePermanentPlayerStatus(serverLiveUsernames, hasCommunityLive = false) {
+  const slot = document.getElementById('slot-rockbound');
   const badge = document.getElementById('live-badge');
-  if (!panel || !badge) return;
+  if (!slot || !badge) return;
 
   const isLive = serverLiveUsernames.has(ROCKBOUND_CHANNEL);
 
   if (isLive) {
-    panel.classList.add('is-live');
+    // Rockbound is live — show their slot with live styling.
+    slot.style.display = '';
+    slot.classList.add('is-live');
     badge.hidden = false;
+  } else if (hasCommunityLive) {
+    // Rockbound offline but community members are live — hide Rockbound slot
+    // so community members fill all 4 Squad slots.
+    slot.style.display = 'none';
+    slot.classList.remove('is-live');
+    badge.hidden = true;
   } else {
-    panel.classList.remove('is-live');
+    // Nobody live — show Rockbound offline player (24/7 requirement).
+    slot.style.display = '';
+    slot.classList.remove('is-live');
     badge.hidden = true;
   }
 }
@@ -458,6 +459,16 @@ function updatePermanentPlayerStatus(serverLiveUsernames) {
 // ============================================
 //   DISCORD ONLINE MEMBERS
 // ============================================
+
+// Known bot usernames (lowercase) to exclude from the member list.
+const KNOWN_BOTS = new Set([
+  'mee6', 'dyno', 'carl-bot', 'carl bot', 'yagpdb.xyz', 'arcane',
+  'statbot', 'streamcord', 'groovy', 'rhythm', 'hydra', 'fredboat',
+  'rythm', 'chip', 'jockie music', 'atlas', 'wick', 'vortex',
+  'autorole', 'sesh', 'apollo', 'ticket tool', 'helper.gg',
+  'captcha.bot', 'modmail', 'welcomer', 'giveawaybot', 'tatsu'
+]);
+
 async function fetchDiscordMembers() {
   const list = document.getElementById('discord-members-list');
   if (!list) return;
@@ -493,11 +504,16 @@ function renderDiscordMembers(members, count) {
   const countEl = document.getElementById('discord-online-count');
   if (!list) return;
 
+  // Filter out bots — check the bot flag and known bot usernames.
+  const humanMembers = members.filter(m =>
+    !m.bot && !KNOWN_BOTS.has(m.username?.toLowerCase())
+  );
+
   if (countEl) {
     countEl.textContent = count > 0 ? `${count} online` : '';
   }
 
-  if (members.length === 0) {
+  if (humanMembers.length === 0) {
     list.innerHTML = `
       <li class="discord-empty-item">
         <i class="fab fa-discord" style="font-size:1.4rem;color:rgba(230,57,70,0.5);"></i>
@@ -508,9 +524,9 @@ function renderDiscordMembers(members, count) {
 
   // Sort: online → idle → dnd
   const order = { online: 0, idle: 1, dnd: 2 };
-  members.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3));
+  humanMembers.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3));
 
-  list.innerHTML = members.map(m => {
+  list.innerHTML = humanMembers.map(m => {
     const avatarSrc = m.avatar_url || '/assets/logos/favcon.jpg';
     const game = m.game
       ? `<span class="member-game">${escapeHtml(m.game.name)}</span>`
