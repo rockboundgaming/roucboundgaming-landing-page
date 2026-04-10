@@ -186,35 +186,69 @@ async function loadFeaturedCreators() {
       }
     }
 
-    // A creator is shown when:
-    //   • they qualify (level ≥ 5 + featured) AND
-    //   • they are confirmed live by the Helix API (serverLiveUsernames), OR
-    //     the spreadsheet still marks them live as a fallback.
-    const liveNow = creators.filter(c => 
-      c.level >= 5 && 
+    // Community live creators: level >= 5, featured, live, excluding the main channel.
+    const communityLiveNow = creators.filter(c =>
+      c.level >= 5 &&
       c.featured?.toLowerCase() === "yes" &&
+      c.twitch !== ROCKBOUND_CHANNEL &&
       (
         serverLiveUsernames.has(c.twitch) ||
         c.status === "live" || c.status === "active"
       )
     );
 
-    // Update the permanent player's live badge / glow using the server status.
-    updatePermanentPlayerStatus(serverLiveUsernames);
+    // Build unified live list: Rockbound first (if live), then community (up to 4 total).
+    const allLive = [];
+    if (serverLiveUsernames.has(ROCKBOUND_CHANNEL)) {
+      allLive.push({ twitch: ROCKBOUND_CHANNEL, name: 'RockboundGaming', level: 0 });
+    }
+    for (const c of communityLiveNow) {
+      if (allLive.length >= 4) break;
+      allLive.push(c);
+    }
 
-    // Exclude the main channel from the community creators section — it is
-    // permanently embedded in the Control Center above.
-    const communityLiveNow = liveNow.filter(c => c.twitch !== ROCKBOUND_CHANNEL);
-    updateDisplay(communityLiveNow, serverLiveUsernames);
+    updateUnifiedHub(allLive, serverLiveUsernames);
   } catch (err) {
     console.error("Error loading creators:", err);
+    updateUnifiedHub([], new Set());
+  }
+}
+
+// ============================================
+//   UNIFIED HUB
+// ============================================
+function updateUnifiedHub(allLive, serverLiveUsernames) {
+  const offlineEl = document.getElementById('offline-player');
+  const liveGrid = document.getElementById('live-streams-grid');
+  const panel = document.getElementById('twitch-panel');
+  const badge = document.getElementById('live-badge');
+  const titleEl = document.getElementById('panel-stream-title');
+
+  if (allLive.length > 0) {
+    if (offlineEl) offlineEl.hidden = true;
+    if (liveGrid) liveGrid.hidden = false;
+    if (panel) panel.classList.add('is-live');
+    if (badge) badge.hidden = false;
+    if (titleEl) titleEl.textContent = allLive.length === 1 ? allLive[0].name : 'Rock Hub Live';
+    updateDisplay(allLive, serverLiveUsernames);
+  } else {
+    if (offlineEl) offlineEl.hidden = false;
+    if (liveGrid) liveGrid.hidden = true;
+    if (panel) panel.classList.remove('is-live');
+    if (badge) badge.hidden = true;
+    if (titleEl) titleEl.textContent = 'RockboundGaming';
     displayNoCreators();
+    initOfflinePlayer();
   }
 }
 
 function updateDisplay(liveNow, serverLiveUsernames = new Set()) {
-  const container = document.getElementById("twitch-embed");
+  const container = document.getElementById("live-streams-grid");
   if (!container) return;
+
+  // Update the grid column class based on stream count.
+  const count = Math.min(liveNow.length, 4);
+  container.className = `live-streams-grid count-${count}`;
 
   const incomingUsernames = new Set(liveNow.map(c => c.twitch));
 
@@ -244,35 +278,18 @@ function updateDisplay(liveNow, serverLiveUsernames = new Set()) {
       addStreamer(c, serverLiveUsernames.has(c.twitch));
     }
   });
-
-  // Only show "no one is streaming" when there are genuinely no live players.
-  // The "no one is streaming" placeholder is removed by the ONLINE event handler
-  // inside addStreamer() once the stream is confirmed live, so we must NOT remove
-  // it here just because a creator is theoretically live in the spreadsheet.
-  if (incomingUsernames.size === 0 && activePlayers.size === 0) {
-    const noCard = container.querySelector('.no-featured-creators');
-    if (!noCard) displayNoCreators();
-  }
 }
 
 function addStreamer(c, serverConfirmedLive = false) {
-  const container = document.getElementById("twitch-embed");
+  const container = document.getElementById("live-streams-grid");
   
   const wrapper = document.createElement('div');
   wrapper.className = 'creator-featured'; 
   wrapper.id = `wrapper-${c.twitch}`;
 
   if (serverConfirmedLive) {
-    // The Twitch Helix API confirmed this stream is live server-side.
-    // Show the player wrapper immediately — no waiting for the ONLINE event —
-    // so Android users see the stream straight away with zero flicker.
     wrapper.style.display = '';
-    const noCard = container.querySelector('.no-featured-creators');
-    if (noCard) noCard.remove();
   } else {
-    // Client-side-only path: keep the wrapper hidden until the Twitch SDK
-    // fires ONLINE so the "no one is streaming" placeholder stays visible
-    // while the player initialises.
     wrapper.style.display = 'none';
   }
 
@@ -281,7 +298,7 @@ function addStreamer(c, serverConfirmedLive = false) {
       <div class="creator-avatar"><i class="fas fa-user"></i></div>
       <div class="creator-info">
         <h3 class="creator-name">${c.name}</h3>
-        <p class="creator-level">Level ${c.level}</p>
+        ${c.level > 0 ? `<p class="creator-level">Level ${c.level}</p>` : ''}
       </div>
       <div class="creator-status-badge">LIVE</div>
     </div>
@@ -321,10 +338,7 @@ function addStreamer(c, serverConfirmedLive = false) {
         clearTimeout(offlineTimeout);
 
         if (!serverConfirmedLive) {
-          // Client-side path: reveal the player now that we know it's live.
           wrapper.style.display = '';
-          const noCard = container.querySelector('.no-featured-creators');
-          if (noCard) noCard.remove();
         }
 
         // Hide the loading spinner in both cases
@@ -368,14 +382,25 @@ function removeStreamer(username) {
   // Record removal to prevent re-adding for 60 seconds
   recentlyRemoved.set(username, Date.now());
   
-  const container = document.getElementById("twitch-embed");
-  if (container && container.children.length === 0) displayNoCreators();
+  const container = document.getElementById("live-streams-grid");
+  if (container && container.children.length === 0) {
+    // No live streams left — switch back to offline player
+    container.hidden = true;
+    const offlineEl = document.getElementById('offline-player');
+    const panel = document.getElementById('twitch-panel');
+    const badge = document.getElementById('live-badge');
+    const titleEl = document.getElementById('panel-stream-title');
+    if (offlineEl) offlineEl.hidden = false;
+    if (panel) panel.classList.remove('is-live');
+    if (badge) badge.hidden = true;
+    if (titleEl) titleEl.textContent = 'RockboundGaming';
+    initOfflinePlayer();
+  }
 }
 
 function displayNoCreators() {
-  // The permanent RockboundGaming player is always shown in the Control Center.
-  // Simply clear the community-creator section so CSS :empty hides it.
-  const container = document.getElementById("twitch-embed");
+  // Clear the live grid; the offline player is shown by updateUnifiedHub / removeStreamer.
+  const container = document.getElementById("live-streams-grid");
   if (container) container.innerHTML = '';
 }
 
@@ -384,7 +409,6 @@ function displayNoCreators() {
 // ============================================
 document.addEventListener('DOMContentLoaded', async () => {
   await initTwitchScript();
-  initPermanentPlayer();
   await loadFeaturedCreators();
   fetchDiscordMembers();
 });
@@ -394,16 +418,20 @@ setInterval(loadFeaturedCreators, 60000);
 setInterval(fetchDiscordMembers, 3 * 60 * 1000);
 
 // ============================================
-//   PERMANENT TWITCH PLAYER (RockboundGaming)
+//   OFFLINE PLAYER (RockboundGaming fallback)
 // ============================================
-function initPermanentPlayer() {
-  const container = document.getElementById('permanent-twitch-embed');
+let offlinePlayerInit = false;
+
+function initOfflinePlayer() {
+  if (offlinePlayerInit) return;
+  const container = document.getElementById('offline-player');
   if (!container || !window.Twitch || !window.Twitch.Player) return;
+  offlinePlayerInit = true;
 
   const hostname = window.location.hostname || 'localhost';
 
   try {
-    const player = new Twitch.Player('permanent-twitch-embed', {
+    const player = new Twitch.Player('offline-player', {
       channel: ROCKBOUND_CHANNEL,
       width: '100%',
       height: '100%',
@@ -417,27 +445,10 @@ function initPermanentPlayer() {
         const loading = document.getElementById('permanent-loading');
         if (loading) loading.style.display = 'none';
       });
-    }  } catch (e) {
-    console.error('Permanent player init error:', e);
-  }
-}
-
-// ============================================
-//   LIVE BADGE / GLOW (driven by live-status.json)
-// ============================================
-function updatePermanentPlayerStatus(serverLiveUsernames) {
-  const panel = document.getElementById('twitch-panel');
-  const badge = document.getElementById('live-badge');
-  if (!panel || !badge) return;
-
-  const isLive = serverLiveUsernames.has(ROCKBOUND_CHANNEL);
-
-  if (isLive) {
-    panel.classList.add('is-live');
-    badge.hidden = false;
-  } else {
-    panel.classList.remove('is-live');
-    badge.hidden = true;
+    }
+  } catch (e) {
+    console.error('Offline player init error:', e);
+    offlinePlayerInit = false;
   }
 }
 
@@ -479,11 +490,21 @@ function renderDiscordMembers(members, count) {
   const countEl = document.getElementById('discord-online-count');
   if (!list) return;
 
+  // Filter out bots: explicit bot flag, known bot usernames, or "bot" in name.
+  const KNOWN_BOTS = ['carl-bot', 'mee6', 'dyno', 'groovy', 'rhythm', 'rythm', 'fredboat', 'nightbot', 'streamelements', 'streamlabs'];
+  const humanMembers = members.filter(m => {
+    if (m.bot === true) return false;
+    const nameLower = m.username.toLowerCase();
+    if (KNOWN_BOTS.includes(nameLower)) return false;
+    if (/\bbot\b/.test(nameLower)) return false;
+    return true;
+  });
+
   if (countEl) {
-    countEl.textContent = count > 0 ? `${count} online` : '';
+    countEl.textContent = humanMembers.length > 0 ? `${humanMembers.length} online` : '';
   }
 
-  if (members.length === 0) {
+  if (humanMembers.length === 0) {
     list.innerHTML = `
       <li class="discord-empty-item">
         <i class="fab fa-discord" style="font-size:1.4rem;color:rgba(230,57,70,0.5);"></i>
@@ -494,9 +515,9 @@ function renderDiscordMembers(members, count) {
 
   // Sort: online → idle → dnd
   const order = { online: 0, idle: 1, dnd: 2 };
-  members.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3));
+  humanMembers.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3));
 
-  list.innerHTML = members.map(m => {
+  list.innerHTML = humanMembers.map(m => {
     const avatarSrc = m.avatar_url || '/assets/logos/favcon.jpg';
     const game = m.game
       ? `<span class="member-game">${escapeHtml(m.game.name)}</span>`
