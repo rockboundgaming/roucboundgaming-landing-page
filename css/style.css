@@ -826,11 +826,11 @@ section:nth-child(odd) {
   50%       { box-shadow: 0 0 30px rgba(230,57,70,0.75), 0 0 70px rgba(230,57,70,0.3); }
 }
 
-/* Side-by-side layout; stretch so Discord panel fills the same height as the video player */
+/* Side-by-side layout; flex-start so each panel uses its natural height */
 .control-center {
   display: flex;
   gap: 1.25rem;
-  align-items: stretch;
+  align-items: flex-start;
   margin-bottom: 2rem;
   width: 100%;
 }
