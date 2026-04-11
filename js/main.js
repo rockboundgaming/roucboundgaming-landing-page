@@ -531,7 +531,7 @@ function renderDiscordMembers(members, count) {
   const humanMembers = members.filter(m => {
     if (m.bot === true) return false;
     const nameLower = m.username.toLowerCase();
-    if (KNOWN_BOTS.includes(nameLower)) return false;
+    if (KNOWN_BOTS.some(bot => nameLower.includes(bot))) return false;
     if (/\bbot\b/.test(nameLower)) return false;
     return true;
   });
