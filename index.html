@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://player.twitch.tv https://embed.twitch.tv; frame-src https://twitch.tv https://player.twitch.tv https://embed.twitch.tv; connect-src 'self' https://*.google.com https://*.googleusercontent.com https://player.twitch.tv https://usher.twitch.tv https://api.twitch.tv https://discord.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https: data:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://player.twitch.tv https://embed.twitch.tv; frame-src https://twitch.tv https://player.twitch.tv https://embed.twitch.tv; connect-src 'self' https://*.google.com https://*.googleusercontent.com https://player.twitch.tv https://usher.twitch.tv https://api.twitch.tv https://discord.com https://discord.com/api/webhooks/; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https: data:;">
 <meta name="google-site-verification" content="your-code-here">
 <link rel="icon" href="./assets/logos/favcon.jpg" type="image/jpeg">
 
@@ -16,7 +16,7 @@
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<link rel="stylesheet" href="/css/style.min.css">
+<link rel="stylesheet" href="/css/style.min.css?v=1.2">
 </head>
 
 <body>
@@ -63,11 +63,11 @@
 
   <div class="hero-stats">
     <div class="stat-item">
-      <div class="stat-number" id="stat-members">100+</div>
-      <div class="stat-label">Founding Members</div>
+      <div class="stat-number" id="stat-members">121+</div>
+      <div class="stat-label">Discord Members</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number" id="stat-followers">190+</div>
+      <div class="stat-number" id="stat-followers">198+</div>
       <div class="stat-label">Facebook Followers</div>
     </div>
     <div class="stat-item">
@@ -234,6 +234,12 @@
           </div>
         </div>
         <div id="creator-form-status" class="creator-form-status" hidden></div>
+        <div class="form-group captcha-group">
+          <label for="creator-captcha" id="captcha-label">Verification</label>
+          <input type="number" id="creator-captcha" name="captcha" required placeholder="Enter your answer" autocomplete="off" min="0" max="99">
+        </div>
+        <!-- honeypot: must remain empty -->
+        <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button type="submit" class="btn-primary">Submit Application</button>
       </form>
     </div>
@@ -343,7 +349,7 @@
     <div class="section-tag">Community</div>
     <h2 class="section-title">EVERYTHING YOU <span>NEED</span></h2>
 
-    <p class="community-desc">Join 100+ founding members in a space built for players, streamers, and creators.</p>
+    <p class="community-desc">Join 121+ members in a space built for players, streamers, and creators.</p>
 
     <div class="community-features">
       <div class="card feature-card">
@@ -424,7 +430,7 @@
 <!-- CTA -->
 <div class="cta-section">
   <h2>JOIN THE ROCKBOUND MOVEMENT</h2>
-  <p>100+ founding members already inside.</p>
+  <p>121+ members already inside.</p>
 
   <div class="cta-btns">
     <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-white">
@@ -461,7 +467,7 @@
   <div class="footer-copy">© 2026 Rockbound Gaming</div>
 </footer>
 
-<script src="/js/main.min.js" defer></script>
+<script src="/js/main.min.js?v=1.2" defer></script>
 
 </body>
 </html>
