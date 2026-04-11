@@ -459,23 +459,19 @@ function initOfflinePlayer() {
   if (!container) return;
   offlinePlayerInit = true;
 
-  // Hide the loading spinner and show a static offline placeholder instead of
-  // loading the Twitch embed, which causes black-screen timeout errors in the
-  // console when the channel is genuinely offline.
   const loading = document.getElementById('permanent-loading');
   if (loading) loading.style.display = 'none';
 
-  container.innerHTML = `
-    <div class="offline-placeholder">
-      <img src="/assets/logos/tplogo.png" alt="Rockbound Gaming — Offline" class="offline-logo">
-      <div class="offline-text">
-        <span class="offline-badge">OFFLINE</span>
-        <p>No stream right now — check us out on Twitch!</p>
-        <a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="btn-primary">
-          <i class="fab fa-twitch"></i>&nbsp; Watch on Twitch
-        </a>
-      </div>
-    </div>`;
+  // Embed the actual Twitch channel so the native offline page is displayed
+  // when no one is streaming, and the stream appears automatically when live.
+  const hostname = window.location.hostname || 'localhost';
+  container.innerHTML = `<iframe
+    src="https://player.twitch.tv/?channel=${ROCKBOUND_CHANNEL}&parent=${encodeURIComponent(hostname)}&autoplay=false&muted=true"
+    frameborder="0"
+    allowfullscreen
+    scrolling="no"
+    style="width:100%;height:100%;display:block;border:none;"
+  ></iframe>`;
 }
 
 // ============================================

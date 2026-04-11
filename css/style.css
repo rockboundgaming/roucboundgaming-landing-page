@@ -837,7 +837,6 @@ section:nth-child(odd) {
 .twitch-panel {
   flex: 1 1 0;
   min-width: 0;
-  min-height: 420px;
   background: #000;
   border-radius: 8px;
   overflow: hidden;
@@ -853,9 +852,9 @@ section:nth-child(odd) {
 }
 
 /* Remove the default margin/radius on the embed container inside the panel;
-   override aspect-ratio and padding-top so flex (not the ratio) sets height */
+   let aspect-ratio set the height now that no min-height forces the panel */
 #offline-player {
-  flex: 1;
+  flex: none;
   margin-top: 0;
   border-radius: 0;
   padding-top: 0;
@@ -914,7 +913,7 @@ section:nth-child(odd) {
 
 /* Live streams grid: up to 4 streams in a responsive grid */
 .live-streams-grid {
-  flex: 1;
+  flex: none;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));
   gap: 4px;
