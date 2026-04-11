@@ -413,6 +413,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await initTwitchScript();
   await loadFeaturedCreators();
   fetchDiscordMembers();
+  loadPlayerOfTheMonth();
 });
 
 setInterval(loadFeaturedCreators, 60000);
@@ -546,4 +547,26 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+// ============================================
+//   PLAYER OF THE MONTH
+// ============================================
+function loadPlayerOfTheMonth() {
+  fetch('potm.json')
+    .then(response => response.json())
+    .then(data => {
+      const nameEl  = document.getElementById('potm-name');
+      const titleEl = document.getElementById('potm-title');
+      const avatarEl = document.getElementById('potm-avatar');
+      const clipEl  = document.getElementById('potm-clip');
+      const bioEl   = document.getElementById('potm-bio');
+
+      if (nameEl)   nameEl.innerText  = data.winnerName;
+      if (titleEl)  titleEl.innerText = data.winnerTitle;
+      if (avatarEl) avatarEl.src      = data.avatarUrl;
+      if (clipEl)   clipEl.src        = data.clipEmbedUrl;
+      if (bioEl)    bioEl.innerText   = data.bio;
+    })
+    .catch(() => console.log('POTM data not ready yet.'));
 }

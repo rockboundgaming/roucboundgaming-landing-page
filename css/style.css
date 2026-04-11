@@ -1066,6 +1066,134 @@ section:nth-child(odd) {
 
 
 
+/* ============================================
+   PLAYER OF THE MONTH
+   ============================================ */
+
+#potm {
+  padding: var(--container-pad);
+  max-width: var(--container-max);
+  margin: 0 auto;
+}
+
+.potm-card {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  background: var(--card);
+  border: 2px solid #FF1A1A;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 0 30px rgba(255,26,26,0.2), 0 0 60px rgba(255,26,26,0.08);
+}
+
+/* Left: profile */
+.potm-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  flex: 0 0 220px;
+}
+
+.potm-avatar-wrap {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #FF1A1A;
+  box-shadow: 0 0 20px rgba(255,26,26,0.4);
+  flex-shrink: 0;
+}
+
+.potm-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.potm-info {
+  text-align: center;
+}
+
+.potm-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 0.25rem;
+}
+
+.potm-title {
+  font-size: 0.85rem;
+  color: #FF1A1A;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.potm-bio {
+  font-size: 0.9rem;
+  color: rgba(241,250,238,0.7);
+  line-height: 1.6;
+}
+
+/* Right: clip */
+.potm-clip-wrap {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.potm-clip-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(241,250,238,0.5);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.potm-clip-label .fab.fa-twitch { color: #9146FF; }
+
+/* 16:9 aspect-ratio container */
+.potm-clip-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+}
+
+.potm-clip-container iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Responsive: stack on smaller screens */
+@media (max-width: 768px) {
+  .potm-card {
+    flex-direction: column;
+  }
+  .potm-profile {
+    flex: none;
+    width: 100%;
+  }
+}
+
 .live-cta {
   text-align: center;
   padding: 2rem;

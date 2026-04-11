@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://player.twitch.tv https://embed.twitch.tv; frame-src https://twitch.tv https://player.twitch.tv https://embed.twitch.tv; connect-src 'self' https://*.google.com https://*.googleusercontent.com https://player.twitch.tv https://usher.twitch.tv https://api.twitch.tv https://discord.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https: data:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://player.twitch.tv https://embed.twitch.tv; frame-src https://twitch.tv https://player.twitch.tv https://embed.twitch.tv https://clips.twitch.tv; connect-src 'self' https://*.google.com https://*.googleusercontent.com https://player.twitch.tv https://usher.twitch.tv https://api.twitch.tv https://discord.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https: data:;">
 <meta name="google-site-verification" content="your-code-here">
 <link rel="icon" href="./assets/logos/favcon.jpg" type="image/jpeg">
 
@@ -251,6 +251,44 @@
     <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">Join Discord</a>
   </div>
 </section>
+
+<!-- PLAYER OF THE MONTH — staged, hidden until first winner is chosen -->
+<div id="potm-wrapper" style="display:none;">
+  <div class="divider"></div>
+
+  <section id="potm" class="reveal">
+    <div class="section-tag">Community Recognition</div>
+    <h2 class="section-title">PLAYER OF THE <span>MONTH</span></h2>
+
+    <div class="potm-card">
+
+      <div class="potm-profile">
+        <div class="potm-avatar-wrap">
+          <img id="potm-avatar" src="assets/logos/favcon.jpg" alt="Player of the Month avatar" class="potm-avatar" loading="lazy">
+        </div>
+        <div class="potm-info">
+          <h3 id="potm-name" class="potm-name">Username</h3>
+          <p id="potm-title" class="potm-title">The Community Rock</p>
+          <p id="potm-bio" class="potm-bio">Write the reason they won here. This person has been a huge help in the Discord and crushed it in Battlefield this month!</p>
+        </div>
+      </div>
+
+      <div class="potm-clip-wrap">
+        <div class="potm-clip-label"><i class="fab fa-twitch"></i> Featured Clip</div>
+        <div class="potm-clip-container">
+          <iframe
+            id="potm-clip"
+            src="https://clips.twitch.tv/embed?clip=YourClipSlugHere&parent=rockboundgaming.ca"
+            title="Player of the Month clip"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
 
 <div class="divider"></div>
 
