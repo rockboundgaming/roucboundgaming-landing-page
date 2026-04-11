@@ -102,7 +102,8 @@ const ROCKBOUND_CHANNEL = "rockboundgaming";
 
 // Correct display names for creators whose spreadsheet entries have typos.
 const NAME_OVERRIDES = {
-  'eastcoastflacko': 'Eastcoastflacko'
+  'eastcoastflacko': 'Eastcoastflacko',
+  'eastcoastflax': 'Eastcoastflacko'
 };
 
 // ============================================
@@ -206,7 +207,7 @@ async function loadFeaturedCreators() {
     // Build unified live list: Rockbound first (if live), then community (up to 4 total).
     const allLive = [];
     if (serverLiveUsernames.has(ROCKBOUND_CHANNEL)) {
-      allLive.push({ twitch: ROCKBOUND_CHANNEL, name: 'RockboundGaming', level: 0 });
+      allLive.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: 0 });
     }
     for (const c of communityLiveNow) {
       if (allLive.length >= 4) break;
@@ -239,7 +240,7 @@ function updateUnifiedHub(allLive, serverLiveUsernames) {
     if (offlineEl) offlineEl.hidden = false;
     if (liveGrid) liveGrid.hidden = true;
     if (panel) panel.classList.remove('is-live');
-    if (titleEl) titleEl.textContent = 'RockboundGaming';
+    if (titleEl) titleEl.textContent = 'Rockbound Gaming';
     displayNoCreators();
     initOfflinePlayer();
   }
@@ -394,7 +395,7 @@ function removeStreamer(username) {
     const titleEl = document.getElementById('panel-stream-title');
     if (offlineEl) offlineEl.hidden = false;
     if (panel) panel.classList.remove('is-live');
-    if (titleEl) titleEl.textContent = 'RockboundGaming';
+    if (titleEl) titleEl.textContent = 'Rockbound Gaming';
     initOfflinePlayer();
   }
 }
