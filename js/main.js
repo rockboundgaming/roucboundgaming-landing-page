@@ -645,6 +645,7 @@ function initCaptcha() {
 
     try {
       const payload = {
+        content: 'New Application Received!',
         embeds: [{
           title: '🎮 New Creator Network Application',
           color: 0xe63946,
