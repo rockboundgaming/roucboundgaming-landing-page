@@ -847,6 +847,7 @@ section:nth-child(odd) {
   padding-top: 0;
   aspect-ratio: unset;
   width: 100%;
+  background: #000;
 }
 
 /* Live streams grid: up to 4 streams in a responsive grid */
