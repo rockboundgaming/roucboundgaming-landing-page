@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (loadingEl && offlineEl && !offlineEl.hidden && loadingEl.style.display !== 'none') {
       loadingEl.innerHTML = `
         <a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="btn-primary">
-          <i class="fab fa-twitch"></i>&nbsp; Check us out live on Twitch
+          <i class="fab fa-twitch"></i>&nbsp; Check us out on Twitch
         </a>`;
     }
     const discordList = document.getElementById('discord-members-list');
@@ -425,7 +425,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       discordList.innerHTML = `
         <li class="discord-fallback-item">
           <a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="btn-primary">
-            <i class="fab fa-twitch"></i>&nbsp; Check us out live on Twitch
+            <i class="fab fa-twitch"></i>&nbsp; Check us out on Twitch
           </a>
         </li>`;
     }
@@ -587,17 +587,37 @@ function escapeHtml(str) {
 // ============================================
 // Paste your Discord webhook URL here to receive applications in your staff channel.
 // NOTE: This URL will be visible in the page source; rotate it if misused.
-const CREATOR_APPLICATION_WEBHOOK = "";
+const CREATOR_APPLICATION_WEBHOOK = "https://discord.com/api/webhooks/1492596778506129551/AM8cV7H_4qovDtYFRHd0Mcuw-T8tXpPSACrDaKQEf1IlJv6436zfp8Lp44V9qa4Yrdrq";
+
+// Stores the expected CAPTCHA answer for the current challenge.
+let _captchaAnswer = 0;
+
+function initCaptcha() {
+  const num1 = Math.floor(Math.random() * 10) + 1;
+  const num2 = Math.floor(Math.random() * 10) + 1;
+  _captchaAnswer = num1 + num2;
+  const labelEl = document.getElementById('captcha-label');
+  const inputEl = document.getElementById('creator-captcha');
+  if (labelEl) labelEl.textContent = `What is ${num1} + ${num2}?`;
+  if (inputEl) inputEl.value = '';
+}
 
 (function initCreatorForm() {
   const form = document.getElementById('creator-application-form');
   if (!form) return;
+
+  // Render the initial CAPTCHA challenge.
+  initCaptcha();
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const statusEl = document.getElementById('creator-form-status');
     const submitBtn = form.querySelector('button[type="submit"]');
+
+    // Honeypot check — bots fill this hidden field; real users don't.
+    const honeypot = form.elements['website'] ? form.elements['website'].value : '';
+    if (honeypot) return; // silently drop the submission
 
     const name     = form.elements['name'].value.trim();
     const gamertag = form.elements['gamertag'].value.trim();
@@ -606,6 +626,14 @@ const CREATOR_APPLICATION_WEBHOOK = "";
 
     if (!name || !gamertag || !platform || !games) {
       showFormStatus(statusEl, 'error', 'Please fill in all fields.');
+      return;
+    }
+
+    // CAPTCHA verification
+    const captchaVal = parseInt(form.elements['captcha'] ? form.elements['captcha'].value : '', 10);
+    if (isNaN(captchaVal) || captchaVal !== _captchaAnswer) {
+      showFormStatus(statusEl, 'error', 'Incorrect answer — please try the verification again.');
+      initCaptcha();
       return;
     }
 
@@ -642,6 +670,7 @@ const CREATOR_APPLICATION_WEBHOOK = "";
       if (res.ok || res.status === 204) {
         showFormStatus(statusEl, 'success', '✅ Application sent! We\'ll be in touch soon.');
         form.reset();
+        initCaptcha();
       } else {
         throw new Error(`HTTP ${res.status}`);
       }

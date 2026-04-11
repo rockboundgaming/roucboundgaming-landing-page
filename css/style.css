@@ -1208,6 +1208,31 @@ section:nth-child(odd) {
   align-self: flex-start;
 }
 
+/* Honeypot field — visually hidden but present in the DOM so bots fill it */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* CAPTCHA group — matches existing form-group sizing */
+.captcha-group {
+  max-width: 260px;
+}
+
+.captcha-group input {
+  -moz-appearance: textfield;
+}
+
+.captcha-group input::-webkit-outer-spin-button,
+.captcha-group input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 /* ============================================
    PLATFORMS
    ============================================ */
