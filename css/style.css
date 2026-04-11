@@ -1545,6 +1545,10 @@ footer {
     gap: 1rem;
   }
 
+  .twitch-panel {
+    width: 100%;
+  }
+
   .discord-panel {
     flex: none;
     width: 100%;
