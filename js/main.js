@@ -407,22 +407,19 @@ function displayNoCreators() {
 //   INITIALIZE
 // ============================================
 document.addEventListener('DOMContentLoaded', async () => {
-  // 2-second fallback: replace any still-spinning loaders with a CTA button
+  // 2-second fallback: if the offline player hasn't initialised yet, trigger it now.
   setTimeout(() => {
     const offlineEl = document.getElementById('offline-player');
     const loadingEl = document.getElementById('permanent-loading');
     if (loadingEl && offlineEl && !offlineEl.hidden && loadingEl.style.display !== 'none') {
-      loadingEl.innerHTML = `
-        <a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="btn-primary">
-          <i class="fab fa-twitch"></i>&nbsp; Check us out on Twitch
-        </a>`;
+      initOfflinePlayer();
     }
     const discordList = document.getElementById('discord-members-list');
     if (discordList && discordList.querySelector('.discord-loading-item')) {
       discordList.innerHTML = `
         <li class="discord-fallback-item">
-          <a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="btn-primary">
-            <i class="fab fa-twitch"></i>&nbsp; Check us out on Twitch
+          <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">
+            <i class="fab fa-discord"></i>&nbsp; Join our Discord
           </a>
         </li>`;
     }
@@ -459,31 +456,26 @@ let offlinePlayerInit = false;
 function initOfflinePlayer() {
   if (offlinePlayerInit) return;
   const container = document.getElementById('offline-player');
-  if (!container || !window.Twitch || !window.Twitch.Player) return;
+  if (!container) return;
   offlinePlayerInit = true;
 
-  const hostname = window.location.hostname || 'localhost';
+  // Hide the loading spinner and show a static offline placeholder instead of
+  // loading the Twitch embed, which causes black-screen timeout errors in the
+  // console when the channel is genuinely offline.
+  const loading = document.getElementById('permanent-loading');
+  if (loading) loading.style.display = 'none';
 
-  try {
-    const player = new Twitch.Player('offline-player', {
-      channel: ROCKBOUND_CHANNEL,
-      width: '100%',
-      height: '100%',
-      parent: [hostname],
-      autoplay: true,
-      muted: true
-    });
-
-    if (player.addEventListener) {
-      player.addEventListener(Twitch.Player.READY, () => {
-        const loading = document.getElementById('permanent-loading');
-        if (loading) loading.style.display = 'none';
-      });
-    }
-  } catch (e) {
-    console.error('Offline player init error:', e);
-    offlinePlayerInit = false;
-  }
+  container.innerHTML = `
+    <div class="offline-placeholder">
+      <img src="/assets/logos/tplogo.png" alt="Rockbound Gaming — Offline" class="offline-logo">
+      <div class="offline-text">
+        <span class="offline-badge">OFFLINE</span>
+        <p>No stream right now — check us out on Twitch!</p>
+        <a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="btn-primary">
+          <i class="fab fa-twitch"></i>&nbsp; Watch on Twitch
+        </a>
+      </div>
+    </div>`;
 }
 
 // ============================================
@@ -667,7 +659,7 @@ function initCaptcha() {
       });
 
       if (res.ok || res.status === 204) {
-        showFormStatus(statusEl, 'success', '✅ Application sent! We\'ll be in touch soon.');
+        showFormStatus(statusEl, 'success', '✅ Application Received! Next Step: <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer">Join our Discord</a> so we can contact you regarding your status.');
         form.reset();
         initCaptcha();
       } else {
@@ -685,10 +677,14 @@ function initCaptcha() {
 
 function showFormStatus(el, type, message) {
   if (!el) return;
-  el.textContent = message;
+  if (type === 'success') {
+    el.innerHTML = message;
+  } else {
+    el.textContent = message;
+  }
   el.className = `creator-form-status ${type}`;
   el.hidden = false;
-  setTimeout(() => { el.hidden = true; }, 6000);
+  setTimeout(() => { el.hidden = true; }, 8000);
 }
 
 // ============================================

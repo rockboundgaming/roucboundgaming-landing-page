@@ -824,11 +824,11 @@ section:nth-child(odd) {
   50%       { box-shadow: 0 0 30px rgba(230,57,70,0.75), 0 0 70px rgba(230,57,70,0.3); }
 }
 
-/* Side-by-side layout; flex-start so Discord panel uses its natural height */
+/* Side-by-side layout; stretch so Discord panel fills the same height as the video player */
 .control-center {
   display: flex;
   gap: 1.25rem;
-  align-items: flex-start;
+  align-items: stretch;
   margin-bottom: 2rem;
   width: 100%;
 }
@@ -841,7 +841,7 @@ section:nth-child(odd) {
   background: #000;
   border-radius: 8px;
   overflow: hidden;
-  border: 2px solid rgba(255,255,255,0.08);
+  border: 2px solid #ff4b4b;
   display: flex;
   flex-direction: column;
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
@@ -861,7 +861,55 @@ section:nth-child(odd) {
   padding-top: 0;
   aspect-ratio: 16 / 9;
   width: 100%;
-  background-color: #000 !important;
+  background-color: #111 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- Offline placeholder (shown instead of Twitch embed when no stream is live) ---- */
+.offline-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 2rem;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+.offline-logo {
+  max-width: 160px;
+  width: 50%;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 12px rgba(255,75,75,0.45));
+}
+
+.offline-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.offline-badge {
+  display: inline-block;
+  background: rgba(255,75,75,0.15);
+  border: 1px solid rgba(255,75,75,0.4);
+  color: #ff4b4b;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 3px;
+  padding: 0.2rem 0.8rem;
+  border-radius: 4px;
+}
+
+.offline-text p {
+  font-size: 0.9rem;
+  color: rgba(241,250,238,0.55);
+  margin: 0;
 }
 
 /* Live streams grid: up to 4 streams in a responsive grid */
@@ -952,8 +1000,6 @@ section:nth-child(odd) {
 .discord-panel {
   flex: 0 0 280px;
   min-width: 0;
-  min-height: 450px;
-  height: auto !important;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
@@ -1270,6 +1316,11 @@ section:nth-child(odd) {
   background: rgba(35,165,90,0.12);
   border: 1px solid rgba(35,165,90,0.4);
   color: #3dd68c;
+}
+
+.creator-form-status.success a {
+  color: #3dd68c;
+  text-decoration: underline;
 }
 
 .creator-form-status.error {
