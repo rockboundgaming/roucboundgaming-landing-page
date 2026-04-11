@@ -1,5 +1,7 @@
 # Rockbound Gaming — Landing Page
 
+[![pages build and deployment](https://github.com/rockboundgaming/roucboundgaming-landing-page/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/rockboundgaming/roucboundgaming-landing-page/actions/workflows/pages/pages-build-deployment)
+
 ## Overview
 Static GitHub Pages landing page for the Rockbound Gaming community. Stream live-status is provided by a scheduled GitHub Actions workflow that polls the Twitch Helix API every 2 minutes and writes `live-status.json`.
 
