@@ -313,6 +313,8 @@ function addStreamer(c, serverConfirmedLive = false) {
   container.appendChild(wrapper);
 
   const hostname = window.location.hostname === "" ? "localhost" : window.location.hostname;
+  const parentDomains = ['rockboundgaming.ca'];
+  if (hostname !== 'rockboundgaming.ca') parentDomains.push(hostname);
 
   try {
     if (!window.Twitch || !window.Twitch.Player) {
@@ -325,7 +327,7 @@ function addStreamer(c, serverConfirmedLive = false) {
       channel: c.twitch,
       width: "100%",
       height: "100%",
-      parent: [hostname],
+      parent: parentDomains,
       autoplay: true,
       muted: true
     });
@@ -465,8 +467,11 @@ function initOfflinePlayer() {
   // Embed the actual Twitch channel so the native offline page is displayed
   // when no one is streaming, and the stream appears automatically when live.
   const hostname = window.location.hostname || 'localhost';
+  const parentDomains = ['rockboundgaming.ca'];
+  if (hostname !== 'rockboundgaming.ca') parentDomains.push(hostname);
+  const parentParams = parentDomains.map(d => `parent=${encodeURIComponent(d)}`).join('&');
   container.innerHTML = `<iframe
-    src="https://player.twitch.tv/?channel=${ROCKBOUND_CHANNEL}&parent=${encodeURIComponent(hostname)}&autoplay=false&muted=true"
+    src="https://player.twitch.tv/?channel=${ROCKBOUND_CHANNEL}&${parentParams}&autoplay=false&muted=true"
     frameborder="0"
     allowfullscreen
     scrolling="no"
@@ -655,9 +660,10 @@ function initCaptcha() {
       });
 
       if (res.ok || res.status === 204) {
-        showFormStatus(statusEl, 'success', '✅ Application Received! Next Step: <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer">Join our Discord</a> so we can contact you regarding your status.');
-        form.reset();
-        initCaptcha();
+        // Replace form with the success screen
+        form.style.display = 'none';
+        const successScreen = document.getElementById('creator-apply-success');
+        if (successScreen) successScreen.hidden = false;
       } else {
         throw new Error(`HTTP ${res.status}`);
       }
@@ -691,6 +697,18 @@ function initApplyButton() {
   const closeBtn = document.getElementById('creator-modal-close');
   if (!modal) return;
 
+  function closeModal() {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+    // Reset form / success-screen state for next open
+    const form = document.getElementById('creator-application-form');
+    const successScreen = document.getElementById('creator-apply-success');
+    if (form) { form.style.display = ''; form.reset(); initCaptcha(); }
+    if (successScreen) successScreen.hidden = true;
+    const statusEl = document.getElementById('creator-form-status');
+    if (statusEl) statusEl.hidden = true;
+  }
+
   // Only the button in the live-cta section below the stream grid opens the modal.
   const liveCtaBtn = document.querySelector('.live-cta .apply-creator-btn');
   if (liveCtaBtn) {
@@ -704,25 +722,16 @@ function initApplyButton() {
 
   // Close on X button click.
   if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      modal.hidden = true;
-      document.body.style.overflow = '';
-    });
+    closeBtn.addEventListener('click', closeModal);
   }
 
   // Close on overlay (backdrop) click.
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.hidden = true;
-      document.body.style.overflow = '';
-    }
+    if (e.target === modal) closeModal();
   });
 
   // Close on Escape key.
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !modal.hidden) {
-      modal.hidden = true;
-      document.body.style.overflow = '';
-    }
+    if (e.key === 'Escape' && !modal.hidden) closeModal();
   });
 }
