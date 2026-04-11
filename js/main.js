@@ -494,11 +494,15 @@ function renderDiscordMembers(members, count) {
 
   // Filter out bots: explicit bot flag, known bot usernames, or "bot" in name.
   const KNOWN_BOTS = ['carl-bot', 'mee6', 'dyno', 'groovy', 'rhythm', 'rythm', 'fredboat', 'nightbot', 'streamelements', 'streamlabs'];
+  // Server-specific bots/apps to hide from the Online Now list.
+  const EXCLUDED_BOTS = ['appy', 'arcane', 'jackie'];
   const humanMembers = members.filter(m => {
     if (m.bot === true) return false;
     const nameLower = m.username.toLowerCase();
     if (KNOWN_BOTS.includes(nameLower)) return false;
     if (/\bbot\b/.test(nameLower)) return false;
+    if (EXCLUDED_BOTS.some(b => nameLower.includes(b))) return false;
+    if (/\bmusic\b/.test(nameLower)) return false;
     return true;
   });
 
