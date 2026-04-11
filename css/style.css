@@ -847,6 +847,7 @@ section:nth-child(odd) {
   padding-top: 0;
   aspect-ratio: unset;
   width: 100%;
+  background: #000000;
 }
 
 /* Live streams grid: up to 4 streams in a responsive grid */
@@ -1547,6 +1548,19 @@ footer {
 
   .twitch-panel {
     width: 100% !important;
+    min-height: 0;
+  }
+
+  /* On mobile, use aspect-ratio to drive player height so the iframe fills
+     the container properly instead of relying on flex stretch */
+  #offline-player {
+    flex: none;
+    aspect-ratio: 16 / 9;
+  }
+
+  #offline-player iframe {
+    width: 100% !important;
+    height: 100% !important;
   }
 
   .discord-panel {

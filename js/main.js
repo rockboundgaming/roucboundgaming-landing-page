@@ -194,14 +194,13 @@ async function loadFeaturedCreators() {
     }
 
     // Community live creators: level >= 5, featured, live, excluding the main channel.
+    // Only use server-confirmed Twitch API status to avoid stale spreadsheet data
+    // causing a name flicker on load.
     const communityLiveNow = creators.filter(c =>
       c.level >= 5 &&
       c.featured?.toLowerCase() === "yes" &&
       c.twitch !== ROCKBOUND_CHANNEL &&
-      (
-        serverLiveUsernames.has(c.twitch) ||
-        c.status === "live" || c.status === "active"
-      )
+      serverLiveUsernames.has(c.twitch)
     );
 
     // Build unified live list: Rockbound first (if live), then community (up to 4 total).
