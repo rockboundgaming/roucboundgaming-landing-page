@@ -602,6 +602,20 @@ function initCaptcha() {
   if (inputEl) inputEl.value = '';
 }
 
+(function initApplyButton() {
+  const btn = document.getElementById('apply-creator-btn');
+  const container = document.getElementById('creator-form-container');
+  if (!btn || !container) return;
+
+  btn.addEventListener('click', () => {
+    const isOpen = container.classList.toggle('is-open');
+    btn.textContent = isOpen ? 'CLOSE APPLICATION' : 'APPLY FOR CREATOR ROLE';
+    if (isOpen) {
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+}());
+
 (function initCreatorForm() {
   const form = document.getElementById('creator-application-form');
   if (!form) return;
