@@ -7,8 +7,8 @@
 <meta name="google-site-verification" content="your-code-here">
 <link rel="icon" href="./assets/logos/favcon.jpg" type="image/jpeg">
 
-<title>Rockbound Gaming — Built on the Rock. Gaming Everywhere.</title>
-<meta name="description" content="Rockbound Gaming is Newfoundland's fastest growing gaming community connecting players, streamers, and creators across all platforms.">
+<title>Rockbound Gaming | Built on the Rock</title>
+<meta name="description" content="Newfoundland's premier gaming community and creator network. Built on the Rock. Gaming Everywhere.">
 
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" as="style">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
@@ -63,11 +63,11 @@
 
   <div class="hero-stats">
     <div class="stat-item">
-      <div class="stat-number">100+</div>
+      <div class="stat-number" id="stat-members">100+</div>
       <div class="stat-label">Founding Members</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number">190+</div>
+      <div class="stat-number" id="stat-followers">190+</div>
       <div class="stat-label">Facebook Followers</div>
     </div>
     <div class="stat-item">
@@ -197,6 +197,45 @@
 
     <div class="creator-cta">
       <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">Get Early Access</a>
+    </div>
+
+    <!-- Creator Network Application Form -->
+    <div class="creator-application">
+      <div class="section-tag">Apply Now</div>
+      <h3 class="creator-apply-title">JOIN THE CREATOR NETWORK</h3>
+      <p class="creator-apply-desc">Ready to create? Fill out the form below and our team will reach out through Discord.</p>
+
+      <form id="creator-application-form" class="creator-form card" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="creator-name">Name</label>
+            <input type="text" id="creator-name" name="name" required placeholder="Your full name" maxlength="100">
+          </div>
+          <div class="form-group">
+            <label for="creator-gamertag">Gamertag</label>
+            <input type="text" id="creator-gamertag" name="gamertag" required placeholder="Your gamertag" maxlength="64">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="creator-platform">Primary Platform</label>
+            <select id="creator-platform" name="platform" required>
+              <option value="" disabled selected>Select your platform</option>
+              <option value="PC">PC</option>
+              <option value="Xbox">Xbox</option>
+              <option value="PlayStation">PlayStation</option>
+              <option value="Mobile">Mobile</option>
+              <option value="Multiple Platforms">Multiple Platforms</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="creator-games">Primary Games</label>
+            <input type="text" id="creator-games" name="games" required placeholder="e.g. Fortnite, Warzone, Minecraft" maxlength="200">
+          </div>
+        </div>
+        <div id="creator-form-status" class="creator-form-status" hidden></div>
+        <button type="submit" class="btn-primary">Submit Application</button>
+      </form>
     </div>
   </div>
 </section>

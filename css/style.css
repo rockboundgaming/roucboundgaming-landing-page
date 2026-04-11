@@ -1062,6 +1062,30 @@ section:nth-child(odd) {
 
 .discord-loading-item i { font-size: 1.2rem; color: rgba(230,57,70,0.6); }
 
+/* Fallback CTA item shown when Discord widget takes too long */
+.discord-fallback-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  list-style: none;
+}
+
+.discord-fallback-item .btn-primary {
+  font-size: 0.78rem;
+  padding: 0.65rem 1.2rem;
+  letter-spacing: 1.5px;
+}
+
+/* Fallback CTA inside the Twitch loading area */
+.stream-loading .btn-primary {
+  font-size: 0.85rem;
+  padding: 0.85rem 1.5rem;
+  letter-spacing: 1.5px;
+  position: relative;
+  transform: none;
+}
+
 
 
 
@@ -1078,6 +1102,110 @@ section:nth-child(odd) {
   color: rgba(241,250,238,0.7);
   margin-bottom: 1.5rem;
   line-height: 1.6;
+}
+
+/* ============================================
+   CREATOR APPLICATION FORM
+   ============================================ */
+.creator-application {
+  margin-top: 3rem;
+  border-top: 1px solid rgba(230,57,70,0.2);
+  padding-top: 3rem;
+}
+
+.creator-apply-title {
+  font-family: 'Bebas Neue';
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.creator-apply-desc {
+  font-size: 1rem;
+  color: rgba(241,250,238,0.6);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.creator-form {
+  max-width: 680px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(241,250,238,0.65);
+}
+
+.form-group input,
+.form-group select {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(230,57,70,0.3);
+  color: var(--white);
+  padding: 0.75rem 1rem;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.95rem;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  width: 100%;
+}
+
+.form-group input::placeholder {
+  color: rgba(241,250,238,0.25);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--red);
+  background: rgba(230,57,70,0.06);
+}
+
+.form-group select option {
+  background: var(--card);
+  color: var(--white);
+}
+
+.creator-form-status {
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.creator-form-status.success {
+  background: rgba(35,165,90,0.12);
+  border: 1px solid rgba(35,165,90,0.4);
+  color: #3dd68c;
+}
+
+.creator-form-status.error {
+  background: rgba(230,57,70,0.08);
+  border: 1px solid rgba(230,57,70,0.4);
+  color: var(--red);
+}
+
+.creator-form .btn-primary {
+  align-self: flex-start;
 }
 
 /* ============================================
@@ -1437,6 +1565,19 @@ footer {
     grid-template-columns: 1fr;
     gap: 1rem;
     max-width: 100%;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .creator-form {
+    max-width: 100%;
+  }
+
+  .creator-form .btn-primary {
+    align-self: stretch;
+    text-align: center;
   }
 
   .platforms-grid {

@@ -410,6 +410,40 @@ function displayNoCreators() {
 //   INITIALIZE
 // ============================================
 document.addEventListener('DOMContentLoaded', async () => {
+  // 2-second fallback: replace any still-spinning loaders with a CTA button
+  setTimeout(() => {
+    const offlineEl = document.getElementById('offline-player');
+    const loadingEl = document.getElementById('permanent-loading');
+    if (loadingEl && offlineEl && !offlineEl.hidden && loadingEl.style.display !== 'none') {
+      loadingEl.innerHTML = `
+        <a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="btn-primary">
+          <i class="fab fa-twitch"></i>&nbsp; Check us out live on Twitch
+        </a>`;
+    }
+    const discordList = document.getElementById('discord-members-list');
+    if (discordList && discordList.querySelector('.discord-loading-item')) {
+      discordList.innerHTML = `
+        <li class="discord-fallback-item">
+          <a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="btn-primary">
+            <i class="fab fa-twitch"></i>&nbsp; Check us out live on Twitch
+          </a>
+        </li>`;
+    }
+  }, 2000);
+
+  // Load dynamic stats from site-data.json
+  fetch('/site-data.json')
+    .then(r => r.json())
+    .then(data => {
+      if (data && data.stats) {
+        const membersEl = document.getElementById('stat-members');
+        const followersEl = document.getElementById('stat-followers');
+        if (membersEl && data.stats.members) membersEl.textContent = data.stats.members;
+        if (followersEl && data.stats.followers) followersEl.textContent = data.stats.followers;
+      }
+    })
+    .catch(e => console.warn('Could not load site-data.json:', e));
+
   await initTwitchScript();
   await loadFeaturedCreators();
   fetchDiscordMembers();
@@ -546,4 +580,85 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+// ============================================
+//   CREATOR NETWORK APPLICATION FORM
+// ============================================
+// Paste your Discord webhook URL here to receive applications in your staff channel.
+// NOTE: This URL will be visible in the page source; rotate it if misused.
+const CREATOR_APPLICATION_WEBHOOK = "";
+
+(function initCreatorForm() {
+  const form = document.getElementById('creator-application-form');
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const statusEl = document.getElementById('creator-form-status');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    const name     = form.elements['name'].value.trim();
+    const gamertag = form.elements['gamertag'].value.trim();
+    const platform = form.elements['platform'].value;
+    const games    = form.elements['games'].value.trim();
+
+    if (!name || !gamertag || !platform || !games) {
+      showFormStatus(statusEl, 'error', 'Please fill in all fields.');
+      return;
+    }
+
+    if (!CREATOR_APPLICATION_WEBHOOK) {
+      showFormStatus(statusEl, 'error', 'Applications not yet configured. Join our Discord to apply directly!');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    try {
+      const payload = {
+        embeds: [{
+          title: '🎮 New Creator Network Application',
+          color: 0xe63946,
+          fields: [
+            { name: 'Name',          value: escapeHtml(name),     inline: true },
+            { name: 'Gamertag',      value: escapeHtml(gamertag), inline: true },
+            { name: 'Platform',      value: escapeHtml(platform), inline: true },
+            { name: 'Primary Games', value: escapeHtml(games),    inline: false }
+          ],
+          footer: { text: 'Rockbound Gaming — Creator Network' },
+          timestamp: new Date().toISOString()
+        }]
+      };
+
+      const res = await fetch(CREATOR_APPLICATION_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok || res.status === 204) {
+        showFormStatus(statusEl, 'success', '✅ Application sent! We\'ll be in touch soon.');
+        form.reset();
+      } else {
+        throw new Error(`HTTP ${res.status}`);
+      }
+    } catch (err) {
+      console.error('Creator form error:', err);
+      showFormStatus(statusEl, 'error', 'Submission failed. Please join our Discord to apply directly.');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Application';
+    }
+  });
+}());
+
+function showFormStatus(el, type, message) {
+  if (!el) return;
+  el.textContent = message;
+  el.className = `creator-form-status ${type}`;
+  el.hidden = false;
+  setTimeout(() => { el.hidden = true; }, 6000);
 }
