@@ -1,4 +1,5 @@
 {
+  "_comment": "Replace each placeholder value below with the actual winner's details. clipEmbedUrl must be a Twitch clip embed URL — replace 'YourClipSlugHere' with the real clip ID found in the Twitch clip share URL.",
   "winnerName": "Username",
   "winnerTitle": "The Community Rock",
   "avatarUrl": "images/avatar.jpg",

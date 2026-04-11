@@ -568,5 +568,5 @@ function loadPlayerOfTheMonth() {
       if (clipEl)   clipEl.src        = data.clipEmbedUrl;
       if (bioEl)    bioEl.innerText   = data.bio;
     })
-    .catch(() => console.log('POTM data not ready yet.'));
+    .catch(err => console.warn('Failed to load POTM data:', err));
 }
