@@ -1546,12 +1546,12 @@ footer {
   }
 
   .twitch-panel {
-    width: 100%;
+    width: 100% !important;
   }
 
   .discord-panel {
     flex: none;
-    width: 100%;
+    width: 100% !important;
     min-height: 160px;
     max-height: 260px;
   }
