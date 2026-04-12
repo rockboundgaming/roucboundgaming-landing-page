@@ -228,7 +228,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   font-weight: 700;
   font-family: 'Barlow Condensed', sans-serif;
   margin-top: 1.5rem;
-  margin-bottom: 0;
+  margin-bottom: 1.5rem;
   animation: fadeUp 1s ease forwards 0.3s both;
   position: relative;
   z-index: 2;
@@ -236,6 +236,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   width: 100%;
   box-sizing: border-box;
   padding: 0 1rem;
+  flex-shrink: 0;
 }
 .hero-stats {
   margin-top: auto;
@@ -1713,7 +1714,6 @@ footer {
     font-size: 1.1rem;
     margin-bottom: 0;
     padding: 1rem 1rem;
-    order: 4;
   }
 
   .hero-stats {
@@ -1972,7 +1972,6 @@ footer {
     font-size: 0.9rem;
     padding: 0.4rem 0.8rem;
     margin-top: 0.3rem;
-    order: 4;
   }
 
   .hero-stats {
