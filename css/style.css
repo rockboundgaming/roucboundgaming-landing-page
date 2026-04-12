@@ -139,9 +139,11 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
    ============================================ */
 .hero {
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   padding: 90px 0 0;
   box-sizing: border-box;
   position: relative;
@@ -232,10 +234,12 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
 }
 .hero-stats {
   margin-top: auto;
+  margin-bottom: 0;
   flex-shrink: 0;
   background: var(--red);
   width: 100%; /* Changed from 100vw to 100% to prevent horizontal scroll */
   padding: 1.5rem 2rem;
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
