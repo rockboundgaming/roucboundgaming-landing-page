@@ -182,9 +182,11 @@ async function loadFeaturedCreators() {
     // Build the set of server-confirmed live usernames from live-status.json.
     // Only trust the file if it was written within LIVE_STATUS_MAX_AGE_MS.
     const serverLiveUsernames = new Set();
+    let serverDataIsFresh = false;
     if (liveStatus.lastChecked) {
       const ageMs = Date.now() - new Date(liveStatus.lastChecked).getTime();
       if (ageMs < LIVE_STATUS_MAX_AGE_MS) {
+        serverDataIsFresh = true;
         for (const s of (liveStatus.live || [])) {
           if (s.twitch) serverLiveUsernames.add(s.twitch.toLowerCase());
         }
@@ -198,11 +200,15 @@ async function loadFeaturedCreators() {
     }
 
     // Priority 2: find the first live Level 5+ featured creator.
+    // When server data is fresh, only trust server-confirmed live status.
+    // Fall back to the spreadsheet status column only when the live-status.json
+    // file is stale (e.g. the Actions workflow hasn't run recently).
     const firstLive = creators.find(c =>
       c.level >= 5 &&
       c.featured?.toLowerCase() === "yes" &&
       c.twitch !== ROCKBOUND_CHANNEL &&
-      (serverLiveUsernames.has(c.twitch) || c.status === "live" || c.status === "active")
+      (serverLiveUsernames.has(c.twitch) ||
+        (!serverDataIsFresh && (c.status === "live" || c.status === "active")))
     );
 
     if (firstLive) {
@@ -303,6 +309,14 @@ function setHubStream(channelName, displayName) {
         const loading = document.getElementById('permanent-loading');
         if (loading) loading.style.display = 'none';
       });
+
+      // If a featured creator's stream ends while the user is watching,
+      // fall back to the main rockbound channel.
+      if (channelName !== ROCKBOUND_CHANNEL) {
+        hubPlayer.addEventListener(Twitch.Player.OFFLINE, () => {
+          setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
+        });
+      }
     }
   } catch (e) {
     console.error('Hub player init error:', e);
