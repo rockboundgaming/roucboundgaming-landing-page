@@ -138,8 +138,8 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
    HERO
    ============================================ */
 .hero {
-  height: 100vh;
-  height: 100svh;
+  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -148,7 +148,6 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   box-sizing: border-box;
   position: relative;
   text-align: center;
-  overflow: hidden;
   background: var(--darker);
 }
 .hero-bg {
@@ -2037,7 +2036,7 @@ footer {
     justify-content: center; /* Vertically center the content block */
     align-items: center;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
   }
 
   .hero-content {
@@ -2065,12 +2064,10 @@ footer {
   }
 
   .hero-stats {
-    position: absolute; /* Anchor to the bottom of .hero (which is position:relative) */
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: relative;
     width: 100%;
-    margin-top: 0;
+    margin-top: auto;
+    flex-shrink: 0;
     padding: 2rem 0;
     justify-content: center;
     gap: 5rem; /* Wider gaps for desktop screens */
@@ -2082,7 +2079,7 @@ footer {
    ============================================ */
 @media (max-height: 750px) {
   .hero-content img {
-    max-height: 180px !important;
+    max-height: 140px !important;
     width: auto;
   }
   .hero-content h1 {
