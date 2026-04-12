@@ -373,6 +373,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await initTwitchScript();
   await loadFeaturedCreators();
+  setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
   fetchDiscordMembers();
   initApplyButton();
 });
