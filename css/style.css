@@ -2037,6 +2037,7 @@ footer {
     align-items: center;
     width: 100%;
     min-height: 100vh;
+    padding-top: clamp(60px, 8vh, 90px);
   }
 
   .hero-content {
@@ -2050,11 +2051,13 @@ footer {
     max-width: 1200px;
     margin: 0 auto;
     text-align: center;
+    max-height: 65vh;
   }
 
   .hero-logo {
     max-width: 550px;
     margin: 0 auto 1.5rem auto;
+    max-height: 22vh;
   }
 
   .authority-line {
