@@ -663,6 +663,9 @@ section:nth-child(odd) {
   overflow: hidden;
   transition: all 0.3s ease;
   margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
 }
 
 .creator-featured:hover {
@@ -845,6 +848,8 @@ section:nth-child(odd) {
   border: 2px solid #ff4b4b;
   display: flex;
   flex-direction: column;
+  height: auto !important;
+  min-height: 0 !important;
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
@@ -919,8 +924,8 @@ section:nth-child(odd) {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));
   gap: 4px;
-  height: auto !important;
-  aspect-ratio: 16 / 9;
+  height: auto;
+  width: 100%;
 }
 
 .live-streams-grid.count-1 {
