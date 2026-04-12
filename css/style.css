@@ -2026,17 +2026,18 @@ footer {
   .hero {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Pushes content to top/stats to bottom */
+    justify-content: center; /* Vertically center the content block */
     align-items: center;
     width: 100%;
-    min-height: 100vh; /* Ensures it fills the desktop screen */
+    min-height: 100vh;
+    padding-bottom: 90px; /* Reserve space so content clears the pinned stats bar */
   }
 
   .hero-content {
-    flex: 1; /* Makes this area grow to fill space above the stats */
+    flex: 0 0 auto; /* Natural size — do not grow or shrink */
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Vertically centers logo/text in that space */
+    justify-content: center;
     align-items: center;
     width: 100%;
     max-width: 1200px;
@@ -2045,13 +2046,23 @@ footer {
   }
 
   .hero-logo {
-    max-width: 550px; /* Slight size reduction for better visual balance */
+    max-width: 550px;
     margin: 0 auto 1.5rem auto;
   }
 
+  .authority-line {
+    flex: 0 0 auto; /* Do not grow — keeps it from pushing content off-center */
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
   .hero-stats {
+    position: absolute; /* Anchor to the bottom of .hero (which is position:relative) */
+    bottom: 0;
+    left: 0;
+    right: 0;
     width: 100%;
-    margin-top: 0; /* Let flex-direction: column handle the gap */
+    margin-top: 0;
     padding: 2rem 0;
     justify-content: center;
     gap: 5rem; /* Wider gaps for desktop screens */
