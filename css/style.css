@@ -846,10 +846,12 @@ section:nth-child(odd) {
   border-radius: 8px;
   overflow: hidden;
   border: 2px solid #ff4b4b;
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   height: auto !important;
   min-height: 0 !important;
+  max-height: fit-content !important;
+  align-self: flex-start;
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
