@@ -181,7 +181,8 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex: 1 0 auto;
+  flex: 1;
+  min-height: 0;
   padding-top: 10px;
   box-sizing: border-box;
 }
@@ -2038,7 +2039,8 @@ footer {
   }
 
   .hero-content {
-    flex: 0 0 auto; /* Natural size — do not grow or shrink */
+    flex: 1; /* Allow shrinking on short viewports (e.g. TVs) */
+    min-height: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -2057,7 +2059,7 @@ footer {
   .authority-line {
     flex: 0 0 auto; /* Do not grow — keeps it from pushing content off-center */
     margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: auto;
   }
 
   .hero-stats {
@@ -2070,5 +2072,15 @@ footer {
     padding: 2rem 0;
     justify-content: center;
     gap: 5rem; /* Wider gaps for desktop screens */
+  }
+}
+
+/* ============================================
+   SHORT VIEWPORT — TVs & laptops (max-height: 800px)
+   ============================================ */
+@media (max-height: 800px) {
+  .hero-content img {
+    max-height: 250px;
+    width: auto;
   }
 }
