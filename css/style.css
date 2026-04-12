@@ -184,6 +184,8 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   flex: 1;
   min-height: 0;
   padding-top: 10px;
+  padding-bottom: 2rem;
+  gap: 1.5rem;
   box-sizing: border-box;
 }
 .hero-logo {
@@ -2076,11 +2078,17 @@ footer {
 }
 
 /* ============================================
-   SHORT VIEWPORT — TVs & laptops (max-height: 800px)
+   SHORT VIEWPORT — TVs & laptops (max-height: 750px)
    ============================================ */
-@media (max-height: 800px) {
+@media (max-height: 750px) {
   .hero-content img {
-    max-height: 250px;
+    max-height: 180px !important;
     width: auto;
+  }
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  .authority-line {
+    font-size: 1.1rem;
   }
 }
