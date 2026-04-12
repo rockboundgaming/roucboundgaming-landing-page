@@ -39,11 +39,52 @@ jobs:
             exit 1
           fi
 
-          # Query the Helix streams endpoint for both channels
+          # Fetch the featured creator spreadsheet and extract all L5+ featured channels.
+          # Col 0 = twitch, col 2 = level, col 4 = featured (yes/no)
+          SHEET_ID="2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg"
+          curl -sL "https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=tsv" \
+            > /tmp/creators.tsv
+
+          # Build a newline-delimited list of channels to query (rockboundgaming always first)
+          python3 - << 'PYEOF'
+import sys
+
+channels = ['rockboundgaming']
+try:
+    with open('/tmp/creators.tsv') as f:
+        lines = f.read().split('\n')
+    for line in lines[1:]:
+        cols = line.strip().split('\t')
+        if len(cols) < 5:
+            continue
+        twitch = cols[0].strip().lower()
+        try:
+            level = int(cols[2].strip())
+        except ValueError:
+            continue
+        featured = cols[4].strip().lower() if len(cols) > 4 else ''
+        if twitch and level >= 5 and featured == 'yes' and twitch not in channels:
+            channels.append(twitch)
+except Exception as e:
+    print(f'Warning: could not parse spreadsheet: {e}', file=sys.stderr)
+
+# Twitch Helix allows up to 100 user_login params per request
+with open('/tmp/channels.txt', 'w') as f:
+    f.write('\n'.join(channels[:100]))
+print(f'Querying {len(channels[:100])} channel(s): {channels[:100]}')
+PYEOF
+
+          # Build the query string from the channel list
+          QUERY=$(python3 -c "
+channels = open('/tmp/channels.txt').read().strip().split('\n')
+print('&'.join(f'user_login={c}' for c in channels if c))
+")
+
+          # Query the Helix streams endpoint for all channels in one request
           curl -s \
             -H "Client-ID: ${TWITCH_CLIENT_ID}" \
             -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-            "https://api.twitch.tv/helix/streams?user_login=rockboundgaming" \
+            "https://api.twitch.tv/helix/streams?${QUERY}" \
             > /tmp/streams.json
 
           echo "Twitch API response:"

@@ -94,9 +94,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ============================================
 const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
 
-// Single-stream hub state
+// Single-stream hub state (used only for the offline-player)
 let hubCurrentChannel = null;  // The channel name currently loaded in the hub player
 let hubPlayer = null;          // The active Twitch.Player instance
+let currentGridChannels = '';  // Comma-joined channel list of the last grid build
 
 // The primary channel that is permanently embedded (24/7).
 const ROCKBOUND_CHANNEL = "rockboundgaming";
@@ -194,33 +195,28 @@ async function loadFeaturedCreators() {
       if (s.twitch) serverLiveUsernames.add(s.twitch.toLowerCase());
     }
 
-    // Priority 1: rockboundgaming is live — always show the main channel.
+    // Build ordered list of live streams: rockboundgaming first (if live),
+    // then all live L5+ featured creators, up to 4 total.
+    const liveStreams = [];
+
     if (serverLiveUsernames.has(ROCKBOUND_CHANNEL)) {
-      setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
-      return;
+      liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null });
     }
 
-    // Priority 2: find the first live Level 5+ featured creator.
-    // When server data is fresh, only trust server-confirmed live status.
-    // Fall back to the spreadsheet status column only when the live-status.json
-    // file is stale (e.g. the Actions workflow hasn't run recently).
-    const firstLive = creators.find(c =>
+    // Collect all live L5+ featured creators (excluding rockboundgaming).
+    const liveCreators = creators.filter(c =>
       c.level >= 5 &&
       c.featured?.toLowerCase() === "yes" &&
       c.twitch !== ROCKBOUND_CHANNEL &&
       (serverLiveUsernames.has(c.twitch) ||
         (!serverDataIsFresh && (c.status === "live" || c.status === "active")))
     );
+    liveStreams.push(...liveCreators);
 
-    if (firstLive) {
-      setHubStream(firstLive.twitch, firstLive.name);
-    } else {
-      // Nobody is live — show the rockboundgaming offline screen.
-      setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
-    }
+    updateLiveDisplay(liveStreams);
   } catch (err) {
     console.error("Error loading creators:", err);
-    setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
+    updateLiveDisplay([]);
   }
 }
 
@@ -229,19 +225,94 @@ async function loadFeaturedCreators() {
 // ============================================
 
 /**
- * Sets the active channel in the single-stream hub player.
+ * Shows the multi-stream live grid when one or more creators are live,
+ * or falls back to the single-channel offline player when nobody is live.
+ *
+ * @param {Array<{twitch: string, name: string, level: number|null}>} liveStreams
+ *   Ordered list of live streams (rockboundgaming first if live, then L5+ creators).
+ *   Only the first 4 are shown.
+ */
+function updateLiveDisplay(liveStreams) {
+  const offlineContainer = document.getElementById('offline-player');
+  const liveGrid = document.getElementById('live-streams-grid');
+  const panel = document.getElementById('twitch-panel');
+  const titleEl = document.getElementById('panel-stream-title');
+
+  if (!liveStreams || liveStreams.length === 0) {
+    // Nobody live — show the single offline player for rockboundgaming.
+    if (liveGrid) liveGrid.hidden = true;
+    if (panel) panel.classList.remove('is-live');
+    if (titleEl) titleEl.textContent = 'Rockbound Gaming';
+    if (offlineContainer) {
+      offlineContainer.hidden = false;
+      offlineContainer.style.display = '';
+    }
+    setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
+    return;
+  }
+
+  // Live streams present — hide offline player, show multi-stream grid.
+  if (offlineContainer) offlineContainer.hidden = true;
+  if (panel) panel.classList.add('is-live');
+
+  const streams = liveStreams.slice(0, 4);
+  const count = streams.length;
+
+  if (titleEl) titleEl.textContent = streams[0].name || 'Rockbound Gaming';
+
+  // Avoid rebuilding the grid if the same channels are already displayed.
+  const channelKey = streams.map(s => s.twitch).join(',');
+  if (channelKey === currentGridChannels && liveGrid && !liveGrid.hidden) return;
+  currentGridChannels = channelKey;
+
+  if (!liveGrid) return;
+
+  liveGrid.className = `live-streams-grid count-${count}`;
+  liveGrid.hidden = false;
+
+  const hostname = window.location.hostname || 'localhost';
+  const parentDomains = ['rockboundgaming.ca', 'www.rockboundgaming.ca'];
+  if (hostname !== 'rockboundgaming.ca' && hostname !== 'www.rockboundgaming.ca') {
+    parentDomains.push(hostname);
+  }
+  const parentParam = parentDomains.map(d => `parent=${encodeURIComponent(d)}`).join('&');
+
+  liveGrid.innerHTML = streams.map(s => {
+    const initial = (s.name || s.twitch).charAt(0).toUpperCase();
+    const levelText = (s.level && s.level >= 5) ? `Level ${s.level}` : '';
+    const streamUrl = `https://player.twitch.tv/?channel=${encodeURIComponent(s.twitch)}&${parentParam}&autoplay=true&muted=true`;
+    return `
+      <div class="creator-featured">
+        <div class="creator-featured-header">
+          <div class="creator-avatar">${initial}</div>
+          <div class="creator-info">
+            <p class="creator-name">${s.name || s.twitch}</p>
+            ${levelText ? `<p class="creator-level">${levelText}</p>` : ''}
+          </div>
+          <span class="creator-status-badge">&#9679; LIVE</span>
+        </div>
+        <div class="twitch-embed-container">
+          <iframe
+            src="${streamUrl}"
+            allowfullscreen
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            title="${s.name || s.twitch} live stream">
+          </iframe>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+/**
+ * Sets the active channel in the single-stream hub player (offline-player).
  * Destroys the existing Twitch.Player and creates a fresh one whenever
  * the channel name changes, avoiding 404 MasterPlaylist errors that occur
  * when the channel is swapped by mutating the iframe src directly.
  */
 function setHubStream(channelName, displayName) {
   const container = document.getElementById('offline-player');
-  const liveGrid = document.getElementById('live-streams-grid');
   const panel = document.getElementById('twitch-panel');
   const titleEl = document.getElementById('panel-stream-title');
-
-  // Always keep the live grid hidden — we use only the single-stream player.
-  if (liveGrid) liveGrid.hidden = true;
 
   // Update the panel title and live indicator.
   if (titleEl) titleEl.textContent = displayName || 'Rockbound Gaming';
@@ -345,7 +416,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const offlineEl = document.getElementById('offline-player');
     const loadingEl = document.getElementById('permanent-loading');
     if (loadingEl && offlineEl && !offlineEl.hidden && loadingEl.style.display !== 'none') {
-      if (!hubCurrentChannel) setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
+      if (!hubCurrentChannel) updateLiveDisplay([]);
     }
     const discordList = document.getElementById('discord-members-list');
     if (discordList && discordList.querySelector('.discord-loading-item')) {
