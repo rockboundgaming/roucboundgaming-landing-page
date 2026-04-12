@@ -396,7 +396,7 @@ function renderDiscordMembers(members, count) {
   if (!list) return;
 
   // Filter out bots: explicit bot flag, known bot usernames, or "bot" in name.
-  const KNOWN_BOTS = ['carl-bot', 'mee6', 'dyno', 'groovy', 'rhythm', 'rythm', 'fredboat', 'nightbot', 'streamelements', 'streamlabs'];
+  const KNOWN_BOTS = ['carl-bot', 'mee6', 'dyno', 'groovy', 'rhythm', 'rythm', 'fredboat', 'nightbot', 'streamelements', 'streamlabs', 'appy', 'arcane', 'jockie music'];
   const humanMembers = members.filter(m => {
     if (m.bot === true) return false;
     const nameLower = m.username.toLowerCase();
