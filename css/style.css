@@ -138,9 +138,10 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
    HERO
    ============================================ */
 .hero {
-  min-height: 100svh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
   padding: 90px 0 0;
   box-sizing: border-box;
   position: relative;
@@ -148,7 +149,6 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   overflow: hidden;
   background: var(--darker);
 }
-
 .hero-bg {
   position: absolute;
   inset: 0;
@@ -157,8 +157,8 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
     radial-gradient(circle at 80% 20%, rgba(69,123,157,0.2), transparent 50%),
     var(--darker);
   animation: parallax 6s ease-in-out infinite;
+  z-index: 0;
 }
-
 .hero-grid {
   position: absolute;
   inset: 0;
@@ -166,30 +166,39 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
     linear-gradient(rgba(230,57,70,0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(230,57,70,0.05) 1px, transparent 1px);
   background-size: 60px 60px;
+  z-index: 1;
 }
-
 .hero-content {
   position: relative;
   z-index: 2;
   max-width: 1000px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1 0 auto;
   justify-content: center;
+  flex: 1 0 auto;
+  padding-top: 10px;
+  box-sizing: border-box;
 }
-
 .hero-logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1rem;
   max-width: 600px;
   width: 100%;
-  margin-bottom: 1rem;
   animation: fadeUp 1s ease forwards;
-  filter: drop-shadow(0 0 2px rgba(255, 200, 210, 0.85)) drop-shadow(0 0 10px rgba(230, 57, 70, 0.88)) drop-shadow(0 0 22px rgba(230, 57, 70, 0.18));
+  filter:
+    drop-shadow(0 0 2px rgba(255,200,210,0.85))
+    drop-shadow(0 0 10px rgba(230,57,70,0.88))
+    drop-shadow(0 0 22px rgba(230,57,70,0.18));
 }
-
 .hero-tagline-text {
-  font-family: 'Bebas Neue';
-  font-size: clamp(2.5rem,6vw,6rem);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 6rem);
   letter-spacing: 4px;
   text-transform: uppercase;
   margin-bottom: 2rem;
@@ -199,7 +208,6 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-
 .hero-btns {
   display: flex;
   gap: 1rem;
@@ -208,14 +216,13 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   margin-bottom: 2rem;
   animation: fadeUp 1s ease forwards 0.2s both;
 }
-
 .authority-line {
   font-size: 1.4rem;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--silver-light);
   font-weight: 700;
-  font-family: 'Barlow Condensed';
+  font-family: 'Barlow Condensed', sans-serif;
   margin-top: 2.5rem;
   margin-bottom: 5.625rem;
   animation: fadeUp 1s ease forwards 0.3s both;
@@ -223,11 +230,11 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   z-index: 2;
   text-align: center;
 }
-
 .hero-stats {
   margin-top: auto;
+  flex-shrink: 0;
   background: var(--red);
-  width: 100%;
+  width: 100%; /* Changed from 100vw to 100% to prevent horizontal scroll */
   padding: 1.5rem 2rem;
   display: flex;
   justify-content: center;
@@ -235,11 +242,11 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   gap: 3rem;
   flex-wrap: wrap;
   position: relative;
-  animation: fadeUp 1s ease forwards 0.4s both;
-  box-shadow: inset 0 10px 30px rgba(0,0,0,0.3);
   z-index: 3;
+  box-shadow: inset 0 10px 30px rgba(0,0,0,0.3);
+  animation: fadeUp 1s ease forwards 0.4s both;
+  left: 0;
 }
-
 .stat-item {
   text-align: center;
   color: white;
@@ -247,18 +254,15 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   min-width: 100px;
   transition: all 0.3s ease;
 }
-
 .stat-item:hover { transform: scale(1.1); }
-
 .stat-number {
-  font-family: 'Bebas Neue';
+  font-family: 'Bebas Neue', sans-serif;
   font-size: 2rem;
   letter-spacing: 2px;
   line-height: 1;
   color: white;
   font-weight: 700;
 }
-
 .stat-label {
   font-size: 0.65rem;
   letter-spacing: 2px;
@@ -2014,5 +2018,54 @@ footer {
 
   footer {
     padding: 2rem 1rem;
+  }
+}
+/* ============================================
+   DESKTOP HERO FIX — Center logo & Stats Bar
+   ============================================ */
+@media (min-width: 1024px) {
+  .hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Vertically center the content block */
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    padding-bottom: 90px; /* Reserve space so content clears the pinned stats bar */
+  }
+
+  .hero-content {
+    flex: 0 0 auto; /* Natural size — do not grow or shrink */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-logo {
+    max-width: 550px;
+    margin: 0 auto 1.5rem auto;
+  }
+
+  .authority-line {
+    flex: 0 0 auto; /* Do not grow — keeps it from pushing content off-center */
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-stats {
+    position: absolute; /* Anchor to the bottom of .hero (which is position:relative) */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin-top: 0;
+    padding: 2rem 0;
+    justify-content: center;
+    gap: 5rem; /* Wider gaps for desktop screens */
   }
 }

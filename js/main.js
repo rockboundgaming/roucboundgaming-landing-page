@@ -180,17 +180,18 @@ async function loadFeaturedCreators() {
     }).filter(c => c && c.twitch && c.name);
 
     // Build the set of server-confirmed live usernames from live-status.json.
-    // Only trust the file if it was written within LIVE_STATUS_MAX_AGE_MS.
+    // Always populate from the file so the rockboundgaming priority check works
+    // even when the file is older than LIVE_STATUS_MAX_AGE_MS.  The freshness
+    // flag is only used later to decide whether to also trust the spreadsheet
+    // status column as a fallback.
     const serverLiveUsernames = new Set();
     let serverDataIsFresh = false;
     if (liveStatus.lastChecked) {
       const ageMs = Date.now() - new Date(liveStatus.lastChecked).getTime();
-      if (ageMs < LIVE_STATUS_MAX_AGE_MS) {
-        serverDataIsFresh = true;
-        for (const s of (liveStatus.live || [])) {
-          if (s.twitch) serverLiveUsernames.add(s.twitch.toLowerCase());
-        }
-      }
+      serverDataIsFresh = ageMs < LIVE_STATUS_MAX_AGE_MS;
+    }
+    for (const s of (liveStatus.live || [])) {
+      if (s.twitch) serverLiveUsernames.add(s.twitch.toLowerCase());
     }
 
     // Priority 1: rockboundgaming is live — always show the main channel.
