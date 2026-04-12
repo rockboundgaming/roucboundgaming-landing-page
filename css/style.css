@@ -139,14 +139,12 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
    ============================================ */
 .hero {
   min-height: 100vh;
-  max-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6rem 2rem 0;
+  padding: 8.75rem 2rem 0;
   position: relative;
   text-align: center;
-  padding-bottom: 8rem;
   overflow: hidden;
   background: var(--darker);
   flex-direction: column;
@@ -218,7 +216,8 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   color: var(--silver-light);
   font-weight: 700;
   font-family: 'Barlow Condensed';
-  margin-bottom: 2rem;
+  margin-top: 2.5rem;
+  margin-bottom: 5.625rem;
   animation: fadeUp 1s ease forwards 0.3s both;
   position: relative;
   z-index: 2;
@@ -234,10 +233,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   align-items: center;
   gap: 3rem;
   flex-wrap: wrap;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   animation: fadeUp 1s ease forwards 0.4s both;
   box-shadow: inset 0 10px 30px rgba(0,0,0,0.3);
 }
