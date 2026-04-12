@@ -138,8 +138,8 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
    HERO
    ============================================ */
 .hero {
-  min-height: 100vh;
-  min-height: 100svh;
+  height: 100vh;
+  height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -226,7 +226,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   font-weight: 700;
   font-family: 'Barlow Condensed', sans-serif;
   margin-top: 2.5rem;
-  margin-bottom: 5.625rem;
+  margin-bottom: auto;
   animation: fadeUp 1s ease forwards 0.3s both;
   position: relative;
   z-index: 2;
@@ -1671,7 +1671,7 @@ footer {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    min-height: 100svh;
+    height: 100svh;
   }
 
   .hero-content {
@@ -1928,7 +1928,7 @@ footer {
 @media (max-width: 480px) {
   .hero {
     padding: 6.5rem 1rem 0;
-    min-height: 100svh;
+    height: 100svh;
   }
 
   .hero-logo {
@@ -2034,8 +2034,7 @@ footer {
     justify-content: center; /* Vertically center the content block */
     align-items: center;
     width: 100%;
-    min-height: 100vh;
-    padding-bottom: 90px; /* Reserve space so content clears the pinned stats bar */
+    height: 100vh;
   }
 
   .hero-content {
