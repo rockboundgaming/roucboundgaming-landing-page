@@ -92,10 +92,11 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ============================================
 //   TWITCH LIVE STREAMS
 // ============================================
-let activePlayers = new Map();
-let lastLiveUsernames = new Set();
-let recentlyRemoved = new Map(); // username -> removal timestamp
 const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
+
+// Single-stream hub state
+let hubCurrentChannel = null;  // The channel name currently loaded in the hub player
+let hubPlayer = null;          // The active Twitch.Player instance
 
 // The primary channel that is permanently embedded (24/7).
 const ROCKBOUND_CHANNEL = "rockboundgaming";
@@ -161,7 +162,7 @@ async function loadFeaturedCreators() {
     ]);
 
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    
+
     const data = await response.text();
     const rows = data.split("\n");
 
@@ -190,231 +191,135 @@ async function loadFeaturedCreators() {
       }
     }
 
-    // Community live creators: level >= 5, featured, live, excluding the main channel.
-    const communityLiveNow = creators.filter(c =>
+    // Priority 1: rockboundgaming is live — always show the main channel.
+    if (serverLiveUsernames.has(ROCKBOUND_CHANNEL)) {
+      setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
+      return;
+    }
+
+    // Priority 2: find the first live Level 5+ featured creator.
+    const firstLive = creators.find(c =>
       c.level >= 5 &&
       c.featured?.toLowerCase() === "yes" &&
       c.twitch !== ROCKBOUND_CHANNEL &&
-      (
-        serverLiveUsernames.has(c.twitch) ||
-        c.status === "live" || c.status === "active"
-      )
+      (serverLiveUsernames.has(c.twitch) || c.status === "live" || c.status === "active")
     );
 
-    // Build unified live list: Rockbound first (if live), then community (up to 4 total).
-    const allLive = [];
-    if (serverLiveUsernames.has(ROCKBOUND_CHANNEL)) {
-      allLive.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: 0 });
+    if (firstLive) {
+      setHubStream(firstLive.twitch, firstLive.name);
+    } else {
+      // Nobody is live — show the rockboundgaming offline screen.
+      setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
     }
-    for (const c of communityLiveNow) {
-      if (allLive.length >= 4) break;
-      allLive.push(c);
-    }
-
-    updateUnifiedHub(allLive, serverLiveUsernames);
   } catch (err) {
     console.error("Error loading creators:", err);
-    updateUnifiedHub([], new Set());
+    setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
   }
 }
 
 // ============================================
-//   UNIFIED HUB
+//   SINGLE-STREAM HUB
 // ============================================
-function updateUnifiedHub(allLive, serverLiveUsernames) {
-  const offlineEl = document.getElementById('offline-player');
+
+/**
+ * Sets the active channel in the single-stream hub player.
+ * Destroys the existing Twitch.Player and creates a fresh one whenever
+ * the channel name changes, avoiding 404 MasterPlaylist errors that occur
+ * when the channel is swapped by mutating the iframe src directly.
+ */
+function setHubStream(channelName, displayName) {
+  const container = document.getElementById('offline-player');
   const liveGrid = document.getElementById('live-streams-grid');
   const panel = document.getElementById('twitch-panel');
   const titleEl = document.getElementById('panel-stream-title');
 
-  if (allLive.length > 0) {
-    if (offlineEl) offlineEl.hidden = true;
-    if (liveGrid) liveGrid.hidden = false;
-    if (panel) panel.classList.add('is-live');
-    if (titleEl) titleEl.textContent = allLive.length === 1 ? allLive[0].name : 'Rockbound Gaming';
-    updateDisplay(allLive, serverLiveUsernames);
-  } else {
-    if (offlineEl) offlineEl.hidden = false;
-    if (liveGrid) liveGrid.hidden = true;
-    if (panel) panel.classList.remove('is-live');
-    if (titleEl) titleEl.textContent = 'Rockbound Gaming';
-    displayNoCreators();
-    initOfflinePlayer();
-  }
-}
+  // Always keep the live grid hidden — we use only the single-stream player.
+  if (liveGrid) liveGrid.hidden = true;
 
-function updateDisplay(liveNow, serverLiveUsernames = new Set()) {
-  const container = document.getElementById("live-streams-grid");
+  // Update the panel title and live indicator.
+  if (titleEl) titleEl.textContent = displayName || 'Rockbound Gaming';
+  if (panel) {
+    if (channelName !== ROCKBOUND_CHANNEL) {
+      panel.classList.add('is-live');
+    } else {
+      panel.classList.remove('is-live');
+    }
+  }
+
+  // No channel change — nothing more to do.
+  if (channelName === hubCurrentChannel) return;
+  hubCurrentChannel = channelName;
+
   if (!container) return;
 
-  // Update the grid column class based on stream count.
-  const count = Math.min(liveNow.length, 4);
-  container.className = `live-streams-grid count-${count}`;
+  // Ensure the container is visible before initialising the player so the
+  // browser does not block autoplay on a hidden element.
+  container.hidden = false;
+  container.style.display = '';
 
-  const incomingUsernames = new Set(liveNow.map(c => c.twitch));
+  // Tear down the previous player and reset the container.
+  hubPlayer = null;
+  container.innerHTML = '<div class="stream-loading" id="permanent-loading"><i class="fas fa-spinner fa-spin"></i><p>Loading stream...</p></div>';
 
-  const usernamesChanged = 
-    incomingUsernames.size !== lastLiveUsernames.size ||
-    ![...incomingUsernames].every(u => lastLiveUsernames.has(u));
-
-  if (!usernamesChanged) return;
-
-  lastLiveUsernames = incomingUsernames;
-
-  activePlayers.forEach((_, username) => {
-    if (!incomingUsernames.has(username)) {
-      removeStreamer(username);
-    }
-  });
-
-  // Filter out recently removed channels (within last 60 seconds)
-  const now = Date.now();
-  const filteredLiveNow = liveNow.filter(c => {
-    const removedTime = recentlyRemoved.get(c.twitch);
-    return !removedTime || (now - removedTime) >= 60000;
-  });
-
-  filteredLiveNow.forEach(c => {
-    if (!activePlayers.has(c.twitch)) {
-      addStreamer(c, serverLiveUsernames.has(c.twitch));
-    }
-  });
-}
-
-function addStreamer(c, serverConfirmedLive = false) {
-  const container = document.getElementById("live-streams-grid");
-  
-  const wrapper = document.createElement('div');
-  wrapper.className = 'creator-featured'; 
-  wrapper.id = `wrapper-${c.twitch}`;
-
-  if (serverConfirmedLive) {
-    wrapper.style.display = '';
-  } else {
-    wrapper.style.display = 'none';
+  if (!window.Twitch || !window.Twitch.Player) {
+    console.warn('Twitch.Player not yet available — channel queued for when script loads.');
+    return;
   }
 
-  wrapper.innerHTML = `
-    <div class="creator-featured-header">
-      <div class="creator-avatar"><i class="fas fa-user"></i></div>
-      <div class="creator-info">
-        <h3 class="creator-name">${c.name}</h3>
-        ${c.level > 0 ? `<p class="creator-level">Level ${c.level}</p>` : ''}
-      </div>
-      <div class="creator-status-badge">LIVE</div>
-    </div>
-    <div id="player-${c.twitch}" class="twitch-embed-container">
-      <div class="stream-loading">
-        <i class="fas fa-spinner fa-spin"></i>
-        <p>Loading stream...</p>
-      </div>
-    </div>
-  `;
-  container.appendChild(wrapper);
-
-  const hostname = window.location.hostname === "" ? "localhost" : window.location.hostname;
+  const hostname = window.location.hostname || 'localhost';
   const parentDomains = ['rockboundgaming.ca', 'www.rockboundgaming.ca'];
   if (hostname !== 'rockboundgaming.ca' && hostname !== 'www.rockboundgaming.ca') parentDomains.push(hostname);
 
-  try {
-    if (!window.Twitch || !window.Twitch.Player) {
-      console.error("Twitch Player not available");
-      removeStreamer(c.twitch);
-      return;
-    }
+  // Create a uniquely-IDed mount point so Twitch.Player never confuses it
+  // with a stale element from the previous session.
+  const playerDivId = `hub-player-${Date.now()}`;
+  const playerDiv = document.createElement('div');
+  playerDiv.id = playerDivId;
+  container.appendChild(playerDiv);
 
-    const player = new Twitch.Player(`player-${c.twitch}`, {
-      channel: c.twitch,
-      width: "100%",
-      height: "100%",
+  try {
+    hubPlayer = new Twitch.Player(playerDivId, {
+      channel: channelName,
+      width: '100%',
+      height: '100%',
       parent: parentDomains,
       autoplay: true,
       muted: true
     });
 
-    let hasStartedPlayback = false;
-    let offlineTimeout;
-    
-    if (player.addEventListener) {
-      player.addEventListener(Twitch.Player.ONLINE, () => {
-        hasStartedPlayback = true;
-        clearTimeout(offlineTimeout);
+    // Inject the permissions policy required by modern browsers so that
+    // autoplay and other features are not silently blocked.
+    setTimeout(() => {
+      const iframe = container.querySelector('iframe');
+      if (iframe) {
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      }
+      const loading = document.getElementById('permanent-loading');
+      if (loading) loading.style.display = 'none';
+    }, 800);
 
-        if (!serverConfirmedLive) {
-          wrapper.style.display = '';
-        }
-
-        // Hide the loading spinner in both cases
-        setTimeout(() => {
-          const loading = wrapper.querySelector('.stream-loading');
-          if (loading) loading.style.display = 'none';
-        }, 1000);
-      });
-
-      player.addEventListener(Twitch.Player.OFFLINE, () => {
-        removeStreamer(c.twitch);
+    if (hubPlayer.addEventListener) {
+      hubPlayer.addEventListener(Twitch.Player.ONLINE, () => {
+        const loading = document.getElementById('permanent-loading');
+        if (loading) loading.style.display = 'none';
       });
     }
-
-    if (!serverConfirmedLive) {
-      // Auto-remove if the stream doesn't go online within 15 seconds.
-      // This guard is only needed for the client-side path where we hide the
-      // player until ONLINE fires; for server-confirmed streams we trust the
-      // Helix API result and rely on the OFFLINE event to clean up instead.
-      offlineTimeout = setTimeout(() => {
-        offlineTimeout = null;
-        if (!hasStartedPlayback) {
-          removeStreamer(c.twitch);
-        }
-      }, 15000);
-    }
-
-    activePlayers.set(c.twitch, player);
   } catch (e) {
-    console.error("Player Init Error:", e);
-    removeStreamer(c.twitch);
+    console.error('Hub player init error:', e);
   }
-}
-
-function removeStreamer(username) {
-  const el = document.getElementById(`wrapper-${username}`);
-  if (el) el.remove();
-  activePlayers.delete(username);
-  lastLiveUsernames.delete(username);
-  
-  // Record removal to prevent re-adding for 60 seconds
-  recentlyRemoved.set(username, Date.now());
-  
-  const container = document.getElementById("live-streams-grid");
-  if (container && container.children.length === 0) {
-    // No live streams left — switch back to offline player
-    container.hidden = true;
-    const offlineEl = document.getElementById('offline-player');
-    const panel = document.getElementById('twitch-panel');
-    const titleEl = document.getElementById('panel-stream-title');
-    if (offlineEl) offlineEl.hidden = false;
-    if (panel) panel.classList.remove('is-live');
-    if (titleEl) titleEl.textContent = 'Rockbound Gaming';
-    initOfflinePlayer();
-  }
-}
-
-function displayNoCreators() {
-  // Clear the live grid; the offline player is shown by updateUnifiedHub / removeStreamer.
-  const container = document.getElementById("live-streams-grid");
-  if (container) container.innerHTML = '';
 }
 
 // ============================================
 //   INITIALIZE
 // ============================================
 document.addEventListener('DOMContentLoaded', async () => {
-  // 2-second fallback: if the offline player hasn't initialised yet, trigger it now.
+  // 2-second fallback: if the hub player hasn't initialised yet, load the
+  // default channel so the loading spinner doesn't spin forever.
   setTimeout(() => {
     const offlineEl = document.getElementById('offline-player');
     const loadingEl = document.getElementById('permanent-loading');
     if (loadingEl && offlineEl && !offlineEl.hidden && loadingEl.style.display !== 'none') {
-      initOfflinePlayer();
+      if (!hubCurrentChannel) setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
     }
     const discordList = document.getElementById('discord-members-list');
     if (discordList && discordList.querySelector('.discord-loading-item')) {
@@ -446,38 +351,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   initApplyButton();
 });
 
-setInterval(loadFeaturedCreators, 60000);
+// Re-check every 3 minutes: preempts any active Level-5 stream back to rockbound
+// the moment the main channel goes live, and handles streamers going offline.
+setInterval(loadFeaturedCreators, 3 * 60 * 1000);
 // Refresh Discord member list every 3 minutes
 setInterval(fetchDiscordMembers, 3 * 60 * 1000);
-
-// ============================================
-//   OFFLINE PLAYER (RockboundGaming fallback)
-// ============================================
-let offlinePlayerInit = false;
-
-function initOfflinePlayer() {
-  if (offlinePlayerInit) return;
-  const container = document.getElementById('offline-player');
-  if (!container) return;
-  offlinePlayerInit = true;
-
-  const loading = document.getElementById('permanent-loading');
-  if (loading) loading.style.display = 'none';
-
-  // Embed the actual Twitch channel so the native offline page is displayed
-  // when no one is streaming, and the stream appears automatically when live.
-  const hostname = window.location.hostname || 'localhost';
-  const parentDomains = ['rockboundgaming.ca', 'www.rockboundgaming.ca'];
-  if (hostname !== 'rockboundgaming.ca' && hostname !== 'www.rockboundgaming.ca') parentDomains.push(hostname);
-  const parentParams = parentDomains.map(d => `parent=${encodeURIComponent(d)}`).join('&');
-  container.innerHTML = `<iframe
-    src="https://player.twitch.tv/?channel=${ROCKBOUND_CHANNEL}&${parentParams}&autoplay=false&muted=true"
-    frameborder="0"
-    allowfullscreen
-    scrolling="no"
-    style="width:100%;height:100%;display:block;border:none;"
-  ></iframe>`;
-}
 
 // ============================================
 //   DISCORD ONLINE MEMBERS
@@ -651,7 +529,7 @@ function initCaptcha() {
       // Discord returns 204 No Content on success
       if (res.ok || res.status === 204) {
         alert("Application Sent! Now taking you to our Discord to finish the process.");
-        window.location.href = 'https://discord.gg/rockbound';
+        window.location.href = 'https://discord.gg/SsrHttHX8n';
       } else {
         throw new Error(`HTTP ${res.status}`);
       }
@@ -659,7 +537,7 @@ function initCaptcha() {
       console.error('Creator form error:', err);
       // Fallback: If the webhook fails for any reason, still get them to Discord
       alert("There was a small error, but we'll take you to Discord to apply manually!");
-      window.location.href = 'https://discord.gg/rockbound';
+      window.location.href = 'https://discord.gg/SsrHttHX8n';
     }
   });
 }());
