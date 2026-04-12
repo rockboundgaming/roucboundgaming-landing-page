@@ -227,12 +227,15 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   color: var(--silver-light);
   font-weight: 700;
   font-family: 'Barlow Condensed', sans-serif;
-  margin-top: 2.5rem;
-  margin-bottom: auto;
+  margin-top: 1.5rem;
+  margin-bottom: 0;
   animation: fadeUp 1s ease forwards 0.3s both;
   position: relative;
   z-index: 2;
   text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 1rem;
 }
 .hero-stats {
   margin-top: auto;
@@ -1672,12 +1675,17 @@ footer {
     padding-bottom: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    height: 100svh;
+    justify-content: space-between;
+    min-height: 100svh;
   }
 
   .hero-content {
-    flex: 0 0 auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .hero-logo {
@@ -1703,12 +1711,9 @@ footer {
 
   .authority-line {
     font-size: 1.1rem;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin-bottom: 0;
-    padding: 1.5rem 1rem;
+    padding: 1rem 1rem;
+    order: 4;
   }
 
   .hero-stats {
@@ -1930,17 +1935,24 @@ footer {
 @media (max-width: 480px) {
   .hero {
     padding: 6.5rem 1rem 0;
-    height: 100svh;
+    min-height: 100svh;
+  }
+
+  .hero-content {
+    gap: 0.5rem;
+    padding-bottom: 0;
   }
 
   .hero-logo {
-    max-width: 250px;
-    margin-bottom: 0.5rem;
+    max-width: 220px;
+    max-height: 180px;
+    width: auto;
+    margin-bottom: 0;
   }
 
   .hero-tagline-text {
     font-size: clamp(1.3rem, 4vw, 2.2rem);
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.4rem;
     order: 2;
   }
 
@@ -1952,13 +1964,15 @@ footer {
     order: 3;
     gap: 0.8rem;
     flex-wrap: nowrap;
-    margin-top: 1.2rem;
-    margin-bottom: 1.2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
 
   .authority-line {
-    font-size: 0.95rem;
-    padding: 1.2rem 0.8rem;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    margin-top: 0.3rem;
+    order: 4;
   }
 
   .hero-stats {
@@ -1966,8 +1980,8 @@ footer {
     left: unset;
     right: unset;
     bottom: unset;
-    padding: 1rem 0.8rem;
-    gap: 1rem;
+    padding: 0.75rem 0.5rem;
+    gap: 0.75rem;
   }
 
   .stat-item {
@@ -2054,13 +2068,15 @@ footer {
 
   .hero-logo {
     max-width: 550px;
+    max-height: 40vh;
+    width: auto;
+    height: auto;
     margin: 0 auto 1.5rem auto;
   }
 
   .authority-line {
-    flex: 0 0 auto; /* Do not grow — keeps it from pushing content off-center */
     margin-top: 1.5rem;
-    margin-bottom: auto;
+    font-size: 1.4rem;
   }
 
   .hero-stats {
@@ -2071,6 +2087,38 @@ footer {
     padding: 2rem 0;
     justify-content: center;
     gap: 5rem; /* Wider gaps for desktop screens */
+  }
+}
+
+/* ============================================
+   DESKTOP MEDIUM-HEIGHT VIEWPORT
+   Covers 110–140% browser zoom on 1080p screens,
+   and typical laptop viewports with browser chrome.
+   ============================================ */
+@media (min-width: 1024px) and (max-height: 1050px) {
+  .hero-logo {
+    max-height: 28vh;
+    width: auto;
+    margin-bottom: 0.5rem;
+  }
+  .hero-content {
+    gap: 1rem;
+    padding-bottom: 0.5rem;
+  }
+  .hero-content h1 {
+    font-size: clamp(1.5rem, 2.8vw, 2.5rem);
+    line-height: 1.05;
+    margin-bottom: 0.5rem;
+  }
+  .hero-btns {
+    margin-bottom: 0.5rem;
+  }
+  .authority-line {
+    margin-top: 0;
+    font-size: 1.1rem;
+  }
+  .hero-stats {
+    padding: 0.75rem 1rem;
   }
 }
 
