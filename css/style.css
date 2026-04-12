@@ -1868,6 +1868,7 @@ footer {
 
   .twitch-panel {
     width: 100% !important;
+    flex: none;
   }
 
   .discord-panel {
