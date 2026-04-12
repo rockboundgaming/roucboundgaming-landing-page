@@ -823,6 +823,12 @@ section:nth-child(odd) {
    COMMUNITY CONTROL CENTER
    ============================================ */
 
+/* Tighter padding and max-width for the Rock Hub section */
+#live {
+  padding: 3rem 2rem;
+  max-width: 1200px;
+}
+
 /* Glow pulse animation for live state */
 @keyframes liveGlow {
   0%, 100% { box-shadow: 0 0 15px rgba(230,57,70,0.4), 0 0 40px rgba(230,57,70,0.15); }
@@ -832,6 +838,7 @@ section:nth-child(odd) {
 /* Side-by-side layout; flex-start so each panel uses its natural height */
 .control-center {
   display: flex;
+  flex-wrap: wrap;
   gap: 1.25rem;
   align-items: flex-start;
   margin-bottom: 2rem;
@@ -841,7 +848,7 @@ section:nth-child(odd) {
 /* ---- Twitch Panel ---- */
 .twitch-panel {
   flex: 1 1 0;
-  min-width: 0;
+  min-width: 300px;
   background: #000;
   border-radius: 8px;
   overflow: hidden;
