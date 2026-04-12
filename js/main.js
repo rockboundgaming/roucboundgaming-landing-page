@@ -637,20 +637,9 @@ function initCaptcha() {
     submitBtn.textContent = 'Sending…';
 
     try {
+      // We use a simpler string-based format to avoid the 400 Bad Request error
       const payload = {
-        content: '🚀 **New Creator Application Received!**',
-        embeds: [{
-          title: '🎮 New Creator Network Application',
-          color: 0xe63946,
-          fields: [
-            { name: 'Name',          value: name,     inline: true },
-            { name: 'Gamertag',      value: gamertag, inline: true },
-            { name: 'Platform',      value: platform, inline: true },
-            { name: 'Primary Games', value: games,    inline: false }
-          ],
-          footer: { text: 'Redirecting to Discord...' },
-          timestamp: new Date().toISOString()
-        }]
+        content: `🚀 **New Creator Application Received!**\n\n**Name:** ${name}\n**Gamertag:** ${gamertag}\n**Platform:** ${platform}\n**Games:** ${games}`
       };
 
       const res = await fetch(CREATOR_APPLICATION_WEBHOOK, {
@@ -659,18 +648,18 @@ function initCaptcha() {
         body: JSON.stringify(payload)
       });
 
+      // Discord returns 204 No Content on success
       if (res.ok || res.status === 204) {
-        alert('Application Sent! You must now join our Discord to complete the process.');
+        alert("Application Sent! Now taking you to our Discord to finish the process.");
         window.location.href = 'https://discord.gg/rockbound';
       } else {
         throw new Error(`HTTP ${res.status}`);
       }
     } catch (err) {
       console.error('Creator form error:', err);
-      showFormStatus(statusEl, 'error', 'Submission failed. Taking you to Discord to apply manually...');
-      setTimeout(() => {
-        window.location.href = 'https://discord.gg/rockbound';
-      }, 2000);
+      // Fallback: If the webhook fails for any reason, still get them to Discord
+      alert("There was a small error, but we'll take you to Discord to apply manually!");
+      window.location.href = 'https://discord.gg/rockbound';
     }
   });
 }());
