@@ -241,6 +241,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   box-sizing: border-box;
   padding: 0 1rem;
   flex-shrink: 0;
+  order: -1; /* Always show above the logo on all screen sizes */
 }
 .hero-stats {
   margin-top: auto;
@@ -1738,7 +1739,7 @@ footer {
   .authority-line {
     font-size: 1.1rem;
     margin-bottom: 0;
-    padding: 1rem 1rem;
+    padding: 0.4rem 1rem 0.8rem;
   }
 
   .hero-stats {
