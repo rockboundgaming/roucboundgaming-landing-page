@@ -447,6 +447,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     .catch(e => console.warn('Could not load site-data.json:', e));
 
   await initTwitchScript();
+  updateLiveDisplay([]);
   await loadFeaturedCreators();
   fetchDiscordMembers();
   initApplyButton();
@@ -618,7 +619,8 @@ function initCaptcha() {
     try {
       // We use a simpler string-based format to avoid the 400 Bad Request error
       const payload = {
-        content: `🚀 **New Creator Application Received!**\n\n**Name:** ${name}\n**Gamertag:** ${gamertag}\n**Platform:** ${platform}\n**Games:** ${games}`
+        username: "Rockbound Gaming",
+        content: `🚀 **New Creator Application**\n**Name:** ${name}\n**Gamertag:** ${gamertag}\n**Platform:** ${platform}\n**Games:** ${games}`
       };
 
       const res = await fetch(CREATOR_APPLICATION_WEBHOOK, {
