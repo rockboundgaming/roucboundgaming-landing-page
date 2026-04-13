@@ -358,7 +358,12 @@ function setHubStream(channelName, displayName) {
   // Ensure the container is visible before initialising the player so the
   // browser does not block autoplay on a hidden element.
   container.hidden = false;
-  container.style.display = '';
+  // Only restore display if the live grid isn't currently showing content
+  const liveGrid = document.getElementById('live-streams-grid');
+  const liveGridIsVisible = liveGrid && liveGrid.childElementCount > 0 && liveGrid.style.display !== 'none' && !liveGrid.hidden;
+  if (!liveGridIsVisible) {
+    container.style.display = '';
+  }
 
   // Tear down the previous player and reset the container.
   hubPlayer = null;
@@ -428,8 +433,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   // default channel so the loading spinner doesn't spin forever.
   setTimeout(() => {
     const offlineEl = document.getElementById('offline-player');
+    const liveGrid = document.getElementById('live-streams-grid');
     const loadingEl = document.getElementById('permanent-loading');
-    if (loadingEl && offlineEl && !offlineEl.hidden && loadingEl.style.display !== 'none') {
+    // Only trigger the offline fallback if the live grid is NOT already showing
+    const liveGridIsVisible = liveGrid && liveGrid.childElementCount > 0 && liveGrid.style.display !== 'none' && !liveGrid.hidden;
+    if (!liveGridIsVisible && loadingEl && offlineEl && loadingEl.style.display !== 'none') {
       if (!hubCurrentChannel) updateLiveDisplay([]);
     }
     const discordList = document.getElementById('discord-members-list');
