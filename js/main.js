@@ -207,14 +207,14 @@ async function loadFeaturedCreators() {
       liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null });
     }
 
-    // Collect all live L5+ featured creators (excluding rockboundgaming).
+    // Collect all live featured creators (excluding rockboundgaming), sorted by level desc.
     const liveCreators = creators.filter(c =>
-      c.level >= 5 &&
       c.featured?.toLowerCase() === "yes" &&
       c.twitch !== ROCKBOUND_CHANNEL &&
       (serverLiveUsernames.has(c.twitch) ||
         (!serverDataIsFresh && (c.status === "live" || c.status === "active")))
     );
+    liveCreators.sort((a, b) => b.level - a.level);
     liveStreams.push(...liveCreators);
 
     updateLiveDisplay(liveStreams);
@@ -271,7 +271,7 @@ function updateLiveDisplay(liveStreams) {
 
   if (!liveGrid) return;
 
-  liveGrid.className = `live-streams-grid count-${count}`;
+  liveGrid.className = `stream-grid grid-${count}`;
   liveGrid.hidden = false;
 
   const hostname = window.location.hostname || 'localhost';
@@ -282,20 +282,14 @@ function updateLiveDisplay(liveStreams) {
   const parentParam = parentDomains.map(d => `parent=${encodeURIComponent(d)}`).join('&');
 
   liveGrid.innerHTML = streams.map(s => {
-    const initial = (s.name || s.twitch).charAt(0).toUpperCase();
-    const levelText = (s.level && s.level >= 5) ? `Level ${s.level}` : '';
+    const levelText = s.level ? ` - Level ${s.level}` : '';
     const streamUrl = `https://player.twitch.tv/?channel=${encodeURIComponent(s.twitch)}&${parentParam}&autoplay=true&muted=true`;
     return `
-      <div class="creator-featured">
-        <div class="creator-featured-header">
-          <div class="creator-avatar">${initial}</div>
-          <div class="creator-info">
-            <p class="creator-name">${s.name || s.twitch}</p>
-            ${levelText ? `<p class="creator-level">${levelText}</p>` : ''}
-          </div>
-          <span class="creator-status-badge">&#9679; LIVE</span>
+      <div class="stream-wrapper">
+        <div class="streamer-header">
+          <strong>${s.name || s.twitch}</strong>${levelText}
         </div>
-        <div class="twitch-embed-container">
+        <div class="video-aspect-ratio">
           <iframe
             src="${streamUrl}"
             allowfullscreen
