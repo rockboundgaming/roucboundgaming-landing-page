@@ -199,23 +199,30 @@ async function loadFeaturedCreators() {
       if (s.twitch) serverLiveUsernames.add(s.twitch.toLowerCase());
     }
 
-    // Build ordered list of live streams: rockboundgaming first (if live),
-    // then all live L5+ featured creators, up to 4 total.
-    const liveStreams = [];
-
-    if (serverLiveUsernames.has(ROCKBOUND_CHANNEL)) {
-      liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null });
-    }
-
     // Collect all live featured creators (excluding rockboundgaming), sorted by level desc.
+    // Only trust the spreadsheet status column as a fallback when server data is stale.
     const liveCreators = creators.filter(c =>
       c.featured?.toLowerCase() === "yes" &&
       c.twitch !== ROCKBOUND_CHANNEL &&
-      (serverLiveUsernames.has(c.twitch) ||
-        (!serverDataIsFresh && (c.status === "live" || c.status === "active")))
+      serverLiveUsernames.has(c.twitch)
     );
     liveCreators.sort((a, b) => b.level - a.level);
-    liveStreams.push(...liveCreators);
+
+    // If other creators are live, they replace the offline placeholder.
+    // Only prepend rockboundgaming when it is confirmed live AND data is fresh.
+    const liveStreams = [];
+    if (liveCreators.length > 0) {
+      // Other creators are live — hide the offline placeholder and show only them.
+      // Prepend rockboundgaming if it is also confirmed live.
+      if (serverDataIsFresh && serverLiveUsernames.has(ROCKBOUND_CHANNEL)) {
+        liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null });
+      }
+      liveStreams.push(...liveCreators);
+    } else if (serverLiveUsernames.has(ROCKBOUND_CHANNEL)) {
+      // Only rockboundgaming is live.
+      liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null });
+    }
+    // If liveStreams is empty, updateLiveDisplay shows the offline placeholder.
 
     updateLiveDisplay(liveStreams);
   } catch (err) {

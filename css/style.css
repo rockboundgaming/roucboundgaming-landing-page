@@ -970,7 +970,13 @@ section:nth-child(odd) {
   display: grid;
 }
 
-.stream-grid.grid-1 { grid-template-columns: 1fr; }
+/* Ensure 1 player stays large and centered */
+.stream-grid.grid-1 {
+  display: block;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
 .stream-grid.grid-2 { grid-template-columns: 1fr 1fr; }
 
 /* grid-3: top 2 side-by-side, 3rd centered on bottom */
