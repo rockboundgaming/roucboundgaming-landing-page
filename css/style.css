@@ -132,6 +132,10 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   font-size: 1.5rem;
   cursor: pointer;
   color: var(--white);
+  background: none;
+  border: none;
+  padding: 0;
+  line-height: 1;
 }
 
 /* ============================================
@@ -281,6 +285,11 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   color: white;
   font-weight: 600;
   margin-top: 0.5rem;
+}
+
+.stat-number abbr {
+  text-decoration: none;
+  cursor: default;
 }
 
 /* ============================================

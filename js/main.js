@@ -60,12 +60,16 @@ const navLinks = document.querySelector('.nav-links');
 
 if (menuToggle && navLinks) {
   menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
+    const isActive = navLinks.classList.toggle('active');
+    menuToggle.setAttribute('aria-expanded', String(isActive));
+    menuToggle.setAttribute('aria-label', isActive ? 'Close navigation menu' : 'Open navigation menu');
   });
 
   navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       navLinks.classList.remove('active');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.setAttribute('aria-label', 'Open navigation menu');
     });
   });
 }
@@ -625,16 +629,18 @@ function initCaptcha() {
 
       // Discord returns 204 No Content on success
       if (res.ok || res.status === 204) {
-        alert("Application Sent! Now taking you to our Discord to finish the process.");
-        window.location.href = 'https://discord.gg/SsrHttHX8n';
+        const successScreen = document.getElementById('creator-apply-success');
+        form.style.display = 'none';
+        if (successScreen) successScreen.hidden = false;
       } else {
         throw new Error(`HTTP ${res.status}`);
       }
     } catch (err) {
       console.error('Creator form error:', err);
-      // Fallback: If the webhook fails for any reason, still get them to Discord
-      alert("There was a small error, but we'll take you to Discord to apply manually!");
-      window.location.href = 'https://discord.gg/SsrHttHX8n';
+      showFormStatus(statusEl, 'error', 'Something went wrong — please try again or join our Discord directly.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Application';
+      initCaptcha();
     }
   });
 }());

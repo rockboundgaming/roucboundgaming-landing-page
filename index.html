@@ -10,10 +10,27 @@
 <link rel="icon" href="./assets/logos/favcon.jpg" type="image/jpeg">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#e63946">
+<link rel="canonical" href="https://www.rockboundgaming.ca/">
 
 <title>Rockbound Gaming | Built on the Rock</title>
 <meta name="description" content="Newfoundland's premier gaming community and creator network. Built on the Rock. Gaming Everywhere.">
 
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.rockboundgaming.ca/">
+<meta property="og:site_name" content="Rockbound Gaming">
+<meta property="og:title" content="Rockbound Gaming | Built on the Rock">
+<meta property="og:description" content="Newfoundland's premier gaming community and creator network. Built on the Rock. Gaming Everywhere.">
+<meta property="og:image" content="https://www.rockboundgaming.ca/assets/logos/tplogo.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rockbound Gaming | Built on the Rock">
+<meta name="twitter:description" content="Newfoundland's premier gaming community and creator network. Built on the Rock. Gaming Everywhere.">
+<meta name="twitter:image" content="https://www.rockboundgaming.ca/assets/logos/tplogo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" as="style">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
 
@@ -29,11 +46,11 @@
 <nav>
   <div class="nav-logo">ROCKBOUND<span>GAMING</span></div>
 
-  <div class="menu-toggle">
-    <i class="fas fa-bars"></i>
-  </div>
+  <button class="menu-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-links">
+    <i class="fas fa-bars" aria-hidden="true"></i>
+  </button>
 
-  <ul class="nav-links">
+  <ul class="nav-links" id="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#creators">Creators</a></li>
     <li><a href="#live">Live</a></li>
@@ -49,7 +66,7 @@
   <div class="hero-grid"></div>
 
   <div class="hero-content">
-    <img src="./assets/logos/tplogo.png" alt="Rockbound Gaming Logo" class="hero-logo" loading="lazy">
+    <img src="./assets/logos/tplogo.png" alt="Rockbound Gaming Logo" class="hero-logo" fetchpriority="high" width="1024" height="1024">
 
     <h1 class="hero-tagline-text">
       Built on the Rock.<br>Gaming Everywhere.
@@ -83,8 +100,8 @@
       <div class="stat-label">Community</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number">Community</div>
-      <div class="stat-label">Born & Built</div>
+      <div class="stat-number"><abbr title="Newfoundland">NL</abbr></div>
+      <div class="stat-label">Born &amp; Built</div>
     </div>
   </div>
 </div>
@@ -252,7 +269,7 @@
 
   <div class="live-cta">
     <p>Think you've got what it takes? Reach <strong>Level 5</strong> in our Discord and apply to get your stream featured right here.</p>
-    <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">Apply To Be A Creator</a>
+    <a href="#" class="btn-primary apply-creator-btn">Apply To Be A Creator</a>
   </div>
 </section>
 
@@ -482,7 +499,7 @@
   </div>
 </div>
 
-<script src="/js/main.min.js?v=215" defer></script>
+<script src="/js/main.min.js?v=216" defer></script>
 
 <script>
   if ('serviceWorker' in navigator) {
