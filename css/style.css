@@ -887,13 +887,9 @@ section:nth-child(odd) {
 /* Ensure the embed iframe fills the panel properly */
 .twitch-panel iframe {
   width: 100% !important;
-  height: 450px !important;
-}
-
-@media (max-width: 768px) {
-  .twitch-panel iframe {
-    height: 250px !important;
-  }
+  height: 100% !important;
+  display: block;
+  border: none;
 }
 
 .twitch-panel.is-live {
