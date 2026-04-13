@@ -677,17 +677,7 @@ function initApplyButton() {
     if (statusEl) statusEl.hidden = true;
   }
 
-  // Only the button in the live-cta section below the stream grid opens the modal.
-  const liveCtaBtn = document.querySelector('.live-cta .apply-creator-btn');
-  if (liveCtaBtn) {
-    liveCtaBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      modal.hidden = false;
-      document.body.style.overflow = 'hidden';
-      modal.querySelector('.creator-modal-close')?.focus();
-    });
-  }
-
+  // NOTE: The live-cta apply button links directly to Discord — no modal intercept needed.
   // Close on X button click.
   if (closeBtn) {
     closeBtn.addEventListener('click', closeModal);
