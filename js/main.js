@@ -251,7 +251,14 @@ function updateLiveDisplay(liveStreams) {
 
   if (!liveStreams || liveStreams.length === 0) {
     // Nobody live — show the single offline player for rockboundgaming.
-    if (liveGrid) liveGrid.hidden = true;
+    if (liveGrid) {
+      // Use style.display = 'none' so inline style beats any CSS class rule
+      // (e.g. `.stream-grid.grid-1 { display: block }` has higher specificity
+      // than `.stream-grid { display: none }` and would override [hidden]).
+      liveGrid.style.display = 'none';
+      liveGrid.innerHTML = '';
+      currentGridChannels = '';
+    }
     if (panel) panel.classList.remove('is-live');
     if (titleEl) titleEl.textContent = 'Rockbound Gaming';
     // Use style.display so the CSS `display: flex` rule on #offline-player cannot
@@ -273,7 +280,7 @@ function updateLiveDisplay(liveStreams) {
 
   // Avoid rebuilding the grid if the same channels are already displayed.
   const channelKey = streams.map(s => s.twitch).join(',');
-  if (channelKey === currentGridChannels && liveGrid && !liveGrid.hidden) return;
+  if (channelKey === currentGridChannels && liveGrid && liveGrid.style.display !== 'none') return;
   currentGridChannels = channelKey;
 
   if (!liveGrid) return;
