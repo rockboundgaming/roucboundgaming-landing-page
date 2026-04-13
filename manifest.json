@@ -1,0 +1,23 @@
+{
+  "name": "Rockbound Gaming",
+  "short_name": "RBG",
+  "description": "Newfoundland's premier gaming community and creator network. Built on the Rock. Gaming Everywhere.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#060810",
+  "theme_color": "#e63946",
+  "icons": [
+    {
+      "src": "/assets/logos/favcon.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/logos/tplogo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
