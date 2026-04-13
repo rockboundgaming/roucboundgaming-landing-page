@@ -262,7 +262,7 @@ function updateLiveDisplay(liveStreams) {
   const streams = liveStreams.slice(0, 4);
   const count = streams.length;
 
-  if (titleEl) titleEl.textContent = streams[0].name || 'Rockbound Gaming';
+  if (titleEl) titleEl.textContent = 'Rockbound Gaming';
 
   // Avoid rebuilding the grid if the same channels are already displayed.
   const channelKey = streams.map(s => s.twitch).join(',');
