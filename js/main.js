@@ -618,6 +618,7 @@ function initCaptcha() {
 
     try {
       const payload = {
+        thread_name: `Application: ${name} (${gamertag})`,
         content: `🚀 **New Creator Application**\n**Name:** ${name}\n**Gamertag:** ${gamertag}\n**Platform:** ${platform}\n**Games:** ${games}`
       };
 
