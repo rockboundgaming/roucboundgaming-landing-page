@@ -550,29 +550,17 @@ function escapeHtml(str) {
 // ============================================
 //   CREATOR NETWORK APPLICATION FORM
 // ============================================
-// Paste your Discord webhook URL here to receive applications in your staff channel.
-// NOTE: This URL will be visible in the page source; rotate it if misused.
-const CREATOR_APPLICATION_WEBHOOK = "https://discord.com/api/webhooks/1493294376082735185/8HBvNdge7aGej7rsfSsTfnK5kOh1YLCX7eNVE3NGfSpjhzdtklqARqdIhSxjj5UYBcK4";
-
-// Stores the expected CAPTCHA answer for the current challenge.
-let _captchaAnswer = 0;
-
-function initCaptcha() {
-  const num1 = Math.floor(Math.random() * 10) + 1;
-  const num2 = Math.floor(Math.random() * 10) + 1;
-  _captchaAnswer = num1 + num2;
-  const labelEl = document.getElementById('captcha-label');
-  const inputEl = document.getElementById('creator-captcha');
-  if (labelEl) labelEl.textContent = `What is ${num1} + ${num2}?`;
-  if (inputEl) inputEl.value = '';
-}
+// Discord webhook URL (obfuscated to reduce casual exposure in page source).
+const _wParts = [
+  'aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ5MzI5NDM3NjA4MjczNTE4',
+  'NQ==',
+  '/8HBvNdge7aGej7rsfSsTfnK5kOh1YLCX7eNVE3NGfSpjhzdtklqARqdIhSxjj5UYBcK4'
+];
+const CREATOR_APPLICATION_WEBHOOK = atob(_wParts[0] + _wParts[1]) + _wParts[2];
 
 (function initCreatorForm() {
   const form = document.getElementById('creator-application-form');
   if (!form) return;
-
-  // Render the initial CAPTCHA challenge.
-  initCaptcha();
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -584,21 +572,19 @@ function initCaptcha() {
     const honeypot = form.elements['website'] ? form.elements['website'].value : '';
     if (honeypot) return; // silently drop the submission
 
-    const name     = form.elements['name'].value.trim();
     const gamertag = form.elements['gamertag'].value.trim();
     const platform = form.elements['platform'].value;
     const games    = form.elements['games'].value.trim();
 
-    if (!name || !gamertag || !platform || !games) {
+    if (!gamertag || !platform || !games) {
       showFormStatus(statusEl, 'error', 'Please fill in all fields.');
       return;
     }
 
-    // CAPTCHA verification
-    const captchaVal = parseInt(form.elements['captcha'] ? form.elements['captcha'].value : '', 10);
-    if (isNaN(captchaVal) || captchaVal !== _captchaAnswer) {
-      showFormStatus(statusEl, 'error', 'Incorrect answer — please try the verification again.');
-      initCaptcha();
+    // Checkbox CAPTCHA verification
+    const captchaCheck = document.getElementById('creator-captcha-check');
+    if (!captchaCheck || !captchaCheck.checked) {
+      showFormStatus(statusEl, 'error', 'Please confirm you are not a robot.');
       return;
     }
 
@@ -612,8 +598,8 @@ function initCaptcha() {
 
     try {
       const payload = {
-        thread_name: `Application: ${name} (${gamertag})`,
-        content: `🚀 **New Creator Application**\n**Name:** ${name}\n**Gamertag:** ${gamertag}\n**Platform:** ${platform}\n**Games:** ${games}`
+        thread_name: `Application: ${gamertag}`,
+        content: `**New Creator Application**\n**Gamer tag/Discord name:** ${gamertag}\n**Platform:** ${platform}\n**Games:** ${games}`
       };
 
       const res = await fetch(CREATOR_APPLICATION_WEBHOOK, {
@@ -636,8 +622,7 @@ function initCaptcha() {
       console.error('Creator form error:', err);
       showFormStatus(statusEl, 'error', 'Something went wrong — please try again or join our Discord directly.');
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Submit Application';
-      initCaptcha();
+      submitBtn.textContent = 'Send';
     }
   });
 }());
@@ -665,7 +650,6 @@ function initApplyButton() {
   function openModal() {
     modal.hidden = false;
     document.body.style.overflow = 'hidden';
-    initCaptcha();
   }
 
   function closeModal() {
@@ -674,10 +658,26 @@ function initApplyButton() {
     // Reset form / success-screen state for next open
     const form = document.getElementById('creator-application-form');
     const successScreen = document.getElementById('creator-apply-success');
-    if (form) { form.style.display = ''; form.reset(); initCaptcha(); }
+    const captchaCheck = document.getElementById('creator-captcha-check');
+    const successCheck = document.getElementById('success-confirm-check');
+    const closeSuccessBtn = document.getElementById('success-close-btn');
+    if (form) { form.style.display = ''; form.reset(); }
+    if (captchaCheck) captchaCheck.checked = false;
+    if (successCheck) successCheck.checked = false;
+    if (closeSuccessBtn) closeSuccessBtn.disabled = true;
     if (successScreen) successScreen.hidden = true;
     const statusEl = document.getElementById('creator-form-status');
     if (statusEl) statusEl.hidden = true;
+  }
+
+  // Wire up the success-screen confirm checkbox and close button.
+  const successCheck = document.getElementById('success-confirm-check');
+  const closeSuccessBtn = document.getElementById('success-close-btn');
+  if (successCheck && closeSuccessBtn) {
+    successCheck.addEventListener('change', () => {
+      closeSuccessBtn.disabled = !successCheck.checked;
+    });
+    closeSuccessBtn.addEventListener('click', closeModal);
   }
 
   // "Apply To Be A Creator" button in the live section opens the modal.

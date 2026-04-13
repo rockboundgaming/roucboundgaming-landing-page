@@ -37,7 +37,7 @@
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<link rel="stylesheet" href="/css/style.min.css?v=227">
+<link rel="stylesheet" href="/css/style.min.css?v=228">
 </head>
 
 <body>
@@ -454,15 +454,9 @@
     <form id="creator-application-form" class="creator-form" novalidate>
       <div class="form-row">
         <div class="form-group">
-          <label for="creator-name">Name</label>
-          <input type="text" id="creator-name" name="name" required placeholder="Your full name" maxlength="100">
+          <label for="creator-gamertag">Gamer tag/Discord name</label>
+          <input type="text" id="creator-gamertag" name="gamertag" required placeholder="Your gamer tag or Discord name" maxlength="64">
         </div>
-        <div class="form-group">
-          <label for="creator-gamertag">Gamertag</label>
-          <input type="text" id="creator-gamertag" name="gamertag" required placeholder="Your gamertag" maxlength="64">
-        </div>
-      </div>
-      <div class="form-row">
         <div class="form-group">
           <label for="creator-platform">Primary Platform</label>
           <select id="creator-platform" name="platform" required>
@@ -474,32 +468,40 @@
             <option value="Multiple Platforms">Multiple Platforms</option>
           </select>
         </div>
-        <div class="form-group">
-          <label for="creator-games">Primary Games</label>
-          <input type="text" id="creator-games" name="games" required placeholder="e.g. Fortnite, Warzone, Minecraft" maxlength="200">
-        </div>
+      </div>
+      <div class="form-group">
+        <label for="creator-games">Primary Games</label>
+        <input type="text" id="creator-games" name="games" required placeholder="e.g. Fortnite, Warzone, Minecraft" maxlength="200">
       </div>
       <div id="creator-form-status" class="creator-form-status" hidden></div>
       <div class="form-group captcha-group">
-        <label for="creator-captcha" id="captcha-label">Verification</label>
-        <input type="number" id="creator-captcha" name="captcha" required placeholder="Enter your answer" autocomplete="off" min="0" max="99">
+        <label class="captcha-checkbox-label">
+          <input type="checkbox" id="creator-captcha-check" name="captcha-check">
+          <span class="captcha-checkbox-box"></span>
+          <span>I'm not a robot</span>
+        </label>
       </div>
       <!-- honeypot: must remain empty -->
       <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <button type="submit" class="btn-primary">Submit Application</button>
+      <button type="submit" class="btn-primary">Send</button>
     </form>
 
     <!-- Success screen shown after a successful submission -->
     <div id="creator-apply-success" class="creator-apply-success" hidden>
-      <div class="section-tag">Application Sent!</div>
-      <h3 class="creator-apply-title">Application Sent! 🚀</h3>
+      <h3 class="creator-apply-title">Application Sent!</h3>
       <p class="creator-apply-desc">To finalize your application, you MUST join the Rockbound Discord so we can contact you regarding your status.</p>
       <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">JOIN THE DISCORD NOW</a>
+      <label class="success-confirm-label">
+        <input type="checkbox" id="success-confirm-check">
+        <span class="captcha-checkbox-box"></span>
+        <span>I understand — I will join the Discord</span>
+      </label>
+      <button type="button" id="success-close-btn" class="btn-secondary" disabled>Close</button>
     </div>
   </div>
 </div>
 
-<script src="/js/main.min.js?v=219" defer></script>
+<script src="/js/main.min.js?v=220" defer></script>
 
 <script>
   if ('serviceWorker' in navigator) {

@@ -1449,14 +1449,82 @@ section:nth-child(odd) {
   max-width: 260px;
 }
 
-.captcha-group input {
-  -moz-appearance: textfield;
+/* Checkbox CAPTCHA & success confirm styles */
+.captcha-checkbox-label,
+.success-confirm-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.85);
+  user-select: none;
 }
 
-.captcha-group input::-webkit-outer-spin-button,
-.captcha-group input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+.captcha-checkbox-label input[type="checkbox"],
+.success-confirm-label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.captcha-checkbox-box {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-radius: 4px;
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.captcha-checkbox-label input[type="checkbox"]:checked ~ .captcha-checkbox-box,
+.success-confirm-label input[type="checkbox"]:checked ~ .captcha-checkbox-box {
+  border-color: var(--accent, #e63946);
+  background: var(--accent, #e63946);
+}
+
+.captcha-checkbox-label input[type="checkbox"]:checked ~ .captcha-checkbox-box::after,
+.success-confirm-label input[type="checkbox"]:checked ~ .captcha-checkbox-box::after {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 11px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translateY(-1px);
+}
+
+.success-confirm-label {
+  margin-top: 0.5rem;
+}
+
+.btn-secondary {
+  display: inline-block;
+  padding: 0.65rem 1.75rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: 2px solid rgba(255,255,255,0.35);
+  background: transparent;
+  color: rgba(255,255,255,0.7);
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-secondary:not(:disabled):hover {
+  border-color: rgba(255,255,255,0.7);
+  color: #fff;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 /* ============================================
