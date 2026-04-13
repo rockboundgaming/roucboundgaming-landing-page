@@ -254,16 +254,16 @@ function updateLiveDisplay(liveStreams) {
     if (liveGrid) liveGrid.hidden = true;
     if (panel) panel.classList.remove('is-live');
     if (titleEl) titleEl.textContent = 'Rockbound Gaming';
-    if (offlineContainer) {
-      offlineContainer.hidden = false;
-      offlineContainer.style.display = '';
-    }
+    // Use style.display so the CSS `display: flex` rule on #offline-player cannot
+    // override the hidden attribute (which it would, since author styles beat UA defaults).
+    if (offlineContainer) offlineContainer.style.display = 'flex';
     setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
     return;
   }
 
-  // Live streams present — hide offline player, show multi-stream grid.
-  if (offlineContainer) offlineContainer.hidden = true;
+  // Live streams present — force-hide offline player, show multi-stream grid.
+  // style.display = 'none' beats any CSS rule (e.g. the `display: flex` on #offline-player).
+  if (offlineContainer) offlineContainer.style.display = 'none';
   if (panel) panel.classList.add('is-live');
 
   const streams = liveStreams.slice(0, 4);
@@ -279,6 +279,8 @@ function updateLiveDisplay(liveStreams) {
   if (!liveGrid) return;
 
   liveGrid.className = `stream-grid grid-${count}`;
+  // Remove any leftover inline style so CSS (including mobile media queries) controls display.
+  liveGrid.style.display = '';
   liveGrid.hidden = false;
 
   const hostname = window.location.hostname || 'localhost';
