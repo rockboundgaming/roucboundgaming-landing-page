@@ -262,7 +262,7 @@ function updateLiveDisplay(liveStreams) {
   const streams = liveStreams.slice(0, 4);
   const count = streams.length;
 
-  if (titleEl) titleEl.textContent = streams[0].name || 'Rockbound Gaming';
+  if (titleEl) titleEl.textContent = 'Rockbound Gaming';
 
   // Avoid rebuilding the grid if the same channels are already displayed.
   const channelKey = streams.map(s => s.twitch).join(',');
@@ -617,9 +617,7 @@ function initCaptcha() {
     submitBtn.textContent = 'Sending…';
 
     try {
-      // We use a simpler string-based format to avoid the 400 Bad Request error
       const payload = {
-        username: "Rockbound Gaming",
         content: `🚀 **New Creator Application**\n**Name:** ${name}\n**Gamertag:** ${gamertag}\n**Platform:** ${platform}\n**Games:** ${games}`
       };
 
@@ -635,6 +633,8 @@ function initCaptcha() {
         form.style.display = 'none';
         if (successScreen) successScreen.hidden = false;
       } else {
+        const errBody = await res.text().catch(() => '');
+        console.error('Discord webhook error:', res.status, errBody);
         throw new Error(`HTTP ${res.status}`);
       }
     } catch (err) {
