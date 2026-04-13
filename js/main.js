@@ -617,9 +617,7 @@ function initCaptcha() {
     submitBtn.textContent = 'Sending…';
 
     try {
-      // We use a simpler string-based format to avoid the 400 Bad Request error
       const payload = {
-        username: "Rockbound Gaming",
         content: `🚀 **New Creator Application**\n**Name:** ${name}\n**Gamertag:** ${gamertag}\n**Platform:** ${platform}\n**Games:** ${games}`
       };
 
@@ -635,6 +633,8 @@ function initCaptcha() {
         form.style.display = 'none';
         if (successScreen) successScreen.hidden = false;
       } else {
+        const errBody = await res.text().catch(() => '');
+        console.error('Discord webhook error:', res.status, errBody);
         throw new Error(`HTTP ${res.status}`);
       }
     } catch (err) {
