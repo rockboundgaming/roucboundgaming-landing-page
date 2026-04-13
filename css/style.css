@@ -961,11 +961,15 @@ section:nth-child(odd) {
 /* Live streams grid: up to 4 streams in a responsive grid */
 .live-streams-grid {
   flex: none;
-  display: grid;
+  display: none;
   grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));
   gap: 4px;
   height: auto;
   width: 100%;
+}
+
+.live-streams-grid:not([hidden]) {
+  display: grid;
 }
 
 .live-streams-grid.count-1 {
