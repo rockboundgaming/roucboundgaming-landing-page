@@ -1005,7 +1005,8 @@ section:nth-child(odd) {
   grid-template-columns: 1fr 1fr;
 }
 
-/* grid-4: subtle gold highlight on featured slot (slot 0) */
+/* grid-4: subtle gold highlight on featured slot (slot 0);
+   grid-column span not used here to preserve the balanced 2×2 layout */
 .stream-grid.grid-4 > .stream-wrapper:first-child {
   border-color: var(--gold);
   box-shadow: 0 0 20px rgba(244, 196, 48, 0.4);
@@ -1013,17 +1014,13 @@ section:nth-child(odd) {
 
 /* ---- Featured tile: desktop only (slot 0 gets prominence) ---- */
 @media (min-width: 769px) {
-  /* grid-2: slot 0 full width on top, slot 1 below */
-  .stream-grid.grid-2 > .stream-wrapper:first-child {
-    grid-column: span 2;
-  }
-
-  /* grid-3: slot 0 full width on top, slots 1+2 side by side below */
+  /* grid-2/3: slot 0 full width on top (featured tile) */
+  .stream-grid.grid-2 > .stream-wrapper:first-child,
   .stream-grid.grid-3 > .stream-wrapper:first-child {
     grid-column: span 2;
   }
 
-  /* Reset last-child override — first-child is now the featured slot */
+  /* Reset last-child override — first-child is now the featured slot in grid-3 */
   .stream-grid.grid-3 > .stream-wrapper:last-child {
     grid-column: auto;
     justify-self: auto;

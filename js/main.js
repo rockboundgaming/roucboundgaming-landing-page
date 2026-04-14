@@ -304,7 +304,7 @@ function updateLiveDisplay(liveStreams) {
       return `
         <div class="stream-wrapper">
           <div class="streamer-header">
-            <strong>${s.name || s.twitch}</strong>${levelText}<span class="live-badge">&#x25CF; LIVE</span>
+            <strong>${s.name || s.twitch}</strong>${levelText}<span class="live-badge" aria-label="Live"><span aria-hidden="true">&#x25CF;</span> LIVE</span>
           </div>
           <div class="video-aspect-ratio">
             <iframe
