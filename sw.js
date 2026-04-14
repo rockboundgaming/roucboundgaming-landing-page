@@ -9,7 +9,7 @@ const CACHE_VERSION = 'rbg-v3';
 const PRECACHE_URLS = [
   '/',
   '/index.html',
-  '/css/style.min.css?v=232',
+  '/css/style.min.css?v=233',
   '/js/main.min.js?v=221',
   '/assets/logos/tplogo.png',
   '/assets/logos/favcon.jpg',
