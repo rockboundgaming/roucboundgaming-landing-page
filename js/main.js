@@ -685,12 +685,12 @@ function initApplyButton() {
 
   function openModal() {
     modal.hidden = false;
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
   }
 
   function closeModal() {
     modal.hidden = true;
-    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
     // Reset form / success-screen state for next open
     const form = document.getElementById('creator-application-form');
     const successScreen = document.getElementById('creator-apply-success');
