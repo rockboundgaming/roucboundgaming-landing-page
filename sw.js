@@ -3,7 +3,7 @@
 //   Enables offline support and fast repeat loads
 // ============================================
 
-const CACHE_VERSION = 'rbg-v1';
+const CACHE_VERSION = 'rbg-v2';
 
 // Static assets to pre-cache when the service worker installs.
 const PRECACHE_URLS = [
@@ -62,7 +62,25 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Same-origin static assets — cache first, then network.
+  // JS and CSS — network first, fall back to cache.
+  // These files change on every deploy so we must always try the network first.
+  if (url.origin === self.location.origin &&
+      (url.pathname.endsWith('.js') || url.pathname.endsWith('.css'))) {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_VERSION).then(cache => cache.put(request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  // Same-origin static assets (images, HTML, JSON, etc.) — cache first, then network.
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches.match(request).then(cached => {
