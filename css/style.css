@@ -971,12 +971,12 @@ section::after {
   50%       { box-shadow: 0 0 30px rgba(230,57,70,0.75), 0 0 70px rgba(230,57,70,0.3); }
 }
 
-/* Side-by-side layout; stretch so both panels match each other's height */
+/* Side-by-side layout; JS syncs Discord panel height to match Twitch panel */
 .control-center {
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem;
-  align-items: stretch;
+  align-items: flex-start;
   margin-bottom: 2rem;
   width: 100%;
 }
@@ -986,6 +986,9 @@ section::after {
   flex: 1 1 0;
   min-width: 300px;
   min-height: 300px;    /* Ensures the container has room for the player to init on mobile */
+  align-self: flex-start;
+  height: auto !important;
+  max-height: fit-content !important;
   background: #000;
   border-radius: 8px;
   overflow: hidden;
@@ -1232,7 +1235,7 @@ section::after {
 .discord-panel {
   flex: 0 0 280px;
   min-width: 0;
-  max-height: none;
+  max-height: 500px;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
