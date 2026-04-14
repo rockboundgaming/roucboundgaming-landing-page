@@ -262,7 +262,6 @@ function showOfflineCard() {
       '</picture>' +
       '<div class="offline-text">' +
         '<span class="offline-badge">OFFLINE</span>' +
-        '<p class="offline-handle">@rockboundgaming</p>' +
         '<p>Built on the Rock. Gaming Everywhere.</p>' +
       '</div>' +
       '<a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="btn-primary offline-cta">' +
