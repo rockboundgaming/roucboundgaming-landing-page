@@ -40,8 +40,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/solid.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/brands.min.css">
 
-<link rel="preload" as="image" href="/assets/logos/tplogo.png" fetchpriority="high">
-<link rel="stylesheet" href="/css/style.min.css?v=243">
+<link rel="preload" as="image" href="/assets/logos/tplogo.webp" fetchpriority="high" type="image/webp">
+<link rel="stylesheet" href="/css/style.min.css?v=244">
 </head>
 
 <body>
@@ -72,7 +72,10 @@
 
   <div class="hero-inner">
     <div class="hero-content">
-      <img src="./assets/logos/tplogo.png" alt="Rockbound Gaming Logo" class="hero-logo" fetchpriority="high" width="1024" height="1024">
+      <picture>
+        <source srcset="./assets/logos/tplogo.webp" type="image/webp">
+        <img src="./assets/logos/tplogo.png" alt="Rockbound Gaming Logo" class="hero-logo" fetchpriority="high" width="1024" height="1024">
+      </picture>
 
       <h1 class="hero-tagline-text">
         Built on the Rock.<br>Gaming Everywhere.
@@ -252,13 +255,17 @@
       </div>
       <!-- Offline fallback: branded card shown when no stream is live -->
       <div id="offline-player" class="twitch-embed-container">
-        <div class="offline-placeholder" id="permanent-loading">
-          <img src="/assets/logos/tplogo.png" alt="Rockbound Gaming" class="offline-logo">
+        <div class="offline-placeholder">
+          <picture>
+            <source srcset="/assets/logos/tplogo.webp" type="image/webp">
+            <img src="/assets/logos/tplogo.png" alt="Rockbound Gaming" class="offline-logo">
+          </picture>
           <div class="offline-text">
             <span class="offline-badge">OFFLINE</span>
-            <p>We're not live right now — follow us so you never miss a stream.</p>
+            <p class="offline-handle">@rockboundgaming</p>
+            <p>Built on the Rock. Gaming Everywhere.</p>
           </div>
-          <a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="btn-primary">
+          <a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="btn-primary offline-cta">
             <i class="fab fa-twitch"></i>&nbsp; Follow on Twitch
           </a>
         </div>
@@ -544,7 +551,7 @@
   </div>
 </div>
 
-<script src="/js/main.min.js?v=222" defer></script>
+<script src="/js/main.min.js?v=223" defer></script>
 
 <script>
   if ('serviceWorker' in navigator) {
