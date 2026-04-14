@@ -32,8 +32,8 @@ html { scroll-behavior: smooth; max-width: 100vw; overflow-x: hidden; }
 /* BASE */
 body {
   background:
-    radial-gradient(circle at 20% 40%, rgba(230,57,70,0.10), transparent 55%),
-    radial-gradient(circle at 80% 60%, rgba(69,123,157,0.12), transparent 50%),
+    radial-gradient(circle at 20% 40%, rgba(230,57,70,0.05), transparent 55%),
+    radial-gradient(circle at 80% 60%, rgba(69,123,157,0.06), transparent 50%),
     var(--darker);
   color: var(--white);
   font-family: 'Barlow', sans-serif;
@@ -444,6 +444,17 @@ section {
   background: transparent;
 }
 
+#about,
+#creators,
+#live,
+#roadmap,
+#community,
+#platforms {
+  background:
+    radial-gradient(circle at 20% 50%, rgba(230,57,70,0.06), transparent 55%),
+    radial-gradient(circle at 80% 50%, rgba(69,123,157,0.06), transparent 50%);
+}
+
 .section-inner {
   max-width: var(--container-max);
   margin: 0 auto;
@@ -604,11 +615,12 @@ section::after {
    ============================================ */
 .card {
   background: var(--card);
-  border: 1px solid rgba(230,57,70,0.2);
+  border: 1px solid rgba(230,57,70,0.15);
   padding: 1.5rem;
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
+  box-shadow: 0 0 18px rgba(230,57,70,0.07), 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .card::before {
@@ -638,9 +650,9 @@ section::after {
 }
 
 .card:hover {
-  transform: translateY(-8px);
-  border-color: var(--red);
-  box-shadow: 0 15px 40px rgba(230,57,70,0.2), 0 0 20px rgba(230,57,70,0.1);
+  transform: translateY(-5px);
+  border-color: rgba(230,57,70,0.5);
+  box-shadow: 0 8px 24px rgba(230,57,70,0.13), 0 0 14px rgba(230,57,70,0.08);
   background: linear-gradient(135deg, rgba(17,24,39,1) 0%, rgba(17,24,39,0.95) 100%);
 }
 
