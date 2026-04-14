@@ -12,8 +12,8 @@
   --card: #111827;
   --silver-light: #D3D3D3;
   --silver-dark: #A9A9A9;
-  --container-max: 1500px;
-  --container-pad: 6rem 2rem;
+  --container-max: 1200px;
+  --container-pad: 5rem 3rem;
 
   --space-1: .5rem;
   --space-2: 1rem;
@@ -523,7 +523,7 @@ section:nth-of-type(odd) {
 
 .community-features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   margin-top: 2rem;
   text-align: left;
@@ -531,7 +531,7 @@ section:nth-of-type(odd) {
 
 .roadmap-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
 }
 
@@ -668,12 +668,6 @@ section:nth-of-type(odd) {
    FEATURE CARDS
    ============================================ */
 .feature-card { border: 1px solid rgba(255,255,255,0.05); }
-
-.feature-card:last-child {
-  grid-column: 1 / -1;
-  max-width: 33.333%;
-  margin: 0 auto;
-}
 
 .feature-card p { font-size: 1.1rem; }
 
@@ -1804,7 +1798,7 @@ footer {
    ============================================ */
 @media (max-width: 1024px) {
   :root {
-    --container-pad: 4rem 2rem;
+    --container-pad: 4rem 2.5rem;
   }
 
   .nav-links {
@@ -1970,9 +1964,8 @@ footer {
     grid-template-columns: 1fr;
   }
 
-  .feature-card:last-child {
-    max-width: 100%;
-    margin: 0;
+  .community-features {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .creator-perks,
@@ -2211,6 +2204,14 @@ footer {
   .section-title {
     font-size: clamp(1.5rem, 4vw, 2.5rem);
     margin-bottom: 1rem;
+  }
+
+  .community-features {
+    grid-template-columns: 1fr;
+  }
+
+  .roadmap-grid {
+    grid-template-columns: 1fr;
   }
 
   .card {
