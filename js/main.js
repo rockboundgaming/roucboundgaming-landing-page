@@ -235,6 +235,27 @@ async function loadFeaturedCreators() {
 //   SINGLE-STREAM HUB
 // ============================================
 
+// ============================================
+//   DISCORD / TWITCH HEIGHT SYNC
+// ============================================
+/**
+ * Sets the Discord panel height to exactly match the rendered height of the
+ * Twitch panel on desktop (> 768 px). On mobile the inline style is cleared so
+ * CSS stacking rules take over.
+ */
+function syncDiscordHeight() {
+  const twitchPanel = document.getElementById('twitch-panel');
+  const discordPanel = document.querySelector('.discord-panel');
+  if (!twitchPanel || !discordPanel) return;
+  if (window.innerWidth > 768) {
+    discordPanel.style.height = twitchPanel.offsetHeight + 'px';
+    discordPanel.style.maxHeight = twitchPanel.offsetHeight + 'px';
+  } else {
+    discordPanel.style.height = '';
+    discordPanel.style.maxHeight = '';
+  }
+}
+
 /**
  * Shows the multi-stream live grid when one or more creators are live,
  * or falls back to the single-channel offline player when nobody is live.
@@ -316,6 +337,7 @@ function updateLiveDisplay(liveStreams) {
           </div>
         </div>`;
     }).join('');
+    requestAnimationFrame(syncDiscordHeight);
   }
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -435,6 +457,7 @@ function setHubStream(channelName, displayName) {
   } catch (e) {
     console.error('Hub player init error:', e);
   }
+  requestAnimationFrame(syncDiscordHeight);
 }
 
 // ============================================
@@ -488,6 +511,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 setInterval(loadFeaturedCreators, 1 * 60 * 1000);
 // Refresh Discord member list every 3 minutes
 setInterval(fetchDiscordMembers, 3 * 60 * 1000);
+
+// Sync Discord panel height to Twitch panel on resize (debounced)
+let _discordSyncTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(_discordSyncTimer);
+  _discordSyncTimer = setTimeout(syncDiscordHeight, 150);
+});
+
+// Initial height sync after the player has had a chance to render
+requestAnimationFrame(function() {
+  setTimeout(syncDiscordHeight, 300);
+});
 
 // ============================================
 //   DISCORD ONLINE MEMBERS
