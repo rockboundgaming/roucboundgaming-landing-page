@@ -250,11 +250,17 @@
           <i class="fab fa-twitch"></i> <span id="panel-stream-title">Rockbound Gaming</span>
         </span>
       </div>
-      <!-- Offline fallback: single RockboundGaming player (shown when no one is live) -->
+      <!-- Offline fallback: branded card shown when no stream is live -->
       <div id="offline-player" class="twitch-embed-container">
-        <div class="stream-loading" id="permanent-loading">
-          <i class="fas fa-spinner fa-spin"></i>
-          <p>Loading stream...</p>
+        <div class="offline-placeholder" id="permanent-loading">
+          <img src="/assets/logos/tplogo.png" alt="Rockbound Gaming" class="offline-logo">
+          <div class="offline-text">
+            <span class="offline-badge">OFFLINE</span>
+            <p>We're not live right now — follow us so you never miss a stream.</p>
+          </div>
+          <a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="btn-primary">
+            <i class="fab fa-twitch"></i>&nbsp; Follow on Twitch
+          </a>
         </div>
       </div>
       <!-- Live stream grid: up to 4 streams (shown when anyone is live) -->
