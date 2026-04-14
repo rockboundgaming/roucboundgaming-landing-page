@@ -19,7 +19,7 @@ function reveal() {
   reveals.forEach(element => {
     const windowHeight = window.innerHeight;
     const revealTop = element.getBoundingClientRect().top;
-    const revealPoint = 150;
+    const revealPoint = 100;
 
     if (revealTop < windowHeight - revealPoint) {
       element.classList.add('visible');
@@ -27,7 +27,7 @@ function reveal() {
   });
 }
 
-window.addEventListener('scroll', debounce(reveal, 100));
+window.addEventListener('scroll', debounce(reveal, 50));
 reveal();
 
 // ============================================
