@@ -506,9 +506,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   initApplyButton();
 });
 
-// Re-check every 1 minute: preempts any active Level-5 stream back to rockbound
-// the moment the main channel goes live, and handles streamers going offline.
-setInterval(loadFeaturedCreators, 1 * 60 * 1000);
+// Re-check every 3 minutes: matches the GitHub Actions live-status.json refresh cadence
+// and reduces unnecessary mobile data usage vs the previous 60-second interval.
+setInterval(loadFeaturedCreators, 3 * 60 * 1000);
 // Refresh Discord member list every 3 minutes
 setInterval(fetchDiscordMembers, 3 * 60 * 1000);
 

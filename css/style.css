@@ -35,7 +35,6 @@ body {
     radial-gradient(circle at 20% 30%, rgba(230,57,70,0.18), transparent 55%),
     radial-gradient(circle at 80% 10%, rgba(69,123,157,0.20), transparent 50%),
     var(--darker);
-  background-attachment: fixed;
   color: var(--white);
   font-family: 'Barlow', sans-serif;
   overflow-x: hidden;
@@ -67,8 +66,8 @@ body::before {
 }
 
 @keyframes pulse {
-  0%, 100% { box-shadow: 0 0 10px rgba(230,57,70,0.5); }
-  50% { box-shadow: 0 0 20px rgba(230,57,70,0.8); }
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
 }
 
 @keyframes tileEnter {
@@ -965,10 +964,9 @@ section::after {
    ============================================ */
 
 /* Rock Hub section uses the same container width as all other sections */
-/* Glow pulse animation for live state */
-@keyframes liveGlow {
-  0%, 100% { box-shadow: 0 0 15px rgba(230,57,70,0.4), 0 0 40px rgba(230,57,70,0.15); }
-  50%       { box-shadow: 0 0 30px rgba(230,57,70,0.75), 0 0 70px rgba(230,57,70,0.3); }
+.twitch-panel.is-live {
+  border-color: rgba(230,57,70,0.6);
+  box-shadow: 0 0 25px rgba(230,57,70,0.45), 0 0 60px rgba(230,57,70,0.18);
 }
 
 /* Side-by-side layout; JS syncs Discord panel height to match Twitch panel */
@@ -1004,11 +1002,6 @@ section::after {
   height: 100% !important;
   display: block;
   border: none;
-}
-
-.twitch-panel.is-live {
-  border-color: rgba(230,57,70,0.6);
-  animation: liveGlow 2.5s ease-in-out infinite;
 }
 
 /* Remove the default margin/radius on the embed container inside the panel;
