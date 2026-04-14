@@ -2276,3 +2276,44 @@ footer {
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================
+   HERO FULL-WIDTH FIX — Desktop
+   Override section container constraints
+   ============================================ */
+section.hero {
+  max-width: 100%;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.hero-inner {
+  max-width: 100%;
+  width: 100%;
+  padding: 0 2rem;
+}
+
+.hero-stats {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+@media (min-width: 1024px) {
+  section.hero {
+    max-width: 100%;
+    width: 100%;
+  }
+  .hero-inner {
+    max-width: 1400px;
+    width: 100%;
+    padding: 0 3rem;
+    margin: 0 auto;
+  }
+  .hero-stats {
+    width: 100%;
+  }
+}
