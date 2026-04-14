@@ -31,7 +31,11 @@ html { scroll-behavior: smooth; overflow-x: hidden; }
 
 /* BASE */
 body {
-  background: var(--darker);
+  background:
+    radial-gradient(circle at 20% 30%, rgba(230,57,70,0.12), transparent 55%),
+    radial-gradient(circle at 80% 10%, rgba(69,123,157,0.15), transparent 50%),
+    var(--darker);
+  background-attachment: fixed;
   color: var(--white);
   font-family: 'Barlow', sans-serif;
   overflow-x: hidden;
