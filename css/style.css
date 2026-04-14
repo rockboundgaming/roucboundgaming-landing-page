@@ -1,8 +1,10 @@
-/* Updated background property */
 .hero-bg {
-    background:
-        url("./assets/backgrounds/hero.webp") center/cover no-repeat,
-        radial-gradient(circle at 20% 50%, rgba(230,57,70,0.15), transparent 60%),
-        radial-gradient(circle at 80% 20%, rgba(69,123,157,0.2), transparent 50%),
-        var(--darker);
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(230,57,70,0.15), transparent 60%),
+    radial-gradient(circle at 80% 20%, rgba(69,123,157,0.2), transparent 50%),
+    var(--darker);
+  animation: parallax 6s ease-in-out infinite;
+  z-index: 0;
 }
