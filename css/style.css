@@ -1027,14 +1027,13 @@ section::after {
 @keyframes offlineBadgePulse {
   0%, 100% {
     text-shadow:
-      0 0 10px rgba(255,75,75,0.5),
-      0 0 22px rgba(255,75,75,0.25);
+      0 0 6px rgba(255,75,75,0.3),
+      0 0 14px rgba(255,75,75,0.12);
   }
   50% {
     text-shadow:
-      0 0 18px rgba(255,75,75,0.95),
-      0 0 40px rgba(255,75,75,0.55),
-      0 0 70px rgba(255,75,75,0.25);
+      0 0 10px rgba(255,75,75,0.5),
+      0 0 24px rgba(255,75,75,0.25);
   }
 }
 
@@ -1052,8 +1051,8 @@ section::after {
 }
 
 .offline-logo {
-  max-width: 160px;
-  width: 45%;
+  max-width: 220px;
+  width: 58%;
   opacity: 0.9;
   filter: drop-shadow(0 0 14px rgba(255,75,75,0.5));
 }
@@ -1072,8 +1071,8 @@ section::after {
   letter-spacing: clamp(4px, 1.5vw, 8px);
   color: #ff4b4b;
   line-height: 1;
-  text-shadow: 0 0 10px rgba(255,75,75,0.5), 0 0 22px rgba(255,75,75,0.25);
-  animation: offlineBadgePulse 2s ease-in-out infinite;
+  text-shadow: 0 0 6px rgba(255,75,75,0.3), 0 0 14px rgba(255,75,75,0.12);
+  animation: offlineBadgePulse 3s ease-in-out infinite;
 }
 
 .offline-text p {
