@@ -40,7 +40,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/solid.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/brands.min.css">
 
-<link rel="preload" as="image" href="/assets/logos/tplogo.png" fetchpriority="high">
+<link rel="preload" as="image" href="/assets/logos/tplogo.webp" fetchpriority="high" type="image/webp">
 <link rel="stylesheet" href="/css/style.min.css?v=244">
 </head>
 
@@ -72,7 +72,10 @@
 
   <div class="hero-inner">
     <div class="hero-content">
-      <img src="./assets/logos/tplogo.png" alt="Rockbound Gaming Logo" class="hero-logo" fetchpriority="high" width="1024" height="1024">
+      <picture>
+        <source srcset="./assets/logos/tplogo.webp" type="image/webp">
+        <img src="./assets/logos/tplogo.png" alt="Rockbound Gaming Logo" class="hero-logo" fetchpriority="high" width="1024" height="1024">
+      </picture>
 
       <h1 class="hero-tagline-text">
         Built on the Rock.<br>Gaming Everywhere.
@@ -253,7 +256,10 @@
       <!-- Offline fallback: branded card shown when no stream is live -->
       <div id="offline-player" class="twitch-embed-container">
         <div class="offline-placeholder">
-          <img src="/assets/logos/tplogo.png" alt="Rockbound Gaming" class="offline-logo">
+          <picture>
+            <source srcset="/assets/logos/tplogo.webp" type="image/webp">
+            <img src="/assets/logos/tplogo.png" alt="Rockbound Gaming" class="offline-logo">
+          </picture>
           <div class="offline-text">
             <span class="offline-badge">OFFLINE</span>
             <p class="offline-handle">@rockboundgaming</p>
@@ -545,7 +551,7 @@
   </div>
 </div>
 
-<script src="/js/main.min.js?v=222" defer></script>
+<script src="/js/main.min.js?v=223" defer></script>
 
 <script>
   if ('serviceWorker' in navigator) {

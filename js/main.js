@@ -256,7 +256,10 @@ function showOfflineCard() {
   container.style.display = 'flex';
   container.innerHTML =
     '<div class="offline-placeholder">' +
-      '<img src="/assets/logos/tplogo.png" alt="Rockbound Gaming" class="offline-logo">' +
+      '<picture>' +
+        '<source srcset="/assets/logos/tplogo.webp" type="image/webp">' +
+        '<img src="/assets/logos/tplogo.png" alt="Rockbound Gaming" class="offline-logo">' +
+      '</picture>' +
       '<div class="offline-text">' +
         '<span class="offline-badge">OFFLINE</span>' +
         '<p class="offline-handle">@rockboundgaming</p>' +
@@ -388,7 +391,7 @@ function updateLiveDisplay(liveStreams) {
  * the channel name changes, avoiding 404 MasterPlaylist errors that occur
  * when the channel is swapped by mutating the iframe src directly.
  */
-function setHubStream(channelName, displayName) {
+async function setHubStream(channelName, displayName) {
   const container = document.getElementById('offline-player');
   const panel = document.getElementById('twitch-panel');
   const titleEl = document.getElementById('panel-stream-title');
@@ -434,8 +437,11 @@ function setHubStream(channelName, displayName) {
   hubPlayer = null;
   container.innerHTML = '<div class="stream-loading" id="permanent-loading"><i class="fas fa-spinner fa-spin"></i><p>Loading stream...</p></div>';
 
+  // Lazily load the Twitch SDK only when we actually need a player.
+  await initTwitchScript();
+
   if (!window.Twitch || !window.Twitch.Player) {
-    console.warn('Twitch.Player not yet available — channel queued for when script loads.');
+    console.warn('Twitch.Player not available.');
     return;
   }
 
@@ -528,7 +534,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
     .catch(e => console.warn('Could not load site-data.json:', e));
 
-  await initTwitchScript();
   updateLiveDisplay([]);
   await loadFeaturedCreators();
   fetchDiscordMembers();
