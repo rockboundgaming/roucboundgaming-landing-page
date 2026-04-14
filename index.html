@@ -1,1 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://player.twitch.tv https://embed.twitch.tv https://www.twitch.tv https://static.twitchsvc.net https://assets.twitch.tv; frame-src https://player.twitch.tv https://embed.twitch.tv https://www.twitch.tv https://discord.com; connect-src 'self' https://discord.com https://discordapp.com https://api.rockboundgaming.ca; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;">
+<link rel="icon" href="./assets/logos/favcon.jpg" type="image/jpeg">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#e63946">
+<link rel="canonical" href="https://www.rockboundgaming.ca/">
+
+<title>Rockbound Gaming | Built on the Rock</title>
+<meta name="description" content="Newfoundland's premier gaming community and creator network. Built on the Rock. Gaming Everywhere.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.rockboundgaming.ca/">
+<meta property="og:site_name" content="Rockbound Gaming">
+<meta property="og:title" content="Rockbound Gaming | Built on the Rock">
+<meta property="og:description" content="Newfoundland's premier gaming community and creator network. Built on the Rock. Gaming Everywhere.">
+<meta property="og:image" content="https://www.rockboundgaming.ca/assets/logos/tplogo.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rockbound Gaming | Built on the Rock">
+<meta name="twitter:description" content="Newfoundland's premier gaming community and creator network. Built on the Rock. Gaming Everywhere.">
+<meta name="twitter:image" content="https://www.rockboundgaming.ca/assets/logos/tplogo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://player.twitch.tv">
+<link rel="preconnect" href="https://discord.com">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" as="style">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
+
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <link rel="stylesheet" href="/css/style.css?v=234">
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">ROCKBOUND<span>GAMING</span></div>
+
+  <button class="menu-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-links">
+    <i class="fas fa-bars" aria-hidden="true"></i>
+  </button>
+
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#creators">Creators</a></li>
+    <li><a href="#live">Live</a></li>
+    <li><a href="#community">Community</a></li>
+    <li><a href="#platforms">Find Us</a></li>
+    <li><a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer">Join Discord</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-inner">
+    <div class="hero-content">
+      <img src="./assets/logos/tplogo.png" alt="Rockbound Gaming Logo" class="hero-logo" fetchpriority="high" width="1024" height="1024">
+
+      <h1 class="hero-tagline-text">
+        Built on the Rock.<br>Gaming Everywhere.
+      </h1>
+
+      <div class="hero-btns">
+        <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">Join Discord</a>
+        <a href="#creators" class="btn-primary">Creator Network</a>
+      </div>
+
+      <div class="authority-line">
+        Building the Future of Unstoppable Content Creators
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-number" id="stat-members">121+</div>
+      <div class="stat-label">Discord Members</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" id="stat-followers">198+</div>
+      <div class="stat-label">Facebook Followers</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">4</div>
+      <div class="stat-label">Platforms</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">18+</div>
+      <div class="stat-label">Community</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number"><abbr title="Newfoundland">NL</abbr></div>
+      <div class="stat-label">Born &amp; Built</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid reveal">
+    <div class="about-text">
+      <div class="section-tag">Who We Are</div>
+      <h2 class="section-title">YOUR <span>GAMING</span> HUB</h2>
+
+      <p>Rockbound Gaming isn't just a Discord server — we're building <strong>a full gaming community platform for gamers proud of where they come from.</strong></p>
+
+      <p>Whether you stream, watch, play casually, or grind competitively — you belong here.</p>
+
+      <p>Nobody was doing this. <strong>So we built it.</strong></p>
+
+      <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">
+        Join The Rockbound Movement
+      </a>
+    </div>
+
+    <div class="about-cards">
+      <div class="card">
+        <div class="card-icon"><i class="fas fa-gamepad"></i></div>
+        <h4>All Platforms</h4>
+        <p>PC, Xbox, PlayStation — all welcome.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fas fa-water"></i></div>
+        <h4>Rock Proud</h4>
+        <p>Built on the Rock. Bound to where we came from.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fas fa-tv"></i></div>
+        <h4>Creator Support</h4>
+        <p>We promote and grow streamers across all platforms.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fas fa-users"></i></div>
+        <h4>18+ Community</h4>
+        <p>Mature, respectful, good vibes only.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CREATORS -->
+<section id="creators" class="creator-section">
+  <div class="reveal">
+    <div class="section-tag">Creator Network</div>
+    <h2 class="section-title">GET IN <span>EARLY</span></h2>
+
+    <p class="creator-intro">The digital landscape is changing, and <strong>Rockbound Gaming</strong> is leading the charge. Our <strong>Creator Network</strong> is officially launching—giving streamers and content creators a platform, a community, and the tools to grow.</p>
+
+    <div class="creator-perks">
+      <div class="card perk-card">
+        <div class="perk-icon"><i class="fas fa-key"></i></div>
+        <div class="perk-content">
+          <h4>Stream Key Access</h4>
+          <p>Stream directly on the Rockbound Gaming Twitch channel.</p>
+        </div>
+      </div>
+
+      <div class="card perk-card">
+        <div class="perk-icon"><i class="fas fa-palette"></i></div>
+        <div class="perk-content">
+          <h4>Custom Branded Overlays</h4>
+          <p>Professional overlays with your gamertag and socials. Look like a pro from day one.</p>
+        </div>
+      </div>
+
+      <div class="card perk-card">
+        <div class="perk-icon"><i class="fas fa-bullhorn"></i></div>
+        <div class="perk-content">
+          <h4>Full Cross Promotion</h4>
+          <p>Your streams and clips promoted across Discord, Facebook, TikTok, Twitch and YouTube.</p>
+        </div>
+      </div>
+
+      <div class="card perk-card">
+        <div class="perk-icon"><i class="fas fa-microphone"></i></div>
+        <div class="perk-content">
+          <h4>Creator's Hub</h4>
+          <p>Private Discord channels, collab opportunities, and a dedicated team behind you.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="creator-perks-bottom">
+      <div class="card perk-card">
+        <div class="perk-icon"><i class="fas fa-broadcast-tower"></i></div>
+        <div class="perk-content">
+          <h4>Hosted Streaming</h4>
+          <p>No beefy PC required. Stream through our setup and we handle the heavy lifting.</p>
+        </div>
+      </div>
+
+      <div class="card perk-card">
+        <div class="perk-icon"><i class="fas fa-trophy"></i></div>
+        <div class="perk-content">
+          <h4>Streamer of the Month</h4>
+          <p>Monthly spotlight feature across all our platforms. Your moment to shine.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="creator-cta">
+      <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">JOIN DISCORD</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMMUNITY CONTROL CENTER -->
+<section id="live" class="reveal">
+  <div class="section-tag">Community Control Center</div>
+  <h2 class="section-title">THE <span>ROCK</span> HUB</h2>
+
+  <div class="control-center">
+
+    <!-- Unified Stream Area -->
+    <div class="twitch-panel" id="twitch-panel">
+      <div class="panel-header">
+        <span class="panel-title">
+          <i class="fab fa-twitch"></i> <span id="panel-stream-title">Rockbound Gaming</span>
+        </span>
+      </div>
+      <!-- Offline fallback: single RockboundGaming player (shown when no one is live) -->
+      <div id="offline-player" class="twitch-embed-container">
+        <div class="stream-loading" id="permanent-loading">
+          <i class="fas fa-spinner fa-spin"></i>
+          <p>Loading stream...</p>
+        </div>
+      </div>
+      <!-- Live stream grid: up to 4 streams (shown when anyone is live) -->
+      <div id="live-streams-grid" class="stream-grid" hidden></div>
+    </div>
+
+    <!-- Discord Online Members Panel -->
+    <div class="discord-panel">
+      <div class="panel-header discord-panel-header">
+        <span class="panel-title">
+          <i class="fab fa-discord"></i> Online Now
+        </span>
+        <span class="discord-online-count" id="discord-online-count"></span>
+      </div>
+      <ul class="discord-members-list" id="discord-members-list" aria-label="Online Discord members">
+        <li class="discord-loading-item">
+          <i class="fas fa-circle-notch fa-spin"></i>
+          <span>Loading members…</span>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="live-cta">
+    <p>Think you've got what it takes? Reach <strong>Level 5</strong> in our Discord and apply to get your stream featured right here.</p>
+    <button type="button" class="btn-primary apply-creator-btn" id="live-cta-apply-btn">Apply To Be A Creator</button>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ROADMAP -->
+<section id="roadmap" class="reveal">
+  <div class="roadmap-section">
+    <h3 class="roadmap-title">THE ROADMAP</h3>
+    <p class="roadmap-subtitle">What's Coming</p>
+
+    <div class="roadmap-grid">
+      <div class="card roadmap-item">
+        <div class="roadmap-num">01</div>
+        <div class="roadmap-content">
+          <h4>Streamer Program Launch</h4>
+          <p>Stream keys, overlays, and Creator's Hub access. Get set up and go live under the Rockbound Gaming banner.</p>
+        </div>
+      </div>
+
+      <div class="card roadmap-item">
+        <div class="roadmap-num">02</div>
+        <div class="roadmap-content">
+          <h4>Featured Streamer Roster</h4>
+          <p>An official roster of verified Rockbound Gaming creators promoted across all our platforms.</p>
+        </div>
+      </div>
+
+      <div class="card roadmap-item">
+        <div class="roadmap-num">03</div>
+        <div class="roadmap-content">
+          <h4>Hosted Streaming Network</h4>
+          <p>Stream through our setup with no expensive hardware required. We provide the infrastructure, you provide the content.</p>
+        </div>
+      </div>
+
+      <div class="card roadmap-item">
+        <div class="roadmap-num">04</div>
+        <div class="roadmap-content">
+          <h4>Collab Events & Game Nights</h4>
+          <p>Organized community events, tournaments, and co-streams featuring our creator roster.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMMUNITY -->
+<section id="community">
+  <div class="reveal">
+    <div class="section-tag">Community</div>
+    <h2 class="section-title">EVERYTHING YOU <span>NEED</span></h2>
+
+    <p class="community-desc">Join 121+ members in a space built for players, streamers, and creators.</p>
+
+    <div class="community-features">
+      <div class="card feature-card">
+        <span class="feature-icon"><i class="fas fa-computer"></i></span>
+        <h4>Digital Garage</h4>
+        <p>Show off your rig and get build advice.</p>
+      </div>
+
+      <div class="card feature-card">
+        <span class="feature-icon"><i class="fas fa-film"></i></span>
+        <h4>Clips & Highlights</h4>
+        <p>Share your best moments.</p>
+      </div>
+
+      <div class="card feature-card">
+        <span class="feature-icon"><i class="fas fa-crosshairs"></i></span>
+        <h4>Game Channels</h4>
+        <p>Dedicated rooms for every game.</p>
+      </div>
+
+      <div class="card feature-card">
+        <span class="feature-icon"><i class="fas fa-headset"></i></span>
+        <h4>Voice Chat</h4>
+        <p>Always someone to play with.</p>
+      </div>
+
+      <div class="card feature-card">
+        <span class="feature-icon"><i class="fas fa-gift"></i></span>
+        <h4>Free Games</h4>
+        <p>Never miss a free game alert.</p>
+      </div>
+
+      <div class="card feature-card">
+        <span class="feature-icon"><i class="fas fa-paw"></i></span>
+        <h4>Pets-R-Us</h4>
+        <p>Show off your gaming buddy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PLATFORMS -->
+<section id="platforms">
+  <div class="reveal">
+    <div class="section-tag">Find Us</div>
+    <h2 class="section-title">WE'RE <span>EVERYWHERE</span></h2>
+
+    <div class="platforms-grid">
+      <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="platform-card">
+        <span class="platform-icon"><i class="fab fa-discord"></i></span>
+        <div class="platform-name">Discord</div>
+        <div class="platform-handle">rockboundgaming</div>
+      </a>
+
+      <a href="https://www.facebook.com/profile.php?id=61578495384408" target="_blank" rel="noopener noreferrer" class="platform-card">
+        <span class="platform-icon"><i class="fab fa-facebook"></i></span>
+        <div class="platform-name">Facebook</div>
+        <div class="platform-handle">Rockbound Gaming</div>
+      </a>
+
+      <a href="https://www.tiktok.com/@rockboundgaming" target="_blank" rel="noopener noreferrer" class="platform-card">
+        <span class="platform-icon"><i class="fab fa-tiktok"></i></span>
+        <div class="platform-name">TikTok</div>
+        <div class="platform-handle">@rockboundgaming</div>
+      </a>
+
+      <a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="platform-card">
+        <span class="platform-icon"><i class="fab fa-twitch"></i></span>
+        <div class="platform-name">Twitch</div>
+        <div class="platform-handle">rockboundgaming</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>JOIN THE ROCKBOUND MOVEMENT</h2>
+  <p>121+ members already inside.</p>
+
+  <div class="cta-btns">
+    <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-white">
+      Join Discord Now
+    </a>
+    <a href="mailto:rockboundgaming@gmail.com" class="btn-dark">Contact Us</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ROCKBOUND<span>GAMING</span></div>
+  <div class="footer-tagline">Built on the Rock. Gaming Everywhere.</div>
+  
+  <div class="footer-links">
+    <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer">
+      <i class="fab fa-discord"></i>
+      <span>Discord</span>
+    </a>
+    <a href="https://www.facebook.com/profile.php?id=61578495384408" target="_blank" rel="noopener noreferrer">
+      <i class="fab fa-facebook"></i>
+      <span>Facebook</span>
+    </a>
+    <a href="https://www.tiktok.com/@rockboundgaming" target="_blank" rel="noopener noreferrer">
+      <i class="fab fa-tiktok"></i>
+      <span>TikTok</span>
+    </a>
+    <a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer">
+      <i class="fab fa-twitch"></i>
+      <span>Twitch</span>
+    </a>
+  </div>
+  
+  <div class="footer-copy">© 2026 Rockbound Gaming</div>
+</footer>
+
+<!-- CREATOR APPLICATION MODAL -->
+<div id="creator-modal" class="creator-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="creator-modal-title" hidden>
+  <div class="creator-modal">
+    <button class="creator-modal-close" id="creator-modal-close" aria-label="Close">&times;</button>
+    <div class="section-tag">Apply Now</div>
+    <h3 class="creator-apply-title" id="creator-modal-title">JOIN THE CREATOR NETWORK</h3>
+    <p class="creator-apply-desc">Ready to create? Fill out the form below and our team will reach out through Discord.</p>
+
+    <form id="creator-application-form" class="creator-form" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="creator-gamertag">Gamer tag/Discord name</label>
+          <input type="text" id="creator-gamertag" name="gamertag" required placeholder="Your gamer tag or Discord name" maxlength="64">
+        </div>
+        <div class="form-group">
+          <label for="creator-platform">Primary Platform</label>
+          <select id="creator-platform" name="platform" required>
+            <option value="" disabled selected>Select your platform</option>
+            <option value="PC">PC</option>
+            <option value="Xbox">Xbox</option>
+            <option value="PlayStation">PlayStation</option>
+            <option value="Mobile">Mobile</option>
+            <option value="Multiple Platforms">Multiple Platforms</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="creator-games">Primary Games</label>
+        <input type="text" id="creator-games" name="games" required placeholder="e.g. Fortnite, Warzone, Minecraft" maxlength="200">
+      </div>
+      <div id="creator-form-status" class="creator-form-status" hidden></div>
+      <div class="form-group captcha-group">
+        <label class="captcha-checkbox-label">
+          <input type="checkbox" id="creator-captcha-check" name="captcha-check">
+          <span class="captcha-checkbox-box"></span>
+          <span>I'm not a robot</span>
+        </label>
+      </div>
+      <!-- honeypot: must remain empty -->
+      <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit" class="btn-primary">Send</button>
+    </form>
+
+    <!-- Success screen shown after a successful submission -->
+    <div id="creator-apply-success" class="creator-apply-success" hidden>
+      <h3 class="creator-apply-title">Application Sent!</h3>
+      <p class="creator-apply-desc">To finalize your application, you MUST join the Rockbound Discord so we can contact you regarding your status.</p>
+      <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">JOIN THE DISCORD NOW</a>
+      <label class="success-confirm-label">
+        <input type="checkbox" id="success-confirm-check">
+        <span class="captcha-checkbox-box"></span>
+        <span>I understand — I will join the Discord</span>
+      </label>
+      <button type="button" id="success-close-btn" class="btn-secondary" disabled>Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/main.min.js?v=221" defer></script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
+  }
+</script>
+
+</body>
+</html>
