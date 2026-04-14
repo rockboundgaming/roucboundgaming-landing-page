@@ -58,6 +58,16 @@ body::before {
   50% { box-shadow: 0 0 20px rgba(230,57,70,0.8); }
 }
 
+@keyframes tileEnter {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes tileExit {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.97); }
+}
+
 /* ============================================
    NAV
    ============================================ */
@@ -995,6 +1005,32 @@ section:nth-child(odd) {
   grid-template-columns: 1fr 1fr;
 }
 
+/* grid-4: subtle gold highlight on featured slot (slot 0) */
+.stream-grid.grid-4 > .stream-wrapper:first-child {
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(244, 196, 48, 0.4);
+}
+
+/* ---- Featured tile: desktop only (slot 0 gets prominence) ---- */
+@media (min-width: 769px) {
+  /* grid-2: slot 0 full width on top, slot 1 below */
+  .stream-grid.grid-2 > .stream-wrapper:first-child {
+    grid-column: span 2;
+  }
+
+  /* grid-3: slot 0 full width on top, slots 1+2 side by side below */
+  .stream-grid.grid-3 > .stream-wrapper:first-child {
+    grid-column: span 2;
+  }
+
+  /* Reset last-child override — first-child is now the featured slot */
+  .stream-grid.grid-3 > .stream-wrapper:last-child {
+    grid-column: auto;
+    justify-self: auto;
+    width: auto;
+  }
+}
+
 /* Red surround applied to each stream player */
 .stream-wrapper {
   border: 2px solid #ff0000;
@@ -1006,12 +1042,25 @@ section:nth-child(odd) {
   position: relative;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .stream-wrapper {
+    animation: tileEnter 400ms ease-out both;
+  }
+
+  .stream-wrapper.stream-exit {
+    animation: tileExit 300ms ease-in both;
+    pointer-events: none;
+  }
+}
+
 .streamer-header {
   color: white;
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 1rem;
   letter-spacing: 1px;
   padding: 4px 0 8px;
+  display: flex;
+  align-items: center;
 }
 
 /* 16:9 aspect-ratio wrapper for each iframe */
@@ -1071,6 +1120,7 @@ section:nth-child(odd) {
   color: #fff;
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
+  font-family: 'Barlow Condensed', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 1px;
@@ -1078,6 +1128,7 @@ section:nth-child(odd) {
   animation: pulse 2s ease-in-out infinite;
   white-space: nowrap;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 /* ---- Discord Panel ---- */

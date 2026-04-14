@@ -297,24 +297,36 @@ function updateLiveDisplay(liveStreams) {
   }
   const parentParam = parentDomains.map(d => `parent=${encodeURIComponent(d)}`).join('&');
 
-  liveGrid.innerHTML = streams.map(s => {
-    const levelText = s.level ? ` - Level ${s.level}` : '';
-    const streamUrl = `https://player.twitch.tv/?channel=${encodeURIComponent(s.twitch)}&${parentParam}&autoplay=true&muted=true`;
-    return `
-      <div class="stream-wrapper">
-        <div class="streamer-header">
-          <strong>${s.name || s.twitch}</strong>${levelText}
-        </div>
-        <div class="video-aspect-ratio">
-          <iframe
-            src="${streamUrl}"
-            allowfullscreen
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            title="${s.name || s.twitch} live stream">
-          </iframe>
-        </div>
-      </div>`;
-  }).join('');
+  function buildGrid() {
+    liveGrid.innerHTML = streams.map(s => {
+      const levelText = s.level ? ` - Level ${s.level}` : '';
+      const streamUrl = `https://player.twitch.tv/?channel=${encodeURIComponent(s.twitch)}&${parentParam}&autoplay=true&muted=true`;
+      return `
+        <div class="stream-wrapper">
+          <div class="streamer-header">
+            <strong>${s.name || s.twitch}</strong>${levelText}<span class="live-badge">&#x25CF; LIVE</span>
+          </div>
+          <div class="video-aspect-ratio">
+            <iframe
+              src="${streamUrl}"
+              allowfullscreen
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              title="${s.name || s.twitch} live stream">
+            </iframe>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const existingWrappers = liveGrid.querySelectorAll('.stream-wrapper');
+
+  if (!prefersReducedMotion && existingWrappers.length > 0) {
+    existingWrappers.forEach(el => el.classList.add('stream-exit'));
+    setTimeout(buildGrid, 300);
+  } else {
+    buildGrid();
+  }
 }
 
 /**
