@@ -1021,20 +1021,19 @@ section::after {
   width: 100%;
   background: radial-gradient(ellipse at 50% 60%, rgba(255,75,75,0.07) 0%, #0d0d0d 65%);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  /* Default align-items:stretch causes the .offline-placeholder flex child to fill the full container height */
 }
 
 /* ---- Offline placeholder (shown instead of Twitch embed when no stream is live) ---- */
 .offline-placeholder {
-  position: absolute;
-  inset: 0;
+  /* Flex child — stretches to fill the full 16:9 #offline-player container */
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.25rem;
-  padding: 2rem;
+  gap: clamp(0.8rem, 2vw, 1.25rem);
+  padding: clamp(1rem, 3vw, 2rem);
   text-align: center;
 }
 
@@ -1055,15 +1054,15 @@ section::after {
 .offline-badge {
   display: block;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 3.5rem;
-  letter-spacing: 8px;
+  font-size: clamp(2rem, 7vw, 3.5rem);
+  letter-spacing: clamp(4px, 1.5vw, 8px);
   color: #ff4b4b;
   line-height: 1;
   text-shadow: 0 0 20px rgba(255,75,75,0.5);
 }
 
 .offline-handle {
-  font-size: 0.95rem;
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
   color: rgba(241,250,238,0.6);
   font-weight: 600;
   letter-spacing: 1px;
@@ -1071,14 +1070,20 @@ section::after {
 }
 
 .offline-text p:not(.offline-handle) {
-  font-size: 0.85rem;
+  font-size: clamp(0.75rem, 1.8vw, 0.85rem);
   color: rgba(241,250,238,0.38);
   margin: 0;
 }
 
 .offline-cta {
-  padding: 0.75rem 1.75rem;
-  font-size: 0.9rem;
+  padding: clamp(0.6rem, 1.7vw, 0.75rem) clamp(1.1rem, 3vw, 1.75rem);
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  background: #9146ff;
+}
+
+.offline-cta:hover {
+  background: #a970ff;
+  box-shadow: 0 8px 25px rgba(145,70,255,0.5), 0 0 20px rgba(145,70,255,0.6);
 }
 
 /* Live streams grid: up to 4 streams in a responsive grid */
