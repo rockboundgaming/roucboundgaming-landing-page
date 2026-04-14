@@ -35,7 +35,7 @@ body {
     radial-gradient(circle at 20% 30%, rgba(230,57,70,0.12), transparent 55%),
     radial-gradient(circle at 80% 10%, rgba(69,123,157,0.15), transparent 50%),
     var(--darker);
-  background-attachment: scroll;
+  background-attachment: fixed;
   color: var(--white);
   font-family: 'Barlow', sans-serif;
   overflow-x: hidden;
@@ -429,6 +429,21 @@ section {
   box-sizing: border-box;
 }
 
+section:nth-of-type(odd) {
+  background: linear-gradient(135deg, rgba(230,57,70,0.03) 0%, rgba(29,53,87,0.05) 100%);
+}
+
+section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, rgba(6,8,16,0.5));
+  pointer-events: none;
+  z-index: 1;
+}
 
 .section-title {
   font-family: 'Bebas Neue';
