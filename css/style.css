@@ -866,11 +866,12 @@ section:nth-child(odd) {
    COMMUNITY CONTROL CENTER
    ============================================ */
 
-/* Tighter padding and max-width for the Rock Hub section */
+/* Rock Hub section uses the same container width as all other sections */
 #live {
-  padding: 3rem 2rem;
-  max-width: 1200px;
-  margin: 0 auto;       /* Centers the hub on wide screens */
+  padding: var(--container-pad);
+  max-width: var(--container-max);
+  margin: 0 auto;
+  width: 100%;
 }
 
 /* Glow pulse animation for live state */
