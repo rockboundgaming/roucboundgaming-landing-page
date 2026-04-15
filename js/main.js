@@ -199,14 +199,31 @@ async function loadFeaturedCreators() {
       if (s.twitch) serverLiveUsernames.add(s.twitch.toLowerCase());
     }
 
+    const spreadsheetStatusIsLive = (status) => {
+      const normalized = (status || '').trim().toLowerCase();
+      return normalized === 'live' ||
+             normalized === 'online' ||
+             normalized === 'yes' ||
+             normalized === 'true' ||
+             normalized === '1';
+    };
+
     // Collect all live featured creators (excluding rockboundgaming), sorted by level desc.
     // Only trust the spreadsheet status column as a fallback when server data is stale.
     const liveCreators = creators.filter(c =>
       c.featured?.toLowerCase() === "yes" &&
       c.twitch !== ROCKBOUND_CHANNEL &&
-      serverLiveUsernames.has(c.twitch)
+      (
+        serverLiveUsernames.has(c.twitch) ||
+        (!serverDataIsFresh && spreadsheetStatusIsLive(c.status))
+      )
     );
     liveCreators.sort((a, b) => b.level - a.level);
+
+    const rockboundSheetEntry = creators.find(c => c.twitch === ROCKBOUND_CHANNEL);
+    const rockboundIsLive =
+      serverLiveUsernames.has(ROCKBOUND_CHANNEL) ||
+      (!serverDataIsFresh && spreadsheetStatusIsLive(rockboundSheetEntry?.status));
 
     // If other creators are live, they replace the offline placeholder.
     // Only prepend rockboundgaming when it is confirmed live AND data is fresh.
@@ -214,11 +231,11 @@ async function loadFeaturedCreators() {
     if (liveCreators.length > 0) {
       // Other creators are live — hide the offline placeholder and show only them.
       // Prepend rockboundgaming if it is also confirmed live.
-      if (serverDataIsFresh && serverLiveUsernames.has(ROCKBOUND_CHANNEL)) {
+      if (rockboundIsLive) {
         liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null });
       }
       liveStreams.push(...liveCreators);
-    } else if (serverLiveUsernames.has(ROCKBOUND_CHANNEL)) {
+    } else if (rockboundIsLive) {
       // Only rockboundgaming is live.
       liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null });
     }
