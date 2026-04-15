@@ -1,34 +1,23 @@
 // ============================================
-//   SCROLL ANIMATIONS WITH DEBOUNCE
+//   SCROLL ANIMATIONS — IntersectionObserver
 // ============================================
 const reveals = document.querySelectorAll('.reveal');
 
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
+if ('IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => revealObserver.observe(el));
+} else {
+  // Fallback for very old browsers
+  reveals.forEach(el => el.classList.add('visible'));
 }
-
-function reveal() {
-  reveals.forEach(element => {
-    const windowHeight = window.innerHeight;
-    const revealTop = element.getBoundingClientRect().top;
-    const revealPoint = 100;
-
-    if (revealTop < windowHeight - revealPoint) {
-      element.classList.add('visible');
-    }
-  });
-}
-
-window.addEventListener('scroll', debounce(reveal, 50));
-reveal();
 
 // ============================================
 //   NAV SCROLL EFFECT WITH THROTTLE
