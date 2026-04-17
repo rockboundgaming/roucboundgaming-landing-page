@@ -297,6 +297,21 @@ function updateLiveDisplay(liveStreams) {
     return;
   }
 
+  // When rockboundgaming is the sole "live" stream, use setHubStream instead
+  // of a raw iframe grid. The Twitch.Player SDK can detect OFFLINE events and
+  // gracefully fall back to the custom offline card — raw iframes cannot, which
+  // causes a "double player" (our LIVE badge + Twitch's own offline/VOD screen)
+  // and MasterPlaylist 404 errors when live-status.json is stale.
+  if (liveStreams.length === 1 && liveStreams[0].twitch === ROCKBOUND_CHANNEL) {
+    if (liveGrid) {
+      liveGrid.style.display = 'none';
+      liveGrid.innerHTML = '';
+      currentGridChannels = '';
+    }
+    setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
+    return;
+  }
+
   // Live streams present — force-hide offline player, show multi-stream grid.
   // style.display = 'none' beats any CSS rule (e.g. the `display: flex` on #offline-player).
   if (offlineContainer) offlineContainer.style.display = 'none';
@@ -333,14 +348,14 @@ function updateLiveDisplay(liveStreams) {
       return `
         <div class="stream-wrapper">
           <div class="streamer-header">
-            <strong>${s.name || s.twitch}</strong>${levelText}<span class="live-badge" aria-label="Live"><span aria-hidden="true">&#x25CF;</span> LIVE</span>
+            <strong>${escapeHtml(s.name || s.twitch)}</strong>${escapeHtml(levelText)}<span class="live-badge" aria-label="Live"><span aria-hidden="true">&#x25CF;</span> LIVE</span>
           </div>
           <div class="video-aspect-ratio">
             <iframe
               src="${streamUrl}"
               allowfullscreen
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              title="${s.name || s.twitch} live stream">
+              title="${escapeHtml(s.name || s.twitch)} live stream">
             </iframe>
           </div>
         </div>`;
@@ -372,12 +387,14 @@ async function setHubStream(channelName, displayName) {
 
   // Update the panel title and live indicator.
   if (titleEl) titleEl.textContent = displayName || 'Rockbound Gaming';
-  if (panel) {
-    if (channelName !== ROCKBOUND_CHANNEL) {
-      panel.classList.add('is-live');
-    } else {
-      panel.classList.remove('is-live');
-    }
+  if (panel) panel.classList.add('is-live');
+
+  // Hide the live grid when switching to the single-stream hub player so the
+  // two display modes don't overlap.
+  const liveGrid = document.getElementById('live-streams-grid');
+  if (liveGrid) {
+    liveGrid.style.display = 'none';
+    liveGrid.innerHTML = '';
   }
 
   // No channel change — but verify the player's internal state hasn't drifted.
@@ -400,12 +417,7 @@ async function setHubStream(channelName, displayName) {
   // Ensure the container is visible before initialising the player so the
   // browser does not block autoplay on a hidden element.
   container.hidden = false;
-  // Only restore display if the live grid isn't currently showing content
-  const liveGrid = document.getElementById('live-streams-grid');
-  const liveGridIsVisible = liveGrid && liveGrid.childElementCount > 0 && liveGrid.style.display !== 'none' && !liveGrid.hidden;
-  if (!liveGridIsVisible) {
-    container.style.display = '';
-  }
+  container.style.display = '';
 
   // Tear down the previous player and reset the container.
   hubPlayer = null;
@@ -457,13 +469,13 @@ async function setHubStream(channelName, displayName) {
         if (loading) loading.style.display = 'none';
       });
 
-      // If a featured creator's stream ends while the user is watching,
-      // fall back to the custom offline card.
-      if (channelName !== ROCKBOUND_CHANNEL) {
-        hubPlayer.addEventListener(Twitch.Player.OFFLINE, () => {
-          showOfflineCard();
-        });
-      }
+      // If the stream ends or was never actually live (stale live-status.json),
+      // fall back to the custom offline card. This covers both rockboundgaming
+      // and featured creators, preventing the Twitch "double player" offline
+      // screen with VOD suggestions.
+      hubPlayer.addEventListener(Twitch.Player.OFFLINE, () => {
+        showOfflineCard();
+      });
     }
   } catch (e) {
     console.error('Hub player init error:', e);
@@ -598,7 +610,7 @@ function renderDiscordMembers(members, count) {
   humanMembers.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3));
 
   list.innerHTML = humanMembers.map(m => {
-    const avatarSrc = m.avatar_url || '/assets/logos/favcon.jpg';
+    const avatarSrc = m.avatar_url || '/assets/logos/favicon.jpg';
     const game = m.game
       ? `<span class="member-game">${escapeHtml(m.game.name)}</span>`
       : '';
@@ -606,7 +618,7 @@ function renderDiscordMembers(members, count) {
       <li class="discord-member-item">
         <div class="member-avatar-wrap">
           <img src="${avatarSrc}" alt="${escapeHtml(m.username)}" class="member-avatar" loading="lazy"
-               onerror="this.src='/assets/logos/favcon.jpg'">
+               onerror="this.src='/assets/logos/favicon.jpg'">
           <span class="member-status-dot status-${m.status}" title="${m.status}"></span>
         </div>
         <div class="member-info">
