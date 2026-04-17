@@ -2,7 +2,7 @@ name: Update Live Status
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/2 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -42,38 +42,49 @@ jobs:
           echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> "$GITHUB_ENV"
 
           SHEET_ID="2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg"
-          curl -sL "https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=tsv" \
-            > /tmp/creators.tsv
+          SHEET_URL="https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=tsv"
+          HTTP_STATUS=$(curl -sL -w "HTTP %{http_code}\n" "${SHEET_URL}" -o /tmp/creators.tsv)
+          echo "=== creators.tsv first 10 lines ===" && head -10 /tmp/creators.tsv
+          wc -l /tmp/creators.tsv
+          echo "=== HTTP status ==="
+          echo "${HTTP_STATUS}"
+          if [ ! -s /tmp/creators.tsv ] || [ "$(wc -l < /tmp/creators.tsv)" -lt 2 ]; then
+            echo "Spreadsheet download failed or empty — aborting so live-status.json is not overwritten with a narrow channel list"
+            exit 1
+          fi
 
       - name: Build channel list
         if: env.SKIP_TWITCH != 'true'
         shell: bash
         run: |
           python3 <<'PY'
-          import sys
-
           channels = ['rockboundgaming']
-          try:
-              with open('/tmp/creators.tsv') as f:
-                  lines = f.read().split('\n')
-              for line in lines[1:]:
-                  cols = line.strip().split('\t')
-                  if len(cols) < 5:
-                      continue
-                  twitch = cols[0].strip().lower()
-                  try:
-                      level = int(cols[2].strip())
-                  except ValueError:
-                      continue
-                  featured = cols[4].strip().lower() if len(cols) > 4 else ''
-                  if twitch and level >= 5 and featured == 'yes' and twitch not in channels:
-                      channels.append(twitch)
-          except Exception as e:
-              print(f'Warning: could not parse spreadsheet: {e}', file=sys.stderr)
+          with open('/tmp/creators.tsv') as f:
+              lines = f.read().splitlines()
+
+          for line in lines[1:]:
+              if not line.strip():
+                  continue
+              cols = [c.strip().strip('\r') for c in line.split('\t')]
+              if len(cols) < 3:
+                  continue
+              twitch = cols[0].lower()
+              try:
+                  level = int(cols[2])
+              except ValueError:
+                  continue
+              featured = cols[4].lower() if len(cols) > 4 else ''
+              eligible = cols[7].lower() if len(cols) > 7 else ''
+              if twitch and level >= 5 and (featured == 'yes' or eligible == 'yes') and twitch not in channels:
+                  channels.append(twitch)
 
           with open('/tmp/channels.txt', 'w') as f:
               f.write('\n'.join(channels[:100]))
-          print(f'Querying {len(channels[:100])} channel(s): {channels[:100]}')
+          PY
+          echo "=== Channels queried ===" && cat /tmp/channels.txt
+          python3 - <<'PY'
+          channels = [c for c in open('/tmp/channels.txt').read().splitlines() if c]
+          print(f'Querying {len(channels)} channel(s): {channels}')
           PY
 
       - name: Query Twitch API
@@ -94,6 +105,7 @@ jobs:
 
           echo "Twitch API response:"
           cat /tmp/streams.json
+          python3 -c "import json; d=json.load(open('/tmp/streams.json')); print(f'Helix returned {len(d.get(\"data\", []))} live streams:', [s[\"user_login\"] for s in d.get(\"data\", [])])"
 
       - name: Generate live-status.json
         shell: bash
@@ -116,9 +128,16 @@ jobs:
                   'viewerCount': s.get('viewer_count', 0)
               })
 
+          try:
+              with open('/tmp/channels.txt') as f:
+                  channels_queried = [line.strip().lower() for line in f.read().splitlines() if line.strip()]
+          except FileNotFoundError:
+              channels_queried = []
+
           output = {
               'lastChecked': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
-              'live': live
+              'live': live,
+              'channelsQueried': channels_queried
           }
 
           with open('live-status.json', 'w') as f:
