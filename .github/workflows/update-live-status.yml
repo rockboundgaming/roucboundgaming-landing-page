@@ -2,8 +2,8 @@ name: Update Live Status
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # Every 5 minutes (GitHub minimum)
-  workflow_dispatch:         # Allow manual triggers
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch Twitch Live Status
+      - name: Fetch Twitch OAuth Token
         env:
           TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
           TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
@@ -23,10 +23,10 @@ jobs:
           if [ -z "${TWITCH_CLIENT_ID}" ] || [ -z "${TWITCH_CLIENT_SECRET}" ]; then
             echo "Twitch credentials not configured - skipping update."
             echo '{"data":[]}' > /tmp/streams.json
+            echo "SKIP_TWITCH=true" >> "$GITHUB_ENV"
             exit 0
           fi
 
-          # Obtain a fresh OAuth token via the client credentials flow
           TOKEN_RESPONSE=$(curl -s -X POST 'https://id.twitch.tv/oauth2/token' \
             -d "client_id=${TWITCH_CLIENT_ID}" \
             -d "client_secret=${TWITCH_CLIENT_SECRET}" \
@@ -39,48 +39,51 @@ jobs:
             exit 1
           fi
 
-          # Fetch the featured creator spreadsheet and extract all L5+ featured channels.
-          # Col 0 = twitch, col 2 = level, col 4 = featured (yes/no)
+          echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> "$GITHUB_ENV"
+
           SHEET_ID="2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg"
           curl -sL "https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=tsv" \
             > /tmp/creators.tsv
 
-          # Build a newline-delimited list of channels to query (rockboundgaming always first)
-          python3 - << 'PYEOF'
-import sys
+      - name: Build channel list
+        if: env.SKIP_TWITCH != 'true'
+        shell: python3
+        run: |
+          import sys
 
-channels = ['rockboundgaming']
-try:
-    with open('/tmp/creators.tsv') as f:
-        lines = f.read().split('\n')
-    for line in lines[1:]:
-        cols = line.strip().split('\t')
-        if len(cols) < 5:
-            continue
-        twitch = cols[0].strip().lower()
-        try:
-            level = int(cols[2].strip())
-        except ValueError:
-            continue
-        featured = cols[4].strip().lower() if len(cols) > 4 else ''
-        if twitch and level >= 5 and featured == 'yes' and twitch not in channels:
-            channels.append(twitch)
-except Exception as e:
-    print(f'Warning: could not parse spreadsheet: {e}', file=sys.stderr)
+          channels = ['rockboundgaming']
+          try:
+              with open('/tmp/creators.tsv') as f:
+                  lines = f.read().split('\n')
+              for line in lines[1:]:
+                  cols = line.strip().split('\t')
+                  if len(cols) < 5:
+                      continue
+                  twitch = cols[0].strip().lower()
+                  try:
+                      level = int(cols[2].strip())
+                  except ValueError:
+                      continue
+                  featured = cols[4].strip().lower() if len(cols) > 4 else ''
+                  if twitch and level >= 5 and featured == 'yes' and twitch not in channels:
+                      channels.append(twitch)
+          except Exception as e:
+              print(f'Warning: could not parse spreadsheet: {e}', file=sys.stderr)
 
-# Twitch Helix allows up to 100 user_login params per request
-with open('/tmp/channels.txt', 'w') as f:
-    f.write('\n'.join(channels[:100]))
-print(f'Querying {len(channels[:100])} channel(s): {channels[:100]}')
-PYEOF
+          with open('/tmp/channels.txt', 'w') as f:
+              f.write('\n'.join(channels[:100]))
+          print(f'Querying {len(channels[:100])} channel(s): {channels[:100]}')
 
-          # Build the query string from the channel list
+      - name: Query Twitch API
+        if: env.SKIP_TWITCH != 'true'
+        env:
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+        run: |
           QUERY=$(python3 -c "
-channels = open('/tmp/channels.txt').read().strip().split('\n')
-print('&'.join(f'user_login={c}' for c in channels if c))
-")
+          channels = open('/tmp/channels.txt').read().strip().split('\n')
+          print('&'.join(f'user_login={c}' for c in channels if c))
+          ")
 
-          # Query the Helix streams endpoint for all channels in one request
           curl -s \
             -H "Client-ID: ${TWITCH_CLIENT_ID}" \
             -H "Authorization: Bearer ${ACCESS_TOKEN}" \
