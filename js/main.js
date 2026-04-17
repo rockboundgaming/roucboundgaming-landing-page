@@ -317,6 +317,11 @@ function updateLiveDisplay(liveStreams) {
   if (offlineContainer) offlineContainer.style.display = 'none';
   if (panel) panel.classList.add('is-live');
 
+  // Ensure the section is fully visible so Twitch embeds pass the autoplay
+  // "style visibility" check (the .reveal class starts with opacity: 0).
+  const liveSection = document.getElementById('live');
+  if (liveSection) liveSection.classList.add('visible');
+
   const streams = liveStreams.slice(0, 4);
   const count = streams.length;
 
@@ -414,10 +419,17 @@ async function setHubStream(channelName, displayName) {
 
   if (!container) return;
 
+  // Ensure the section is fully visible before creating the player.
+  // The #live section starts with .reveal (opacity: 0) for scroll animation;
+  // Twitch's embed SDK blocks autoplay when the element fails its "style
+  // visibility" check, cascading into MasterPlaylist 404 errors.
+  const liveSection = container.closest('.reveal') || document.getElementById('live');
+  if (liveSection) liveSection.classList.add('visible');
+
   // Ensure the container is visible before initialising the player so the
   // browser does not block autoplay on a hidden element.
   container.hidden = false;
-  container.style.display = '';
+  container.style.display = 'flex';
 
   // Tear down the previous player and reset the container.
   hubPlayer = null;
@@ -436,10 +448,15 @@ async function setHubStream(channelName, displayName) {
   if (hostname !== 'rockboundgaming.ca' && hostname !== 'www.rockboundgaming.ca') parentDomains.push(hostname);
 
   // Create a uniquely-IDed mount point so Twitch.Player never confuses it
-  // with a stale element from the previous session.
+  // with a stale element from the previous session.  The div must have
+  // non-zero dimensions at construction time so the SDK's visibility check
+  // (required for autoplay) passes before the iframe is injected.
   const playerDivId = `hub-player-${Date.now()}`;
   const playerDiv = document.createElement('div');
   playerDiv.id = playerDivId;
+  playerDiv.style.width = '100%';
+  playerDiv.style.height = '100%';
+  playerDiv.style.position = 'relative';
   container.appendChild(playerDiv);
 
   try {
