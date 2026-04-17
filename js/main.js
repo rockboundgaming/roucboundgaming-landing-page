@@ -164,36 +164,15 @@ async function loadFeaturedCreators() {
         twitch,
         name: NAME_OVERRIDES[twitch] || cols[1]?.trim(),
         level: Number.isFinite(level) ? level : null,
-        featured: cols[4]?.trim(),
-        status: cols[5]?.trim()
+        featured: cols[4]?.trim()
       };
     }).filter(c => c && c.twitch && c.name);
 
-    const statusAge = liveStatus?.lastChecked
-      ? Date.now() - new Date(liveStatus.lastChecked).getTime()
-      : Infinity;
     const serverLive = Array.isArray(liveStatus?.live) ? liveStatus.live : [];
-    const useSpreadsheetFallback = !liveStatus?.lastChecked || statusAge > 30 * 60 * 1000;
-
-    const authoritativeLiveUsernames = new Set();
+    const activeLiveUsernames = new Set();
     for (const s of serverLive) {
-      if (s.twitch) authoritativeLiveUsernames.add(s.twitch.toLowerCase());
+      if (s.twitch) activeLiveUsernames.add(s.twitch.toLowerCase());
     }
-
-    const fallbackLiveUsernames = new Set();
-    if (useSpreadsheetFallback) {
-      console.warn(`live-status.json unavailable or stale (${Math.round(statusAge / 60000)}m) — falling back to spreadsheet`);
-      for (const c of creators) {
-        if (
-          c.featured?.toLowerCase() === 'yes' &&
-          c.level >= 5 &&
-          c.status?.toLowerCase() === 'live'
-        ) {
-          fallbackLiveUsernames.add(c.twitch);
-        }
-      }
-    }
-    const activeLiveUsernames = useSpreadsheetFallback ? fallbackLiveUsernames : authoritativeLiveUsernames;
 
     // Collect all live featured creators (excluding rockboundgaming), sorted by level desc.
     const liveCreators = creators.filter(c =>
@@ -213,12 +192,12 @@ async function loadFeaturedCreators() {
       // Other creators are live — hide the offline placeholder and show only them.
       // Prepend rockboundgaming if it is also confirmed live.
       if (rockboundIsLive) {
-        liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null, unverified: useSpreadsheetFallback });
+        liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null });
       }
-      liveStreams.push(...liveCreators.map(c => ({ ...c, unverified: useSpreadsheetFallback })));
+      liveStreams.push(...liveCreators);
     } else if (rockboundIsLive) {
       // Only rockboundgaming is live.
-      liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null, unverified: useSpreadsheetFallback });
+      liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null });
     }
     // If liveStreams is empty, updateLiveDisplay shows the offline placeholder.
 
@@ -294,7 +273,7 @@ function syncDiscordHeight() {
  * Shows the multi-stream live grid when one or more creators are live,
  * or falls back to the single-channel offline player when nobody is live.
  *
- * @param {Array<{twitch: string, name: string, level: number|null, unverified?: boolean}>} liveStreams
+ * @param {Array<{twitch: string, name: string, level: number|null}>} liveStreams
  *   Ordered list of live streams (rockboundgaming first if live, then L5+ creators).
  *   Only the first 4 are shown.
  */
@@ -375,12 +354,10 @@ function updateLiveDisplay(liveStreams) {
     liveGrid.innerHTML = streams.map(s => {
       const levelText = s.level ? ` - Level ${s.level}` : '';
       const streamUrl = `https://player.twitch.tv/?channel=${encodeURIComponent(s.twitch)}&${parentParam}&autoplay=true&muted=true`;
-      const liveBadgeText = s.unverified ? 'LIVE (unverified)' : 'LIVE';
-      const liveBadgeClass = s.unverified ? 'live-badge live-badge-unverified' : 'live-badge';
       return `
         <div class="stream-wrapper">
           <div class="streamer-header">
-            <strong>${escapeHtml(s.name || s.twitch)}</strong>${escapeHtml(levelText)}<span class="${liveBadgeClass}" aria-label="${escapeHtml(liveBadgeText)}"><span aria-hidden="true">&#x25CF;</span> ${escapeHtml(liveBadgeText)}</span>
+            <strong>${escapeHtml(s.name || s.twitch)}</strong>${escapeHtml(levelText)}<span class="live-badge" aria-label="LIVE"><span aria-hidden="true">&#x25CF;</span> LIVE</span>
           </div>
           <div class="video-aspect-ratio">
             <iframe

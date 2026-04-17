@@ -45,7 +45,7 @@ rockboundgaming-landing-page/
 - Workflow diagnostics now print:
   - `=== Channels queried ===` (full channel list sent to Helix)
   - `Helix returned N live streams: [...]` (raw `user_login` values from Twitch API)
-- Client resilience: if `live-status.json` is unavailable or older than **30 minutes**, the page falls back to spreadsheet **Status (Live/Inactive)** for Featured Level 5+ creators and marks them as **`LIVE (unverified)`**.
+- Client behavior: the page reads `live-status.json` exclusively to decide who is live. If the file is empty, stale, or unreachable, the live grid is hidden and the branded offline card is shown. The spreadsheet `Status` column is not used as a live signal — only for roster eligibility.
 
 ## Offline / PWA Support
 The site registers a service worker (`sw.js`) on first load. After that initial visit:

@@ -1272,15 +1272,6 @@ section::after {
   margin-left: auto;
 }
 
-.live-badge-unverified {
-  background: #f0a202;
-  color: #0b0b0b;
-}
-
-.live-badge-unverified::before {
-  content: "◌ ";
-}
-
 /* ---- Discord Panel ---- */
 .discord-panel {
   flex: 0 0 280px;
