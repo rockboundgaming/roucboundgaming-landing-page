@@ -91,7 +91,7 @@ print('&'.join(f'user_login={c}' for c in channels if c))
           cat /tmp/streams.json
 
       - name: Generate live-status.json
-        shell: python
+        shell: python3
         run: |
           import json, datetime, sys
 

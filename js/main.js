@@ -107,11 +107,6 @@ const NAME_OVERRIDES = {};
 //   3. Paste it below.
 const DISCORD_GUILD_ID = "1482393227146559518"; // Rockbound Gaming Discord server
 
-// How long (ms) the server-side status file is considered fresh.
-// The GitHub Actions workflow runs every 5 minutes, so 10 minutes gives
-// comfortable headroom before we fall back to the spreadsheet status column.
-const LIVE_STATUS_MAX_AGE_MS = 10 * 60 * 1000;
-
 // Fetch the server-generated live-status.json produced by the GitHub Actions
 // workflow that calls the Twitch Helix API server-side.
 async function fetchLiveStatus() {
@@ -168,54 +163,28 @@ async function loadFeaturedCreators() {
         twitch,
         name: NAME_OVERRIDES[twitch] || cols[1]?.trim(),
         level: parseInt(cols[2]),
-        featured: cols[4]?.trim(),
-        status: cols[5]?.trim()?.toLowerCase()
+        featured: cols[4]?.trim()
       };
     }).filter(c => c && c.twitch && c.name);
 
     // Build the set of server-confirmed live usernames from live-status.json.
-    // Always populate from the file so the rockboundgaming priority check works
-    // even when the file is older than LIVE_STATUS_MAX_AGE_MS.  The freshness
-    // flag is only used later to decide whether to also trust the spreadsheet
-    // status column as a fallback.
     const serverLiveUsernames = new Set();
-    let serverDataIsFresh = false;
-    if (liveStatus.lastChecked) {
-      const ageMs = Date.now() - new Date(liveStatus.lastChecked).getTime();
-      serverDataIsFresh = ageMs < LIVE_STATUS_MAX_AGE_MS;
-    }
     for (const s of (liveStatus.live || [])) {
       if (s.twitch) serverLiveUsernames.add(s.twitch.toLowerCase());
     }
 
-    const spreadsheetStatusIsLive = (status) => {
-      const normalized = (status || '').trim().toLowerCase();
-      return normalized === 'live' ||
-             normalized === 'online' ||
-             normalized === 'yes' ||
-             normalized === 'true' ||
-             normalized === '1';
-    };
-
     // Collect all live featured creators (excluding rockboundgaming), sorted by level desc.
-    // Only trust the spreadsheet status column as a fallback when server data is stale.
     const liveCreators = creators.filter(c =>
       c.featured?.toLowerCase() === "yes" &&
       c.twitch !== ROCKBOUND_CHANNEL &&
-      (
-        serverLiveUsernames.has(c.twitch) ||
-        (!serverDataIsFresh && spreadsheetStatusIsLive(c.status))
-      )
+      serverLiveUsernames.has(c.twitch)
     );
     liveCreators.sort((a, b) => b.level - a.level);
 
-    const rockboundSheetEntry = creators.find(c => c.twitch === ROCKBOUND_CHANNEL);
-    const rockboundIsLive =
-      serverLiveUsernames.has(ROCKBOUND_CHANNEL) ||
-      (!serverDataIsFresh && spreadsheetStatusIsLive(rockboundSheetEntry?.status));
+    const rockboundIsLive = serverLiveUsernames.has(ROCKBOUND_CHANNEL);
 
     // If other creators are live, they replace the offline placeholder.
-    // Only prepend rockboundgaming when it is confirmed live AND data is fresh.
+    // Only prepend rockboundgaming when it is confirmed live.
     const liveStreams = [];
     if (liveCreators.length > 0) {
       // Other creators are live — hide the offline placeholder and show only them.
