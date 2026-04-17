@@ -47,8 +47,9 @@ jobs:
 
       - name: Build channel list
         if: env.SKIP_TWITCH != 'true'
-        shell: python3
+        shell: bash
         run: |
+          python3 <<'PY'
           import sys
 
           channels = ['rockboundgaming']
@@ -73,6 +74,7 @@ jobs:
           with open('/tmp/channels.txt', 'w') as f:
               f.write('\n'.join(channels[:100]))
           print(f'Querying {len(channels[:100])} channel(s): {channels[:100]}')
+          PY
 
       - name: Query Twitch API
         if: env.SKIP_TWITCH != 'true'
@@ -94,8 +96,9 @@ jobs:
           cat /tmp/streams.json
 
       - name: Generate live-status.json
-        shell: python3
+        shell: bash
         run: |
+          python3 <<'PY'
           import json, datetime, sys
 
           with open('/tmp/streams.json') as f:
@@ -123,6 +126,7 @@ jobs:
               f.write('\n')
 
           print(f"Live streamers: {[s['twitch'] for s in live]}")
+          PY
 
       - name: Commit and push if changed
         run: |
