@@ -153,35 +153,61 @@ async function loadFeaturedCreators() {
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
     const data = await response.text();
-    const rows = data.split("\n");
+    const rows = data.split(/\r?\n/);
 
     const creators = rows.slice(1).map(row => {
       if (!row.trim()) return null;
-      const cols = row.split("\t");
+      const cols = row.split("\t").map(col => col.trim().replace(/\r/g, ''));
       const twitch = cols[0]?.trim()?.toLowerCase();
+      const level = parseInt(cols[2], 10);
       return {
         twitch,
         name: NAME_OVERRIDES[twitch] || cols[1]?.trim(),
-        level: parseInt(cols[2]),
-        featured: cols[4]?.trim()
+        level: Number.isFinite(level) ? level : null,
+        featured: cols[4]?.trim(),
+        status: cols[5]?.trim()
       };
     }).filter(c => c && c.twitch && c.name);
 
-    // Build the set of server-confirmed live usernames from live-status.json.
-    const serverLiveUsernames = new Set();
-    for (const s of (liveStatus.live || [])) {
-      if (s.twitch) serverLiveUsernames.add(s.twitch.toLowerCase());
+    const lastCheckedMs = liveStatus?.lastChecked ? new Date(liveStatus.lastChecked).getTime() : NaN;
+    const hasLastChecked = Number.isFinite(lastCheckedMs);
+    const statusAge = hasLastChecked ? Date.now() - lastCheckedMs : 0;
+    const serverLive = Array.isArray(liveStatus?.live) ? liveStatus.live : [];
+    const useSpreadsheetFallback = hasLastChecked && (
+      statusAge > 10 * 60 * 1000 ||
+      serverLive.length === 0
+    );
+
+    const authoritativeLiveUsernames = new Set();
+    for (const s of serverLive) {
+      if (s.twitch) authoritativeLiveUsernames.add(s.twitch.toLowerCase());
     }
+
+    const fallbackLiveUsernames = new Set();
+    if (useSpreadsheetFallback) {
+      console.warn(`live-status.json is stale (${Math.round(statusAge / 60000)}m old) — falling back to spreadsheet Status column`);
+      for (const c of creators) {
+        if (
+          c.featured?.toLowerCase() === 'yes' &&
+          c.level >= 5 &&
+          c.status?.toLowerCase() === 'live'
+        ) {
+          fallbackLiveUsernames.add(c.twitch);
+        }
+      }
+    }
+    const activeLiveUsernames = useSpreadsheetFallback ? fallbackLiveUsernames : authoritativeLiveUsernames;
 
     // Collect all live featured creators (excluding rockboundgaming), sorted by level desc.
     const liveCreators = creators.filter(c =>
       c.featured?.toLowerCase() === "yes" &&
+      c.level >= 5 &&
       c.twitch !== ROCKBOUND_CHANNEL &&
-      serverLiveUsernames.has(c.twitch)
+      activeLiveUsernames.has(c.twitch)
     );
     liveCreators.sort((a, b) => b.level - a.level);
 
-    const rockboundIsLive = serverLiveUsernames.has(ROCKBOUND_CHANNEL);
+    const rockboundIsLive = activeLiveUsernames.has(ROCKBOUND_CHANNEL);
 
     // If other creators are live, they replace the offline placeholder.
     // Only prepend rockboundgaming when it is confirmed live.
@@ -190,12 +216,12 @@ async function loadFeaturedCreators() {
       // Other creators are live — hide the offline placeholder and show only them.
       // Prepend rockboundgaming if it is also confirmed live.
       if (rockboundIsLive) {
-        liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null });
+        liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null, unverified: useSpreadsheetFallback });
       }
-      liveStreams.push(...liveCreators);
+      liveStreams.push(...liveCreators.map(c => ({ ...c, unverified: useSpreadsheetFallback })));
     } else if (rockboundIsLive) {
       // Only rockboundgaming is live.
-      liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null });
+      liveStreams.push({ twitch: ROCKBOUND_CHANNEL, name: 'Rockbound Gaming', level: null, unverified: useSpreadsheetFallback });
     }
     // If liveStreams is empty, updateLiveDisplay shows the offline placeholder.
 
@@ -271,7 +297,7 @@ function syncDiscordHeight() {
  * Shows the multi-stream live grid when one or more creators are live,
  * or falls back to the single-channel offline player when nobody is live.
  *
- * @param {Array<{twitch: string, name: string, level: number|null}>} liveStreams
+ * @param {Array<{twitch: string, name: string, level: number|null, unverified?: boolean}>} liveStreams
  *   Ordered list of live streams (rockboundgaming first if live, then L5+ creators).
  *   Only the first 4 are shown.
  */
@@ -350,10 +376,12 @@ function updateLiveDisplay(liveStreams) {
     liveGrid.innerHTML = streams.map(s => {
       const levelText = s.level ? ` - Level ${s.level}` : '';
       const streamUrl = `https://player.twitch.tv/?channel=${encodeURIComponent(s.twitch)}&${parentParam}&autoplay=true&muted=true`;
+      const liveBadgeText = s.unverified ? 'LIVE (unverified)' : 'LIVE';
+      const liveBadgeClass = s.unverified ? 'live-badge live-badge-unverified' : 'live-badge';
       return `
         <div class="stream-wrapper">
           <div class="streamer-header">
-            <strong>${escapeHtml(s.name || s.twitch)}</strong>${escapeHtml(levelText)}<span class="live-badge" aria-label="Live"><span aria-hidden="true">&#x25CF;</span> LIVE</span>
+            <strong>${escapeHtml(s.name || s.twitch)}</strong>${escapeHtml(levelText)}<span class="${liveBadgeClass}" aria-label="${escapeHtml(liveBadgeText)}"><span aria-hidden="true">&#x25CF;</span> ${escapeHtml(liveBadgeText)}</span>
           </div>
           <div class="video-aspect-ratio">
             <iframe

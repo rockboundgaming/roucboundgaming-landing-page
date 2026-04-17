@@ -39,6 +39,14 @@ rockboundgaming-landing-page/
 - **sw.js**: Service worker — caches all static assets and CDN fonts on first visit so the page loads instantly and remains usable offline. `live-status.json` is fetched from the network first (falls back to the cached copy when offline).
 - **README.md**: This file — project structure and setup documentation.
 
+## Live Status
+- The **Update Live Status** GitHub Actions workflow runs every **2 minutes** (`*/2`) and can also be run manually.
+- Manual trigger path: **Actions → Update Live Status → Run workflow**.
+- Workflow diagnostics now print:
+  - `=== Channels queried ===` (full channel list sent to Helix)
+  - `Helix returned N live streams: [...]` (raw `user_login` values from Twitch API)
+- Client resilience: if `live-status.json` is older than **10 minutes** (or provides no live entries despite having `lastChecked`), the page falls back to spreadsheet **Status (Live/Inactive)** for Featured Level 5+ creators and marks them as **`LIVE (unverified)`**.
+
 ## Offline / PWA Support
 The site registers a service worker (`sw.js`) on first load. After that initial visit:
 - All pages, styles, scripts, images, and CDN fonts are served from the browser cache, making repeat visits instant even without an internet connection.
