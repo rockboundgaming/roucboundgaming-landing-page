@@ -169,14 +169,11 @@ async function loadFeaturedCreators() {
       };
     }).filter(c => c && c.twitch && c.name);
 
-    const lastCheckedMs = liveStatus?.lastChecked ? new Date(liveStatus.lastChecked).getTime() : NaN;
-    const hasLastChecked = Number.isFinite(lastCheckedMs);
-    const statusAge = hasLastChecked ? Date.now() - lastCheckedMs : 0;
+    const statusAge = liveStatus?.lastChecked
+      ? Date.now() - new Date(liveStatus.lastChecked).getTime()
+      : Infinity;
     const serverLive = Array.isArray(liveStatus?.live) ? liveStatus.live : [];
-    const useSpreadsheetFallback = hasLastChecked && (
-      statusAge > 10 * 60 * 1000 ||
-      serverLive.length === 0
-    );
+    const useSpreadsheetFallback = !liveStatus?.lastChecked || statusAge > 30 * 60 * 1000;
 
     const authoritativeLiveUsernames = new Set();
     for (const s of serverLive) {
@@ -185,7 +182,7 @@ async function loadFeaturedCreators() {
 
     const fallbackLiveUsernames = new Set();
     if (useSpreadsheetFallback) {
-      console.warn(`live-status.json is stale (${Math.round(statusAge / 60000)}m old) — falling back to spreadsheet Status column`);
+      console.warn(`live-status.json unavailable or stale (${Math.round(statusAge / 60000)}m) — falling back to spreadsheet`);
       for (const c of creators) {
         if (
           c.featured?.toLowerCase() === 'yes' &&
@@ -314,6 +311,7 @@ function updateLiveDisplay(liveStreams) {
       // (e.g. `.stream-grid.grid-1 { display: block }` has higher specificity
       // than `.stream-grid { display: none }` and would override [hidden]).
       liveGrid.style.display = 'none';
+      liveGrid.hidden = true;
       liveGrid.innerHTML = '';
       currentGridChannels = '';
     }
@@ -331,6 +329,7 @@ function updateLiveDisplay(liveStreams) {
   if (liveStreams.length === 1 && liveStreams[0].twitch === ROCKBOUND_CHANNEL) {
     if (liveGrid) {
       liveGrid.style.display = 'none';
+      liveGrid.hidden = true;
       liveGrid.innerHTML = '';
       currentGridChannels = '';
     }
@@ -427,6 +426,7 @@ async function setHubStream(channelName, displayName) {
   const liveGrid = document.getElementById('live-streams-grid');
   if (liveGrid) {
     liveGrid.style.display = 'none';
+    liveGrid.hidden = true;
     liveGrid.innerHTML = '';
   }
 

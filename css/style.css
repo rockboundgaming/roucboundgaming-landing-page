@@ -973,6 +973,10 @@ section::after {
 .twitch-panel.is-live {
   border-color: rgba(230,57,70,0.6);
   box-shadow: 0 0 25px rgba(230,57,70,0.45), 0 0 60px rgba(230,57,70,0.18);
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  flex: 0 1 auto;
 }
 
 /* Side-by-side layout; JS syncs Discord panel height to match Twitch panel */
@@ -1123,8 +1127,10 @@ section::after {
 /* Live streams grid: up to 4 streams in a responsive grid */
 .stream-grid {
   display: none;
+  --grid-gap: 20px;
   gap: 20px;
-  width: 100%;
+  width: fit-content;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -1143,13 +1149,14 @@ section::after {
 
 /* grid-3: top 2 side-by-side, 3rd centered on bottom */
 .stream-grid.grid-3 {
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto auto;
 }
 
-.stream-grid.grid-3 > .stream-wrapper:last-child {
-  grid-column: span 2;
+.stream-grid.grid-3 > :nth-child(3) {
+  grid-column: 1 / span 2;
   justify-self: center;
-  width: 50%;
+  width: calc(50% - var(--grid-gap, 0.5rem));
 }
 
 /* grid-4: 2×2 square */
@@ -1164,28 +1171,13 @@ section::after {
   box-shadow: 0 0 20px rgba(244, 196, 48, 0.4);
 }
 
-/* ---- Featured tile: desktop only (slot 0 gets prominence) ---- */
-@media (min-width: 769px) {
-  /* grid-2/3: slot 0 full width on top (featured tile) */
-  .stream-grid.grid-2 > .stream-wrapper:first-child,
-  .stream-grid.grid-3 > .stream-wrapper:first-child {
-    grid-column: span 2;
-  }
-
-  /* Reset last-child override — first-child is now the featured slot in grid-3 */
-  .stream-grid.grid-3 > .stream-wrapper:last-child {
-    grid-column: auto;
-    justify-self: auto;
-    width: auto;
-  }
-}
-
 /* Red surround applied to each stream player */
 .stream-wrapper {
   border: 2px solid #ff0000;
   box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
   background: #000;
   padding: 10px;
+  min-width: 280px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -2270,14 +2262,16 @@ footer::before {
   .stream-grid:not([hidden]) {
     display: flex;
     flex-direction: column;
+    width: 100%;
   }
 
   .stream-wrapper {
     width: 100% !important;
+    min-width: 0;
     margin-bottom: 15px;
   }
 
-  .stream-grid.grid-3 > .stream-wrapper:last-child {
+  .stream-grid.grid-3 > :nth-child(3) {
     width: 100% !important;
     grid-column: auto;
   }

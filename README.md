@@ -45,7 +45,7 @@ rockboundgaming-landing-page/
 - Workflow diagnostics now print:
   - `=== Channels queried ===` (full channel list sent to Helix)
   - `Helix returned N live streams: [...]` (raw `user_login` values from Twitch API)
-- Client resilience: if `live-status.json` is older than **10 minutes** (or provides no live entries despite having `lastChecked`), the page falls back to spreadsheet **Status (Live/Inactive)** for Featured Level 5+ creators and marks them as **`LIVE (unverified)`**.
+- Client resilience: if `live-status.json` is unavailable or older than **30 minutes**, the page falls back to spreadsheet **Status (Live/Inactive)** for Featured Level 5+ creators and marks them as **`LIVE (unverified)`**.
 
 ## Offline / PWA Support
 The site registers a service worker (`sw.js`) on first load. After that initial visit:
