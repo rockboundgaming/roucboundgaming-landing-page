@@ -1145,6 +1145,12 @@ section::after {
   max-width: 1000px;
   margin: 0 auto;
 }
+
+.stream-grid.grid-1 .stream-wrapper {
+  width: 100%;
+  min-width: unset;
+}
+
 .stream-grid.grid-2 { grid-template-columns: 1fr 1fr; }
 
 /* grid-3: top 2 side-by-side, 3rd centered on bottom */
