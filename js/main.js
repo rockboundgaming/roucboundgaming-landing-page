@@ -263,7 +263,7 @@ function showOfflineCard() {
   container.innerHTML =
     '<div class="offline-placeholder">' +
       '<picture>' +
-        '<img src="/assets/logos/newlogo.png" alt="Rockbound Gaming" class="offline-logo">' +
+        '<img src="/assets/logos/NewLogo2.png" alt="Rockbound Gaming" class="offline-logo">' +
       '</picture>' +
       '<div class="offline-text">' +
         '<span class="offline-badge">OFFLINE</span>' +
