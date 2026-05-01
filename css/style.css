@@ -973,10 +973,12 @@ section::after {
 .twitch-panel.is-live {
   border-color: rgba(230,57,70,0.6);
   box-shadow: 0 0 25px rgba(230,57,70,0.45), 0 0 60px rgba(230,57,70,0.18);
-  width: fit-content;
-  max-width: 100%;
-  margin: 0 auto;
-  flex: 0 1 auto;
+  /* Keep base flex sizing (flex: 1 1 0) so the panel fills its column and
+     #offline-player's aspect-ratio: 16/9 produces a proper-height embed.
+     Previously `width: fit-content` collapsed the panel to its absolutely
+     positioned children's intrinsic width (i.e. min-width: 300px), which
+     made the live embed appear at a fixed ~300x168 size instead of 16:9
+     of the available column width. */
 }
 
 /* Side-by-side layout; JS syncs Discord panel height to match Twitch panel */
