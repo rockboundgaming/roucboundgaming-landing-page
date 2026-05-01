@@ -78,15 +78,11 @@ body::before {
 @keyframes heroLogoBreathe {
   0%, 100% {
     transform: scale(1);
-    filter:
-      drop-shadow(0 0 3px rgba(255,200,210,0.55))
-      drop-shadow(0 0 14px rgba(230,57,70,0.45));
+    filter: drop-shadow(0 0 3px rgba(230,57,70,0.45));
   }
   50% {
     transform: scale(1.02);
-    filter:
-      drop-shadow(0 0 5px rgba(255,200,210,0.7))
-      drop-shadow(0 0 22px rgba(230,57,70,0.65));
+    filter: drop-shadow(0 0 5px rgba(230,57,70,0.6));
   }
 }
 
@@ -216,16 +212,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   overflow: hidden;
 }
 .hero::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 30%;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 70% 100% at 50% 100%, rgba(230,57,70,0.35), transparent 70%);
-  z-index: 1;
+  content: none;
 }
 .hero-bg {
   position: absolute;
@@ -282,9 +269,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   animation:
     fadeUp 1s ease forwards,
     heroLogoBreathe 6s ease-in-out 1s infinite;
-  filter:
-    drop-shadow(0 0 3px rgba(255,200,210,0.55))
-    drop-shadow(0 0 14px rgba(230,57,70,0.45));
+  filter: drop-shadow(0 0 3px rgba(230,57,70,0.45));
 }
 .hero-tagline-text {
   font-family: 'Bebas Neue', sans-serif;
@@ -299,9 +284,8 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   background: linear-gradient(
     100deg,
     var(--silver-dark) 0%,
-    var(--silver-light) 25%,
-    var(--gold) 50%,
-    var(--silver-light) 75%,
+    var(--silver-light) 35%,
+    var(--silver-light) 65%,
     var(--red) 100%
   );
   background-size: 220% 100%;
