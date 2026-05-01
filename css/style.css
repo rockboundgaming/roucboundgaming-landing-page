@@ -2099,17 +2099,19 @@ footer::before {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 1.25rem;
   }
 
   .hero-logo {
     max-width: 400px;
+    margin-bottom: 0;
   }
 
   .hero-tagline-text {
     font-size: clamp(1.3rem, 3vw, 1.9rem);
     letter-spacing: 2px;
     line-height: 1.15;
-    margin-bottom: 1rem;
+    margin-bottom: 0;
     order: 2;
   }
 
@@ -2120,8 +2122,8 @@ footer::before {
   .hero-btns {
     order: 3;
     flex-wrap: nowrap;
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 
   .authority-line {
@@ -2364,7 +2366,7 @@ footer::before {
   }
 
   .hero-content {
-    gap: 0.5rem;
+    gap: 1rem;
     padding-bottom: 0;
   }
 
@@ -2379,7 +2381,7 @@ footer::before {
     font-size: clamp(1rem, 3.2vw, 1.5rem);
     letter-spacing: 1.5px;
     line-height: 1.15;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0;
     order: 2;
   }
 
@@ -2391,8 +2393,8 @@ footer::before {
     order: 3;
     gap: 0.8rem;
     flex-wrap: nowrap;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 
   .authority-line {
