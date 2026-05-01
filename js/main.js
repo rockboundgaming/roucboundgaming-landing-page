@@ -231,6 +231,18 @@ function showOfflineCard() {
   if (!container) return;
 
   container.style.display = 'flex';
+  container.hidden = false;
+
+  // Idempotent: if the offline placeholder is already mounted, leave the
+  // existing DOM untouched. Background live-status polls run every few
+  // minutes; rewriting innerHTML each cycle would restart the
+  // `offlineBadgePulse` animation and cause a visible "hard reset" of the
+  // offline logo / badge. Only build the card when it's not already there.
+  if (container.querySelector('.offline-placeholder')) {
+    requestAnimationFrame(syncDiscordHeight);
+    return;
+  }
+
   container.innerHTML =
     '<div class="offline-placeholder">' +
       '<picture>' +
@@ -319,6 +331,11 @@ function updateLiveDisplay(liveStreams) {
   // style.display = 'none' beats any CSS rule (e.g. the `display: flex` on #offline-player).
   if (offlineContainer) offlineContainer.style.display = 'none';
   if (panel) panel.classList.add('is-live');
+
+  // Leaving the single-stream hub: drop the player reference so a future
+  // hub-mode transition rebuilds cleanly instead of trusting stale state.
+  hubPlayer = null;
+  hubCurrentChannel = null;
 
   // Ensure the section is fully visible so Twitch embeds pass the autoplay
   // "style visibility" check (the .reveal class starts with opacity: 0).
