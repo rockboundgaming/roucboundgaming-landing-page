@@ -649,7 +649,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
     .catch(e => console.warn('Could not load site-data.json:', e));
 
+  // Show the branded offline card first and let the browser paint it before
+  // we kick off the live-status check. Without this yield, a fast (or stale
+  // SW-cached) live-status.json response can swap the offline card for a live
+  // grid in the same frame as init, producing a visible flash of "last known
+  // live" streamers that then collapse back to the offline card once Twitch
+  // confirms they're offline. Double rAF guarantees one rendered frame of the
+  // offline state before any live-state transitions happen.
   updateLiveDisplay([]);
+  await new Promise(resolve =>
+    requestAnimationFrame(() => requestAnimationFrame(resolve))
+  );
   await loadFeaturedCreators();
   fetchDiscordMembers();
   initApplyButton();
