@@ -1,10 +1,15 @@
 {
-  "lastChecked": "2026-05-01T12:45:33Z",
+  "lastChecked": "2026-05-01T14:10:22Z",
   "live": [
     {
       "twitch": "fortnitenewfies",
       "title": "7 days to die",
-      "viewerCount": 1
+      "viewerCount": 3
+    },
+    {
+      "twitch": "blu3joker709",
+      "title": "Testing out 7 Days with Fortnitenewfies~~~Drop in and say hello to your favorite Joker~~",
+      "viewerCount": 2
     }
   ],
   "channelsQueried": [
@@ -14,6 +19,7 @@
     "thatdopegamer99",
     "fortnitenewfies",
     "ladyflarena",
-    "ibmrface"
+    "ibmrface",
+    "blu3joker709"
   ]
 }
