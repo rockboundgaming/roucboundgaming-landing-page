@@ -263,7 +263,7 @@ function showOfflineCard() {
   container.innerHTML =
     '<div class="offline-placeholder">' +
       '<picture>' +
-        '<img src="/assets/logos/TPHDLogo.png" alt="Rockbound Gaming" class="offline-logo">' +
+        '<img src="/assets/logos/Logo3.svg" alt="Rockbound Gaming" class="offline-logo">' +
       '</picture>' +
       '<div class="offline-text">' +
         '<span class="offline-badge">OFFLINE</span>' +
@@ -749,7 +749,7 @@ function renderDiscordMembers(members, count) {
   humanMembers.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3));
 
   list.innerHTML = humanMembers.map(m => {
-    const avatarSrc = m.avatar_url || '/assets/logos/favicon.jpg';
+    const avatarSrc = m.avatar_url || '/assets/logos/Logo3.svg';
     const game = m.game
       ? `<span class="member-game">${escapeHtml(m.game.name)}</span>`
       : '';
@@ -757,7 +757,7 @@ function renderDiscordMembers(members, count) {
       <li class="discord-member-item">
         <div class="member-avatar-wrap">
           <img src="${avatarSrc}" alt="${escapeHtml(m.username)}" class="member-avatar" loading="lazy"
-               onerror="this.src='/assets/logos/favicon.jpg'">
+               onerror="this.src='/assets/logos/Logo3.svg'">
           <span class="member-status-dot status-${m.status}" title="${m.status}"></span>
         </div>
         <div class="member-info">
