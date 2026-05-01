@@ -311,19 +311,26 @@ function updateLiveDisplay(liveStreams) {
     return;
   }
 
-  // When rockboundgaming is the sole "live" stream, use setHubStream instead
-  // of a raw iframe grid. The Twitch.Player SDK can detect OFFLINE events and
-  // gracefully fall back to the custom offline card — raw iframes cannot, which
-  // causes a "double player" (our LIVE badge + Twitch's own offline/VOD screen)
-  // and MasterPlaylist 404 errors when live-status.json is stale.
-  if (liveStreams.length === 1 && liveStreams[0].twitch === ROCKBOUND_CHANNEL) {
+  // When exactly one creator is "live", use setHubStream instead of a raw
+  // iframe grid. This routes the player into the 16:9 #offline-player container
+  // (so the visible player is exactly 16:9 — the .stream-wrapper grid layout
+  // adds a streamer-header + padding above the iframe and ends up taller than
+  // 16:9). The Twitch.Player SDK also detects OFFLINE events and gracefully
+  // falls back to the custom offline card, avoiding the "double player"
+  // (our LIVE badge + Twitch's own offline/VOD screen) and MasterPlaylist 404
+  // errors that raw iframes hit when live-status.json is stale.
+  if (liveStreams.length === 1) {
     if (liveGrid) {
       liveGrid.style.display = 'none';
       liveGrid.hidden = true;
       liveGrid.innerHTML = '';
       currentGridChannels = '';
     }
-    setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
+    const solo = liveStreams[0];
+    const displayName = solo.twitch === ROCKBOUND_CHANNEL
+      ? 'Rockbound Gaming'
+      : (solo.name || solo.twitch);
+    setHubStream(solo.twitch, displayName);
     return;
   }
 
