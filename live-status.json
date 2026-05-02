@@ -1,9 +1,19 @@
 {
-  "lastChecked": "2026-05-02T14:37:48Z",
+  "lastChecked": "2026-05-02T15:32:29Z",
   "live": [
     {
+      "twitch": "rockboundgaming",
+      "title": "Rockbound Back Again!",
+      "viewerCount": 2
+    },
+    {
+      "twitch": "fortnitenewfies",
+      "title": "New day",
+      "viewerCount": 2
+    },
+    {
       "twitch": "blu3joker709",
-      "title": "GoopGoblin  [Lvl 109 Theif] Gimme Dat Goop!!! ~Drop in and say hello to your favorite Joker~~",
+      "title": "First play through lvl 2 ~Drop in and say hello to your favorite Joker~~",
       "viewerCount": 1
     }
   ],
